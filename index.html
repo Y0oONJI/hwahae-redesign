@@ -1,0 +1,2151 @@
+<meta charset="utf-8">
+<title>화해 리디자인 — 홈에서 검색까지</title>
+<style>
+/* ============================================================
+   TOKENS
+   studio-* : 프레젠테이션 크롬 (테마 대응)
+   app-*    : 디바이스 화면 (기기 스크린샷이므로 라이트 고정, 단 전부 명시)
+   ============================================================ */
+:root{
+  --studio-bg:#E9EDEC;
+  --studio-panel:#FFFFFF;
+  --studio-panel-2:#F3F6F5;
+  --studio-ink:#152220;
+  --studio-mid:#556462;
+  --studio-faint:#8A9895;
+  --studio-line:#D2DAD8;
+  --studio-accent:#0E8478;
+  --studio-wash:#DDEFEB;
+  --studio-shadow:0 24px 60px -20px rgba(21,34,32,.34), 0 4px 12px -4px rgba(21,34,32,.14);
+
+  --app-bg:#FFFFFF;
+  --app-sub:#F5F7F7;
+  --app-sub-2:#F0F2F2;
+  --app-ink:#1B1F1E;
+  --app-mid:#6A7370;
+  --app-faint:#9AA3A0;
+  --app-line:#EDF0EF;
+  --app-line-2:#E1E6E5;
+  --app-accent:#12A594;
+  --app-accent-ink:#0B7268;
+  --app-wash:#E3F4F1;
+  --app-red:#E5484D;
+  --app-violet:#6E56CF;
+  --app-violet-wash:#EFECFC;
+  --app-amber:#E8A317;
+  --app-blue:#3E7BFA;
+  --app-rose:#E56B8C;
+
+  --ui:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic",sans-serif;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --studio-bg:#0B1211;--studio-panel:#141E1C;--studio-panel-2:#1A2624;--studio-ink:#E7EEEC;
+    --studio-mid:#9FADAA;--studio-faint:#6C7B78;--studio-line:#233230;--studio-accent:#3ED3BE;
+    --studio-wash:#13302C;--studio-shadow:0 30px 70px -20px rgba(0,0,0,.7), 0 4px 14px -4px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --studio-bg:#0B1211;--studio-panel:#141E1C;--studio-panel-2:#1A2624;--studio-ink:#E7EEEC;
+  --studio-mid:#9FADAA;--studio-faint:#6C7B78;--studio-line:#233230;--studio-accent:#3ED3BE;
+  --studio-wash:#13302C;--studio-shadow:0 30px 70px -20px rgba(0,0,0,.7), 0 4px 14px -4px rgba(0,0,0,.5);
+}
+
+*{box-sizing:border-box;}
+html{background:var(--studio-bg);}
+body{margin:0;background:var(--studio-bg);color:var(--studio-ink);font-family:var(--ui);-webkit-font-smoothing:antialiased;line-height:1.6;}
+:where(button){font:inherit;color:inherit;}
+[hidden]{display:none!important;}
+:focus-visible{outline:2px solid var(--studio-accent);outline-offset:2px;border-radius:4px;}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
+
+/* ============================================================ STAGE */
+.studio{min-height:100vh;display:grid;place-items:center;padding:40px 16px;}
+.deviceframe{width:414px;padding:12px;border-radius:56px;background:linear-gradient(160deg,#333c3a,#121817 45%,#2b3533);box-shadow:var(--studio-shadow);}
+.viewport{position:relative;width:390px;height:844px;border-radius:45px;overflow:hidden;background:var(--app-bg);color:var(--app-ink);}
+
+/* ============================================================ iOS CHROME */
+.statusbar{position:relative;height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 30px 0 34px;flex:none;}
+.statusbar .clock{font-size:15px;font-weight:650;letter-spacing:-.01em;padding-top:6px;}
+.island{position:absolute;left:50%;transform:translateX(-50%);top:11px;width:124px;height:35px;border-radius:19px;background:#000;}
+.statusicons{display:flex;align-items:center;gap:6px;padding-top:6px;}
+.statusicons svg{display:block;}
+.homebar{position:absolute;bottom:0;left:0;right:0;height:26px;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:5;}
+.homebar i{display:block;width:140px;height:5px;border-radius:3px;background:var(--app-ink);opacity:.85;}
+
+/* ============================================================ SCREENS */
+.screen{position:absolute;inset:0;display:none;flex-direction:column;background:var(--app-bg);font-size:14px;letter-spacing:-.01em;}
+.screen.is-active{display:flex;}
+.scroll{flex:1;overflow-y:auto;overscroll-behavior:contain;padding-bottom:34px;}
+.scroll::-webkit-scrollbar{width:0;}
+
+/* ============================================================ HOME */
+.homehead{padding:0 16px 10px;display:flex;align-items:center;gap:12px;flex:none;}
+.cartbtn{position:relative;border:0;background:transparent;padding:0;width:28px;height:28px;display:grid;place-items:center;cursor:pointer;color:var(--app-ink);flex:none;}
+.cartbadge{position:absolute;top:-4px;right:-6px;min-width:17px;height:17px;border-radius:9px;background:var(--app-red);color:#fff;font-size:10px;font-weight:700;display:grid;place-items:center;padding:0 4px;font-variant-numeric:tabular-nums;}
+.toptabs{display:grid;grid-template-columns:repeat(2,1fr);border-bottom:1px solid var(--app-line);flex:none;}
+.toptab{position:relative;border:0;background:transparent;padding:12px 0 11px;cursor:pointer;font-size:16px;font-weight:600;color:var(--app-faint);display:flex;align-items:center;justify-content:center;gap:6px;}
+.toptab[aria-selected="true"]{color:var(--app-ink);font-weight:700;}
+.toptab[aria-selected="true"]::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;background:var(--app-ink);}
+.toptab .medal{width:20px;height:20px;border-radius:10px;background:linear-gradient(150deg,#FFD86B,#F0A81F);display:grid;place-items:center;font-size:10px;font-weight:800;color:#8A5A00;flex:none;}
+.toptab .await{position:absolute;top:-1px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:700;color:var(--app-red);white-space:nowrap;}
+.toptab.hasawait{padding-top:20px;}
+
+/* 퍼소나 카드 */
+.persona{margin:14px 16px 4px;border:1px solid var(--app-line-2);border-radius:15px;overflow:hidden;background:var(--app-bg);}
+.pertop{display:flex;align-items:flex-start;gap:12px;padding:15px 15px 14px;background:var(--app-wash);}
+.pface{width:44px;height:44px;border-radius:22px;background:#5B62B8;display:grid;place-items:center;flex:none;color:#CFE7F7;}
+.perinfo{flex:1;min-width:0;}
+.perinfo .plab{font-size:12px;color:var(--app-accent-ink);opacity:.75;}
+.pertags{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;}
+.ptag{background:var(--app-bg);color:var(--app-accent-ink);border-radius:12px;padding:4px 11px;font-size:12.5px;font-weight:700;}
+.peredit{border:0;background:transparent;padding:0;font-size:12px;color:var(--app-accent-ink);opacity:.75;cursor:pointer;display:flex;align-items:center;gap:2px;flex:none;}
+.persec{padding:12px 15px;border-top:1px solid var(--app-line);}
+.persec h4{margin:0 0 8px;font-size:11.5px;font-weight:650;color:var(--app-faint);}
+.perchips{display:flex;flex-wrap:wrap;gap:6px;}
+.perchip{display:flex;align-items:center;gap:6px;background:#FDF0DC;color:#8A5A00;border:0;border-radius:14px;padding:6px 9px 6px 11px;font-size:12.5px;font-weight:650;cursor:pointer;}
+.perchip span{opacity:.6;display:grid;place-items:center;}
+.perchip.add{background:var(--app-bg);border:1px dashed var(--app-line-2);color:var(--app-mid);font-weight:500;padding:6px 11px;}
+.perempty{font-size:12.5px;color:var(--app-faint);}
+.pergo{display:flex;align-items:center;gap:8px;width:100%;border:0;border-top:1px solid var(--app-line);background:transparent;padding:13px 15px;cursor:pointer;text-align:left;font-size:14px;font-weight:700;letter-spacing:-.02em;color:var(--app-accent-ink);}
+.pergo .cnt{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:800;}
+.pergo .chev{color:var(--app-accent);flex:none;}
+
+/* 프로모션 스트립 */
+.promostrip{display:flex;gap:8px;overflow-x:auto;padding:0 16px 18px;flex:none;}
+.promostrip::-webkit-scrollbar{height:0;}
+.promo{flex:none;display:flex;align-items:center;gap:9px;border:1px solid var(--app-line-2);border-radius:12px;padding:9px 13px 9px 10px;background:var(--app-bg);cursor:pointer;text-align:left;}
+.promo .pic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none;font-size:11px;font-weight:800;letter-spacing:-.04em;line-height:1.05;text-align:center;}
+.promo .ptxt{display:flex;flex-direction:column;gap:1px;}
+.promo .ptxt b{font-size:12.5px;font-weight:650;white-space:nowrap;}
+.promo .ptxt em{font-style:normal;font-size:11px;color:var(--app-red);font-weight:700;white-space:nowrap;}
+
+/* 찜 궁합 알림 *//* 찜 궁합 알림 */
+.wishalert{display:flex;align-items:center;gap:9px;width:calc(100% - 32px);margin:4px 16px 16px;border:0;border-radius:12px;padding:12px 13px;cursor:pointer;text-align:left;font-size:13px;background:#FEF7EC;color:#8A5A00;}
+.wishalert.calm{background:var(--app-sub);color:var(--app-mid);}
+.wishalert .ic{width:22px;height:22px;border-radius:11px;background:#FADFB4;color:#B87400;display:grid;place-items:center;flex:none;}
+.wishalert.calm .ic{background:var(--app-line-2);color:var(--app-mid);}
+.wishalert .t{flex:1;min-width:0;}
+.wishalert b{font-weight:700;}
+.wishalert .chev{color:currentColor;opacity:.6;flex:none;}
+
+/* 오늘의 성분 */
+.todaycard{display:block;width:calc(100% - 32px);margin:0 16px;border:1px solid var(--app-line-2);border-radius:14px;padding:15px 16px 13px;cursor:pointer;text-align:left;background:var(--app-bg);}
+.todaytop{display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap;}
+.todaymatch{font-size:11px;font-weight:700;border-radius:10px;padding:3px 9px;flex:none;}
+.todaymatch.good{background:var(--app-accent);color:#fff;}
+.todaymatch.care{background:#FDF0DC;color:#B87400;}
+.todaysub{margin:0 0 10px;font-size:11.5px;color:var(--app-faint);}
+.todaytop .iname{font-size:17px;font-weight:700;letter-spacing:-.03em;flex:1;min-width:0;}
+.todaytop .ifn{font-size:11.5px;color:var(--app-faint);flex:none;}
+.todaydesc{margin:0;font-size:13px;line-height:1.6;color:var(--app-mid);}
+.todaydesc b{color:var(--app-accent-ink);font-weight:700;}
+.todayfoot{display:flex;align-items:center;gap:4px;margin-top:12px;padding-top:11px;border-top:1px solid var(--app-line);font-size:12.5px;font-weight:650;color:var(--app-accent-ink);}
+.todayfoot .chev{margin-left:auto;}
+
+.hero{overflow:hidden;padding-top:12px;flex:none;}
+.herotrack{display:flex;gap:8px;margin-left:-13px;}
+.herosliver{flex:none;width:26px;border-radius:16px;}
+.herocard{flex:none;width:348px;height:216px;border-radius:16px;position:relative;overflow:hidden;background:linear-gradient(180deg,#DCEBF7 0%,#E9F2F8 52%,#EFF3F6 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:0 18px 16px;}
+.heroscene{position:absolute;top:6px;left:0;width:100%;height:132px;}
+.heropage{position:absolute;top:10px;right:12px;display:flex;align-items:center;gap:4px;background:rgba(255,255,255,.62);border-radius:14px;padding:5px 10px 5px 12px;font-size:12.5px;font-weight:600;color:#2B3A44;font-variant-numeric:tabular-nums;}
+.herotitle{margin:0;font-size:18px;line-height:1.28;font-weight:800;letter-spacing:-.035em;color:#16303F;position:relative;}
+.herosub{margin:5px 0 0;font-size:12.5px;font-weight:700;letter-spacing:-.03em;color:#2C4A5C;position:relative;}
+
+
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:18px 16px 20px;flex:none;}
+.quick::-webkit-scrollbar{height:0;}
+.quickitem{border:0;background:transparent;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:7px;}
+.qtile{position:relative;width:54px;height:54px;border-radius:16px;display:grid;place-items:center;background:var(--app-wash);color:var(--app-accent-ink);}
+.qtile .qbadge{position:absolute;top:-7px;left:50%;transform:translateX(-50%);background:var(--app-red);color:#fff;font-size:9.5px;font-weight:700;border-radius:8px;padding:2px 6px;white-space:nowrap;}
+.qtile .qtext{font-size:13px;font-weight:800;letter-spacing:-.04em;line-height:1.05;text-align:center;}
+.quickitem span.qlabel{font-size:12px;color:var(--app-ink);white-space:nowrap;letter-spacing:-.03em;}
+
+.homesec{padding:6px 0 20px;}
+.homesec .sechead{padding:0 16px 12px;display:flex;align-items:flex-end;justify-content:space-between;gap:10px;}
+.dateline{font-size:12px;color:var(--app-faint);margin:0 0 3px;font-variant-numeric:tabular-nums;}
+.homesec h2{margin:0;font-size:20px;font-weight:800;letter-spacing:-.035em;}
+.morebtn{border:0;background:transparent;padding:0;font-size:12.5px;color:var(--app-mid);cursor:pointer;display:flex;align-items:center;gap:2px;flex:none;white-space:nowrap;}
+.catchips{display:flex;gap:6px;overflow-x:auto;padding:0 16px 14px;}
+.catchips::-webkit-scrollbar{height:0;}
+.hscroll{display:flex;gap:12px;overflow-x:auto;padding:0 16px 4px;}
+.hscroll::-webkit-scrollbar{height:0;}
+.pcard{flex:none;width:124px;display:flex;flex-direction:column;gap:6px;border:0;background:transparent;padding:0;cursor:pointer;text-align:left;}
+.pcardthumb{position:relative;width:124px;height:124px;border-radius:12px;background:var(--app-sub);display:grid;place-items:center;overflow:hidden;}
+.pcardthumb svg{width:56px;height:72px;}
+.pcardrank{position:absolute;left:0;top:0;background:rgba(27,31,30,.82);color:#fff;font-family:var(--mono);font-size:12px;font-weight:700;padding:3px 8px;border-bottom-right-radius:8px;}
+.pcard .brand{font-size:11px;color:var(--app-mid);}
+.pcard .pcname{font-size:12.5px;line-height:1.38;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.pcard .pcprice{display:flex;align-items:baseline;gap:5px;margin-top:1px;}
+.pcard .pcprice .off{font-size:12.5px;font-weight:700;color:var(--app-red);}
+.pcard .pcprice .price{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;}
+
+.ingmodule{background:var(--app-wash);margin:0 0 20px;padding:18px 0 20px;}
+.ingmodule .sechead{padding:0 16px 4px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
+.ingmodule h2{margin:0;font-size:18px;font-weight:800;letter-spacing:-.035em;color:var(--app-accent-ink);}
+.ingmodule .secsub{margin:4px 0 14px;padding:0 16px;font-size:12.5px;color:var(--app-accent-ink);opacity:.78;}
+.ingmodule .morebtn{color:var(--app-accent-ink);font-weight:650;}
+.ingmodule .pcardthumb{background:#fff;}
+
+.tabbar{position:absolute;left:0;right:0;bottom:0;height:76px;padding:8px 4px 26px;background:var(--app-bg);border-top:1px solid var(--app-line);display:grid;grid-template-columns:repeat(5,1fr);}
+.tabitem{position:relative;border:0;background:transparent;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--app-faint);}
+.tabitem b{font-size:10.5px;font-weight:600;letter-spacing:-.03em;}
+.tabitem[aria-selected="true"]{color:var(--app-ink);}
+.tabitem .dot{position:absolute;top:-1px;right:22px;width:5px;height:5px;border-radius:3px;background:var(--app-red);}
+
+/* ============================================================ SEARCH */
+.apphead{padding:2px 16px 12px;display:flex;align-items:center;gap:10px;flex:none;}
+.iconbtn{border:0;background:transparent;padding:0;width:26px;height:26px;flex:none;display:grid;place-items:center;cursor:pointer;color:var(--app-ink);}
+.field{flex:1;display:flex;align-items:center;gap:8px;height:42px;padding:0 14px;background:var(--app-sub);border-radius:21px;border:1px solid transparent;font-size:14.5px;color:var(--app-ink);cursor:text;}
+.field.is-focused{background:var(--app-bg);border-color:var(--app-accent);}
+.field .ph{color:var(--app-faint);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.field .val{flex:1;color:var(--app-ink);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.field .caret{width:1.5px;height:18px;background:var(--app-accent);animation:blink 1.1s steps(1,end) infinite;flex:none;}
+@keyframes blink{50%{opacity:0;}}
+.field svg{color:var(--app-mid);flex:none;}
+.field .clear{border:0;background:var(--app-line-2);width:18px;height:18px;border-radius:9px;display:grid;place-items:center;cursor:pointer;color:var(--app-bg);flex:none;}
+.field input{flex:1;min-width:0;border:0;outline:0;background:transparent;font:inherit;font-size:14.5px;color:var(--app-ink);letter-spacing:-.01em;padding:0;-webkit-appearance:none;}
+.field input::placeholder{color:var(--app-faint);}
+.field input::-webkit-search-cancel-button{display:none;}
+button.field{cursor:pointer;text-align:left;}
+.rank{border:0;background:transparent;width:100%;cursor:pointer;}
+.qhint{padding:26px 16px;text-align:center;font-size:13px;color:var(--app-faint);line-height:1.6;}
+.qhint b{color:var(--app-ink);}
+
+.shortcut{margin:0 16px 8px;display:flex;align-items:center;gap:10px;width:calc(100% - 32px);background:var(--app-wash);border:0;border-radius:12px;padding:11px 13px;cursor:pointer;text-align:left;}
+.shortcut .sicon{width:26px;height:26px;border-radius:8px;background:var(--app-accent);color:#fff;display:grid;place-items:center;flex:none;}
+.shortcut .stext{flex:1;display:flex;flex-direction:column;gap:1px;}
+.shortcut .stitle{font-size:13.5px;font-weight:650;color:var(--app-accent-ink);}
+.shortcut .ssub{font-size:11.5px;color:var(--app-accent-ink);opacity:.72;}
+.shortcut .chev{color:var(--app-accent-ink);opacity:.6;flex:none;}
+
+.sec{padding:18px 16px 0;}
+.sectop{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:12px;}
+.sectitle{font-size:16.5px;font-weight:700;letter-spacing:-.02em;margin:0;}
+.secmeta{font-size:11px;color:var(--app-faint);font-variant-numeric:tabular-nums;}
+.linkbtn{border:0;background:transparent;padding:0;font-size:12.5px;color:var(--app-mid);cursor:pointer;}
+.chiprow{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
+.chip{border:1px solid var(--app-line-2);background:var(--app-bg);border-radius:16px;padding:6px 13px;font-size:12.5px;color:var(--app-mid);cursor:pointer;white-space:nowrap;flex:none;}
+.chip[aria-pressed="true"]{background:var(--app-wash);border-color:transparent;color:var(--app-accent-ink);font-weight:650;}
+.ranks{display:grid;grid-template-columns:1fr 1fr;gap:2px 16px;}
+.rank{display:flex;align-items:center;gap:10px;padding:7px 0;font-size:13.5px;}
+.rank .n{font-family:var(--mono);font-size:12.5px;color:var(--app-ink);width:15px;flex:none;font-weight:600;}
+.rank .kw{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.rank .type{font-size:10px;color:var(--app-faint);border:1px solid var(--app-line-2);border-radius:4px;padding:1px 4px;flex:none;}
+
+.prod{cursor:pointer;display:flex;gap:12px;padding:14px 0;border-top:1px solid var(--app-line);align-items:flex-start;}
+.prod:first-of-type{border-top:0;}
+.prodrank{width:22px;flex:none;display:flex;flex-direction:column;align-items:center;gap:2px;padding-top:14px;}
+.prodrank b{font-family:var(--mono);font-size:14px;}
+.prodrank em{font-style:normal;font-size:9.5px;color:var(--app-red);font-family:var(--mono);}
+.thumb{width:74px;height:74px;border-radius:10px;background:var(--app-sub);display:grid;place-items:center;flex:none;}
+.thumb svg{width:40px;height:52px;}
+.prodinfo{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;}
+.brand{font-size:11.5px;color:var(--app-mid);}
+.pname{font-size:13.5px;line-height:1.42;color:var(--app-ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.pname b{color:var(--app-accent);font-weight:700;}
+.specline{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--app-mid);margin-top:1px;}
+.specline .sp{background:var(--app-sub);border-radius:4px;padding:2px 6px;font-weight:600;letter-spacing:-.02em;}
+.starrow{display:flex;align-items:center;gap:3px;font-size:12px;color:var(--app-mid);font-variant-numeric:tabular-nums;}
+.pricerow{display:flex;align-items:baseline;gap:6px;margin-top:1px;}
+.off{font-size:14px;font-weight:700;color:var(--app-red);font-variant-numeric:tabular-nums;}
+.price{font-size:14.5px;font-weight:700;font-variant-numeric:tabular-nums;}
+.unit{font-size:11.5px;color:var(--app-faint);font-weight:400;}
+.badges{display:flex;gap:4px;margin-top:5px;flex-wrap:wrap;}
+.badge{font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600;}
+.badge.only{background:var(--app-violet-wash);color:var(--app-violet);}
+.badge.low{background:#FDECEC;color:var(--app-red);}
+.badge.safe{background:var(--app-wash);color:var(--app-accent-ink);}
+.fitpill{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:700;border-radius:11px;padding:3px 9px;letter-spacing:-.02em;font-variant-numeric:tabular-nums;align-self:flex-start;margin-top:3px;}
+.fitpill.hi{background:var(--app-accent);color:#fff;}
+.fitpill.mid{background:var(--app-wash);color:var(--app-accent-ink);}
+.fitpill.low{background:var(--app-sub-2);color:var(--app-mid);}
+.fitpill.warn{background:#FDF0DC;color:#B87400;}
+.fitpill .dot{width:5px;height:5px;border-radius:3px;background:currentColor;opacity:.55;}
+.pcardthumb .pcfit{position:absolute;right:5px;top:5px;font-size:10.5px;font-weight:800;border-radius:9px;padding:3px 7px;font-variant-numeric:tabular-nums;}
+.pcfit.hi{background:var(--app-accent);color:#fff;}
+.pcfit.mid{background:rgba(255,255,255,.92);color:var(--app-accent-ink);}
+.pcfit.low{background:rgba(255,255,255,.92);color:var(--app-mid);}
+.pcfit.warn{background:#FDF0DC;color:#B87400;}
+
+.recent{padding:16px 16px 4px;}
+.recentchips{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;}
+.recentchips::-webkit-scrollbar{height:0;}
+.rchip{display:flex;align-items:center;gap:6px;flex:none;border:1px solid var(--app-line-2);background:var(--app-bg);border-radius:16px;padding:6px 10px 6px 12px;font-size:12.5px;color:var(--app-ink);cursor:pointer;}
+.rchip span{color:var(--app-faint);display:grid;place-items:center;}
+.sugg{padding:6px 0 0;}
+.suggrow{display:flex;align-items:center;gap:10px;width:100%;border:0;background:transparent;padding:11px 16px;cursor:pointer;text-align:left;}
+.suggrow:hover{background:var(--app-sub);}
+.sicon-round{width:30px;height:30px;border-radius:15px;display:grid;place-items:center;flex:none;}
+.suggtext{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px;}
+.suggmain{font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.suggmain b{color:var(--app-accent);font-weight:700;}
+.suggsub{font-size:11.5px;color:var(--app-faint);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.tbadge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;flex:none;letter-spacing:.02em;}
+.tbadge.ing{background:var(--app-wash);color:var(--app-accent-ink);}
+.tbadge.prd{background:#EDF1FE;color:var(--app-blue);}
+.tbadge.brd{background:#FBF0F3;color:var(--app-rose);}
+.tbadge.cat{background:var(--app-sub-2);color:var(--app-mid);}
+
+.tabs{display:flex;padding:0 8px;border-bottom:1px solid var(--app-line);flex:none;}
+.tab{border:0;background:transparent;padding:13px 12px 11px;cursor:pointer;position:relative;font-size:14px;color:var(--app-faint);display:flex;align-items:center;gap:5px;}
+.tab b{font-weight:600;}
+.tab i{font-style:normal;font-family:var(--mono);font-size:11.5px;}
+.tab[aria-selected="true"]{color:var(--app-ink);}
+.tab[aria-selected="true"] b{font-weight:700;}
+.tab[aria-selected="true"]::after{content:"";position:absolute;left:12px;right:12px;bottom:-1px;height:2px;background:var(--app-ink);border-radius:1px;}
+.pane{display:none;}
+.pane.is-active{display:block;}
+
+.ingcard{margin:14px 16px 4px;border:1px solid var(--app-line-2);border-radius:14px;overflow:hidden;}
+.ingtop{padding:15px 16px 13px;display:flex;flex-direction:column;gap:9px;}
+.ingname{display:flex;align-items:center;gap:8px;}
+.ingname h3{margin:0;font-size:17px;font-weight:700;letter-spacing:-.02em;}
+.ewg{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--app-mid);}
+.ewgdot{width:7px;height:7px;border-radius:4px;background:#2FA84F;}
+.ingfns{display:flex;gap:5px;flex-wrap:wrap;}
+.fn{font-size:11.5px;background:var(--app-sub);color:var(--app-mid);border-radius:5px;padding:3px 8px;}
+.ingdesc{font-size:12.5px;color:var(--app-mid);line-height:1.55;margin:0;}
+.ingact{display:flex;border-top:1px solid var(--app-line);}
+.ingact button{flex:1;border:0;background:transparent;padding:12px 0;cursor:pointer;font-size:13px;font-weight:650;color:var(--app-accent-ink);display:flex;align-items:center;justify-content:center;gap:5px;}
+.ingact button + button{border-left:1px solid var(--app-line);color:var(--app-mid);font-weight:500;}
+.ingact button[data-on="true"]{color:var(--app-mid);}
+
+.brandcard{margin:14px 16px 2px;display:flex;align-items:center;gap:12px;border:1px solid var(--app-line-2);border-radius:14px;padding:13px 15px;}
+.brandmark{width:44px;height:44px;border-radius:22px;background:var(--app-sub);display:grid;place-items:center;flex:none;font-size:13px;font-weight:700;color:var(--app-mid);}
+.brandinfo{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
+.brandinfo b{font-size:15px;font-weight:700;letter-spacing:-.02em;}
+.brandinfo span{font-size:11.5px;color:var(--app-faint);font-variant-numeric:tabular-nums;}
+.followbtn{border:1px solid var(--app-accent);background:var(--app-bg);color:var(--app-accent-ink);border-radius:16px;padding:6px 14px;font-size:12.5px;font-weight:650;cursor:pointer;flex:none;}
+.followbtn[data-on="true"]{background:var(--app-accent);border-color:var(--app-accent);color:#fff;}
+
+.resulthead{padding:18px 16px 6px;display:flex;align-items:baseline;justify-content:space-between;}
+.resulthead h4{margin:0;font-size:14.5px;font-weight:700;}
+.resulthead span{font-size:11.5px;color:var(--app-faint);font-variant-numeric:tabular-nums;}
+.plist{padding:0 16px;}
+.filterbar{display:flex;gap:6px;padding:10px 16px 4px;overflow-x:auto;align-items:center;}
+.filterbar::-webkit-scrollbar{height:0;}
+.filternote{margin:8px 16px 0;background:var(--app-wash);border-radius:9px;padding:9px 12px;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--app-accent-ink);}
+.filternote b{font-weight:700;}
+.filternote button{margin-left:auto;border:0;background:transparent;color:var(--app-accent-ink);opacity:.75;font-size:12px;font-weight:600;cursor:pointer;text-decoration:underline;padding:0;flex:none;}
+.countline{padding:14px 16px 0;font-size:12.5px;color:var(--app-faint);font-variant-numeric:tabular-nums;}
+
+/* --- 성분 필터 칩 (상시 노출) --- */
+.chip.ingchip{display:flex;align-items:center;gap:5px;border-color:var(--app-accent);color:var(--app-accent-ink);font-weight:650;background:var(--app-bg);}
+.chip.ingchip[data-on="true"]{background:var(--app-accent);border-color:var(--app-accent);color:#fff;}
+.chip.ingchip .cnt{font-family:var(--mono);font-size:11px;font-weight:700;}
+
+/* --- 온보딩 카드 (마이 성분 0개일 때) --- */
+.onboard{margin:12px 16px 0;border:1px solid var(--app-accent);border-radius:13px;padding:15px 16px 14px;display:none;flex-direction:column;gap:4px;background:var(--app-wash);}
+.onboard.is-shown{display:flex;}
+.onboard b{font-size:14px;font-weight:700;color:var(--app-accent-ink);}
+.onboard p{margin:0 0 9px;font-size:12.5px;color:var(--app-accent-ink);opacity:.8;line-height:1.5;}
+.onboard .obchips{display:flex;gap:6px;flex-wrap:wrap;}
+.obchip{border:1px solid rgba(11,114,104,.3);background:#fff;color:var(--app-accent-ink);border-radius:15px;padding:6px 12px;font-size:12.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;}
+.obmore{border:0;background:transparent;color:var(--app-accent-ink);font-size:12.5px;font-weight:650;cursor:pointer;padding:6px 4px;text-decoration:underline;}
+
+/* --- 필터 시트 --- */
+.sheetwrap{position:absolute;inset:0;z-index:8;display:none;}
+.sheetwrap.is-open{display:block;}
+.sheetdim{position:absolute;inset:0;background:rgba(20,28,27,.42);border:0;width:100%;cursor:pointer;}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--app-bg);border-radius:20px 20px 0 0;display:flex;flex-direction:column;max-height:78%;}
+.sheethandle{width:44px;height:5px;border-radius:3px;background:var(--app-line-2);margin:9px auto 4px;flex:none;}
+.sheethead{padding:6px 18px 12px;flex:none;}
+.sheethead h3{margin:0;font-size:17px;font-weight:700;letter-spacing:-.025em;}
+.sheethead p{margin:4px 0 0;font-size:12.5px;color:var(--app-mid);}
+.sheetbody{flex:1;overflow-y:auto;padding:0 0 12px;}
+.sheetbody::-webkit-scrollbar{width:0;}
+.sheetsec{padding:14px 18px 0;}
+.sheetsec h4{margin:0 0 9px;font-size:12.5px;font-weight:700;color:var(--app-mid);display:flex;align-items:center;gap:6px;}
+.sheetsec h4 em{font-style:normal;font-family:var(--mono);font-size:11.5px;color:var(--app-accent-ink);}
+.pickedwrap{display:flex;flex-wrap:wrap;gap:6px;min-height:32px;}
+.picked{display:flex;align-items:center;gap:7px;background:var(--app-accent);color:#fff;border:0;border-radius:16px;padding:7px 10px 7px 13px;font-size:12.5px;font-weight:650;cursor:pointer;}
+.picked span{opacity:.75;display:grid;place-items:center;}
+.emptypick{font-size:12.5px;color:var(--app-faint);padding:6px 0;}
+.addchips{display:flex;flex-wrap:wrap;gap:6px;}
+.addchip{display:flex;align-items:center;gap:6px;border:1px solid var(--app-line-2);background:var(--app-bg);border-radius:16px;padding:7px 12px 7px 9px;font-size:12.5px;color:var(--app-ink);cursor:pointer;}
+.addchip svg{color:var(--app-accent);flex:none;}
+.addchip em{font-style:normal;font-size:11px;color:var(--app-faint);font-variant-numeric:tabular-nums;}
+.addchip.is-hidden{display:none;}
+.sheetrow{display:flex;align-items:center;gap:12px;width:100%;border:0;background:transparent;padding:11px 18px;cursor:pointer;text-align:left;}
+.sheetrow:hover{background:var(--app-sub);}
+.sheetrow .dicticon{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;flex:none;}
+.sheetrow .dicttext{flex:1;display:flex;flex-direction:column;gap:0;min-width:0;}
+.sheetfoot{display:flex;gap:10px;padding:12px 16px 30px;border-top:1px solid var(--app-line);flex:none;background:var(--app-bg);}
+.resetbtn{border:1px solid var(--app-line-2);background:var(--app-bg);border-radius:11px;padding:14px 20px;font-size:14px;font-weight:650;color:var(--app-mid);cursor:pointer;display:flex;align-items:center;gap:6px;flex:none;}
+.applybtn{flex:1;border:0;background:var(--app-accent);color:#fff;border-radius:11px;padding:14px 0;font-size:15px;font-weight:700;cursor:pointer;font-variant-numeric:tabular-nums;letter-spacing:-.02em;}
+
+/* --- 성분 사전 --- */
+.dicthead{padding:2px 16px 10px;display:flex;align-items:center;gap:10px;flex:none;}
+.dicthead h1{margin:0;font-size:17px;font-weight:700;letter-spacing:-.02em;flex:1;}
+.dictrow{display:flex;align-items:center;gap:12px;width:100%;border:0;background:transparent;padding:13px 16px;cursor:pointer;text-align:left;border-top:1px solid var(--app-line);}
+.dictrow:first-of-type{border-top:0;}
+.dictrow:hover{background:var(--app-sub);}
+.dicticon{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;flex:none;}
+.dicttext{flex:1;display:flex;flex-direction:column;gap:1px;min-width:0;}
+.dicttext b{font-size:14px;font-weight:500;}
+.dicttext span{font-size:11.5px;color:var(--app-faint);font-variant-numeric:tabular-nums;}
+.addbtn{border:1px solid var(--app-line-2);background:var(--app-bg);border-radius:14px;padding:5px 12px;font-size:12px;font-weight:650;color:var(--app-mid);cursor:pointer;flex:none;}
+.addbtn[data-on="true"]{background:var(--app-accent);border-color:var(--app-accent);color:#fff;}
+.mynote{margin:14px 16px;background:var(--app-sub);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:6px;}
+.mynote b{font-size:13px;font-weight:650;}
+.mynote p{margin:0;font-size:12.5px;color:var(--app-mid);line-height:1.55;}
+.mychips{display:flex;flex-wrap:wrap;gap:6px;padding:4px 16px 0;}
+.mychip{display:flex;align-items:center;gap:6px;background:var(--app-wash);color:var(--app-accent-ink);border:0;border-radius:16px;padding:7px 10px 7px 12px;font-size:12.5px;font-weight:600;cursor:pointer;}
+
+/* ============================================================ 상세 페이지 */
+.dhead{padding:0 14px 8px;display:flex;align-items:center;gap:4px;flex:none;}
+.dhead .spacer{flex:1;}
+.gallery{position:relative;width:100%;aspect-ratio:1/1;background:linear-gradient(165deg,#EAF6F7,#DCEFF2 60%,#E9F1F3);overflow:hidden;flex:none;}
+.gbadge{position:absolute;top:16px;left:16px;background:#1B1F1E;color:#fff;font-size:14px;font-weight:800;letter-spacing:-.03em;padding:7px 14px;border-radius:9px;z-index:2;}
+.gscene{position:absolute;inset:0;width:100%;height:100%;}
+.gbrandbar{position:absolute;left:0;right:0;bottom:0;height:52px;background:#3FD1D6;color:#fff;display:grid;place-items:center;font-size:22px;font-weight:800;letter-spacing:-.03em;font-style:italic;}
+.gdots{position:absolute;bottom:64px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:2;}
+.gdots i{width:6px;height:6px;border-radius:3px;background:rgba(27,31,30,.22);display:block;}
+.gdots i.on{background:var(--app-accent);}
+.gonlywrap{display:flex;justify-content:center;padding:12px 0 2px;}
+.gonly{background:#FCE6EE;color:#E0578C;font-size:12px;font-weight:700;border-radius:14px;padding:5px 14px;}
+
+.dbody{padding:16px 16px 0;}
+.dbrand{border:0;background:transparent;padding:0;display:flex;align-items:center;gap:3px;font-size:13px;color:var(--app-mid);cursor:pointer;}
+.dname{margin:7px 0 0;font-size:20px;line-height:1.36;font-weight:700;letter-spacing:-.035em;}
+.dmeta{display:flex;align-items:center;gap:7px;margin-top:10px;flex-wrap:wrap;}
+.dmeta .rate{display:flex;align-items:center;gap:4px;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums;}
+.dmeta .cnt{color:var(--app-faint);font-weight:400;text-decoration:underline;}
+.dmeta .sep{color:var(--app-line-2);}
+.inglink{border:0;background:transparent;padding:0;display:flex;align-items:center;gap:3px;font-size:13.5px;font-weight:650;color:var(--app-accent-ink);cursor:pointer;text-decoration:underline;text-underline-offset:3px;}
+
+/* --- 궁합 카드 (컴팩트 · 카드 전체가 링크) --- */
+.fitcard{margin:14px 16px 0;width:calc(100% - 32px);display:flex;flex-direction:column;border:1px solid var(--app-accent);border-radius:13px;background:var(--app-bg);padding:12px 14px 11px;cursor:pointer;text-align:left;}
+.fitcard:active{background:var(--app-wash);}
+.fitrow{display:flex;align-items:center;gap:9px;}
+.fitface{width:30px;height:30px;border-radius:15px;background:#5B62B8;display:grid;place-items:center;flex:none;color:#CFE7F7;}
+.fitnum{flex:1;min-width:0;display:flex;align-items:baseline;gap:1px;font-size:14.5px;font-weight:650;letter-spacing:-.03em;color:var(--app-accent-ink);}
+.fitnum b{font-size:21px;font-weight:800;font-variant-numeric:tabular-nums;margin-left:4px;}
+.fitnum i{font-style:normal;font-size:13px;font-weight:700;}
+.fitband{font-size:12px;font-weight:700;background:var(--app-accent);color:#fff;border-radius:10px;padding:3px 9px;flex:none;}
+.fitrow .chev{color:var(--app-accent);flex:none;}
+.fitmeter{position:relative;height:6px;border-radius:3px;background:var(--app-sub-2);margin-top:9px;}
+.fitmeter .fill{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:var(--app-accent);}
+.fitmeter .tick{position:absolute;top:-3px;bottom:-3px;width:2px;border-radius:1px;background:var(--app-mid);opacity:.5;}
+.fitavg{margin-top:6px;font-size:11px;color:var(--app-faint);letter-spacing:-.01em;}
+.fitfacts{margin-top:10px;padding-top:9px;border-top:1px solid var(--app-line);display:flex;flex-direction:column;gap:5px;}
+.fact{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--app-mid);letter-spacing:-.02em;}
+.fact .t{flex:1;min-width:0;}
+.fact b{font-weight:700;color:var(--app-ink);}
+.fact .ic{width:15px;height:15px;border-radius:8px;display:grid;place-items:center;flex:none;}
+.fact.ok .ic{background:var(--app-wash);color:var(--app-accent-ink);}
+.fact.warn{color:#8A5A00;}
+.fact.warn b{color:#8A5A00;}
+.fact.warn .ic{background:#FADFB4;color:#B87400;}
+
+/* --- 가격 --- */
+.dprice{padding:20px 16px 0;}
+.dprice .was{font-size:13.5px;color:var(--app-faint);text-decoration:line-through;font-variant-numeric:tabular-nums;}
+.dprice .now{display:flex;align-items:baseline;gap:7px;margin-top:2px;}
+.dprice .pct{font-size:26px;font-weight:800;color:var(--app-red);font-variant-numeric:tabular-nums;letter-spacing:-.03em;}
+.dprice .amt{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.03em;}
+.benefitrow{margin-top:12px;width:100%;display:flex;align-items:center;gap:8px;border:1px solid var(--app-line-2);border-radius:11px;padding:12px 14px;background:var(--app-bg);cursor:pointer;text-align:left;font-size:13px;color:var(--app-mid);}
+.benefitrow b{color:var(--app-ink);font-weight:700;font-variant-numeric:tabular-nums;}
+.benefitrow .chev{margin-left:auto;color:var(--app-faint);flex:none;}
+
+/* --- 스펙 --- */
+.specrows{padding:20px 16px 0;display:flex;flex-direction:column;gap:0;}
+.specrow{display:flex;gap:14px;padding:9px 0;font-size:13px;align-items:flex-start;}
+.specrow dt{width:56px;flex:none;color:var(--app-faint);margin:0;}
+.specrow dd{margin:0;flex:1;color:var(--app-ink);display:flex;align-items:flex-start;gap:6px;}
+.specrow dd .free{color:var(--app-accent-ink);font-weight:650;}
+.specrow dd .chev{margin-left:auto;color:var(--app-faint);flex:none;}
+.dactions{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:18px 16px 0;border-top:1px solid var(--app-line);border-bottom:1px solid var(--app-line);}
+.dactions button{border:0;background:transparent;padding:14px 0;cursor:pointer;font-size:13px;color:var(--app-mid);display:flex;align-items:center;justify-content:center;gap:6px;}
+.dactions button + button{border-left:1px solid var(--app-line);}
+
+/* --- 평점 분포 --- */
+.dsec{padding:22px 16px 0;}
+.dsec > h3{margin:0 0 12px;font-size:16.5px;font-weight:700;letter-spacing:-.025em;}
+.rdist{display:flex;gap:18px;align-items:center;}
+.rbig{display:flex;flex-direction:column;align-items:center;gap:1px;flex:none;width:86px;}
+.rbig b{font-size:30px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.03em;line-height:1.1;}
+.rbig .stars{display:flex;gap:1px;}
+.rbig em{font-style:normal;font-size:11px;color:var(--app-faint);margin-top:2px;}
+.rbars{flex:1;display:flex;flex-direction:column;gap:5px;min-width:0;}
+.rbar{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--app-faint);font-variant-numeric:tabular-nums;}
+.rbar .lab{width:20px;flex:none;}
+.rbar .track{flex:1;height:6px;border-radius:3px;background:var(--app-sub-2);overflow:hidden;}
+.rbar .track i{display:block;height:100%;background:#FFB400;border-radius:3px;}
+.rbar .pc{width:26px;text-align:right;flex:none;}
+
+.revscroll{display:flex;gap:10px;overflow-x:auto;padding:14px 16px 0;}
+.revscroll::-webkit-scrollbar{height:0;}
+.revcard{flex:none;width:230px;border:1px solid var(--app-line-2);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:6px;background:var(--app-bg);}
+.revtop{display:flex;align-items:center;gap:7px;}
+.revtop .rstar{display:flex;align-items:center;gap:3px;font-size:12.5px;font-weight:700;}
+.revtop .rwho{font-size:11px;color:var(--app-faint);margin-left:auto;}
+.revbody{font-size:12.5px;line-height:1.5;color:var(--app-mid);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+
+.brandrow{display:flex;align-items:center;gap:11px;margin:22px 16px 0;border:1px solid var(--app-line-2);border-radius:13px;padding:13px 15px;}
+.brandrow .bmark{width:40px;height:40px;border-radius:20px;background:var(--app-sub);display:grid;place-items:center;font-size:10px;font-weight:700;color:var(--app-mid);flex:none;}
+.brandrow .binfo{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px;}
+.brandrow .binfo b{font-size:14.5px;font-weight:700;display:flex;align-items:center;gap:3px;}
+.brandrow .binfo span{font-size:11.5px;color:var(--app-faint);font-variant-numeric:tabular-nums;}
+.brandrow .heartbtn{border:0;background:transparent;padding:0;cursor:pointer;color:var(--app-line-2);flex:none;}
+.brandrow .heartbtn[data-on="true"]{color:var(--app-rose);}
+
+/* --- 성분 구성 (리뷰/성분 탭 안) --- */
+.ingsum{padding:18px 16px 0;}
+.ingsumhead{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:4px;}
+.ingsumhead h4{margin:0;font-size:15.5px;font-weight:700;letter-spacing:-.025em;}
+.ingsumstat{font-size:12px;color:var(--app-mid);margin:0 0 12px;font-variant-numeric:tabular-nums;}
+.ingsumstat b{color:var(--app-ink);font-weight:650;}
+.ingitem{display:flex;align-items:center;gap:11px;padding:11px 0;border-top:1px solid var(--app-line);}
+.ingitem:first-of-type{border-top:0;}
+.ingitem .idot{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;flex:none;}
+.ingitem .itext{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px;}
+.ingitem .itext b{font-size:13.5px;font-weight:600;}
+.ingitem .itext span{font-size:11.5px;color:var(--app-faint);}
+.ingitem .iflag{font-size:10px;font-weight:700;border-radius:4px;padding:3px 7px;flex:none;}
+.ingitem .iflag.mine{background:#FDF0DC;color:#B87400;}
+.allingbtn{margin-top:12px;width:100%;border:1px solid var(--app-line-2);background:var(--app-bg);border-radius:10px;padding:12px 0;font-size:13px;font-weight:650;color:var(--app-mid);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;}
+
+.aitag{background:linear-gradient(120deg,#6E56CF,#3E7BFA);color:#fff;font-size:10px;font-weight:700;border-radius:5px;padding:3px 7px;}
+.topicgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px;margin-top:14px;}
+.topiccol h5{margin:0 0 9px;font-size:12.5px;font-weight:700;color:var(--app-mid);display:flex;align-items:center;gap:5px;}
+.topicitem{display:flex;align-items:center;gap:6px;width:100%;border:0;background:transparent;padding:9px 0;cursor:pointer;font-size:13px;text-align:left;border-top:1px solid var(--app-line);}
+.topicitem:first-of-type{border-top:0;}
+.topicitem span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.topicitem em{font-style:normal;font-size:11.5px;color:var(--app-faint);font-variant-numeric:tabular-nums;}
+
+.dbottom{position:absolute;left:0;right:0;bottom:0;height:96px;padding:10px 14px 30px;background:var(--app-bg);border-top:1px solid var(--app-line);display:flex;align-items:center;gap:9px;z-index:4;}
+.zzim{display:flex;flex-direction:column;align-items:center;gap:2px;border:0;background:transparent;padding:0 6px;cursor:pointer;color:var(--app-faint);flex:none;}
+.zzim b{font-size:10.5px;font-weight:600;}
+.zzim[data-on="true"]{color:var(--app-rose);}
+.dbtn{flex:1;border:0;border-radius:11px;padding:15px 0;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:-.02em;}
+.dbtn.cart{background:var(--app-bg);border:1px solid var(--app-accent);color:var(--app-accent-ink);}
+.dbtn.buy{background:var(--app-accent);color:#fff;}
+
+/* ============================================================ 성분 페이지 */
+.ihead{padding:2px 8px 4px;display:flex;align-items:center;gap:4px;flex:none;}
+.ihead h1{flex:1;text-align:center;margin:0;font-size:16.5px;font-weight:700;letter-spacing:-.02em;}
+
+/* --- 1층 : 결론 --- */
+.verdict{padding:16px 16px 22px;border-bottom:8px solid var(--app-sub);}
+.vtop{display:flex;align-items:center;gap:11px;}
+.vface{width:40px;height:40px;border-radius:20px;background:#5B62B8;display:grid;place-items:center;flex:none;color:#CFE7F7;}
+.vnum{flex:1;min-width:0;display:flex;align-items:baseline;font-size:16px;font-weight:650;letter-spacing:-.03em;}
+.vnum b{font-size:30px;font-weight:800;font-variant-numeric:tabular-nums;margin:0 1px 0 6px;}
+.vnum i{font-style:normal;font-size:14px;font-weight:700;}
+.vband{font-size:13px;font-weight:700;background:var(--app-accent);color:#fff;border-radius:12px;padding:5px 12px;flex:none;}
+.vmeterwrap{position:relative;margin-top:16px;padding-bottom:17px;}
+.vmeter{position:relative;height:8px;border-radius:4px;background:var(--app-sub-2);}
+.vmeter .fill{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:var(--app-accent);}
+.vmeter .tick{position:absolute;top:-4px;bottom:-4px;width:2px;border-radius:1px;background:var(--app-ink);opacity:.32;}
+.vticklab{position:absolute;top:14px;transform:translateX(-50%);font-size:10.5px;color:var(--app-faint);white-space:nowrap;font-variant-numeric:tabular-nums;}
+
+/* --- 2층 : 내 피부 기준 스코어카드 --- */
+.skinbox{padding:0 16px 18px;border-bottom:8px solid var(--app-sub);}
+.skinbox h2{margin:0 0 4px;font-size:14.5px;font-weight:700;letter-spacing:-.02em;}
+.skinbox h2 b{color:var(--app-accent-ink);font-weight:800;}
+.sbrow{display:flex;align-items:center;gap:10px;padding:12px 0;border-top:1px solid var(--app-line);font-size:14px;}
+.sbrow:first-of-type{border-top:0;}
+.sbic{width:19px;height:19px;border-radius:10px;display:grid;place-items:center;flex:none;}
+.sbrow.good .sbic{background:var(--app-wash);color:var(--app-accent-ink);}
+.sbrow.none .sbic{background:var(--app-sub-2);color:var(--app-faint);}
+.sbrow.warn .sbic{background:#FADFB4;color:#B87400;}
+.sbrow.warn{color:#8A5A00;}
+.sblab{flex:1;min-width:0;color:var(--app-mid);}
+.sbrow.warn .sblab{color:#8A5A00;}
+.sbval{flex:none;font-weight:700;color:var(--app-ink);display:flex;align-items:baseline;gap:7px;}
+.sbrow.none .sbval{color:var(--app-faint);font-weight:600;}
+.sbrow.warn .sbval{color:#8A5A00;}
+.sbval em{font-style:normal;font-variant-numeric:tabular-nums;color:#B87400;}
+.sbnames{display:flex;flex-wrap:wrap;gap:5px;padding:0 0 12px 29px;margin:-2px 0 0;}
+.sbnames span{background:var(--app-wash);color:var(--app-accent-ink);border-radius:12px;padding:4px 10px;font-size:12px;font-weight:600;}
+.sbmore{margin-top:12px;width:100%;border:1px solid var(--app-line-2);background:var(--app-bg);border-radius:10px;padding:11px 0;font-size:12.5px;font-weight:600;color:var(--app-mid);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;}
+.sbmore[aria-expanded="true"] .chev{transform:rotate(180deg);}
+.sbmore .chev{transition:transform .18s ease;}
+.otherbox{display:none;margin-top:8px;background:var(--app-sub);border-radius:10px;padding:2px 12px;}
+.otherbox.is-open{display:block;}
+.otherrow{display:flex;align-items:center;gap:9px;padding:11px 0;border-top:1px solid var(--app-line-2);font-size:13px;}
+.otherrow:first-child{border-top:0;}
+.otherrow .olab{flex:1;font-weight:600;}
+.otherrow .oval{font-size:12.5px;color:var(--app-mid);font-variant-numeric:tabular-nums;}
+.otherrow .oval b{color:var(--app-accent-ink);font-weight:700;}
+
+/* --- 3층 : 원자료 --- */
+.morelabel{margin:0;padding:20px 16px 10px;font-size:12.5px;color:var(--app-faint);}
+.gradelegend{display:flex;align-items:center;gap:12px;padding:13px 16px 3px;flex-wrap:wrap;}
+.gradelegend span{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--app-mid);font-variant-numeric:tabular-nums;}
+.gradelegend .sw{width:9px;height:9px;border-radius:5px;flex:none;}
+.gradelegend .ln{margin-left:auto;color:var(--app-faint);}
+.ilisthead{display:flex;align-items:baseline;gap:8px;padding:18px 16px 6px;}
+.ilisthead h2{margin:0;font-size:15px;font-weight:700;letter-spacing:-.025em;}
+.ilisthead .cnt{font-size:13px;font-weight:700;color:var(--app-accent);font-variant-numeric:tabular-nums;}
+.ilisthead .sub{margin-left:auto;font-size:11px;color:var(--app-faint);}
+
+.irow{display:flex;align-items:center;gap:11px;width:100%;border:0;background:transparent;padding:12px 16px;cursor:pointer;text-align:left;border-top:1px solid var(--app-line);}
+.irow:hover{background:var(--app-sub);}
+.grade{min-width:34px;height:24px;border-radius:6px;display:grid;place-items:center;font-size:11.5px;font-weight:800;flex:none;font-variant-numeric:tabular-nums;padding:0 6px;letter-spacing:-.02em;}
+.grade.g1{background:#CDEDF1;color:#0A6B78;}
+.grade.g3{background:#FBE3B8;color:#8A5A00;}
+.grade.g7{background:#FBD2D2;color:#B02A30;}
+.grade.g0{background:var(--app-sub-2);color:var(--app-faint);}
+.irow .iname{flex:1;min-width:0;font-size:14px;font-weight:500;color:var(--app-ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.irow .ifn{font-size:11.5px;color:var(--app-faint);flex:none;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.irow .chev{color:var(--app-line-2);flex:none;}
+.mineblock{background:#FEF9F1;border-top:1px solid #F3E2C6;border-bottom:1px solid #F3E2C6;}
+.mineblock .ilisthead h2{color:#8A5A00;}
+.mineblock .ilisthead .cnt{color:#B87400;}
+.mineblock .irow{border-top:0;}
+.mineblock .irow:hover{background:#FCF2E2;}
+.mineblock .iname{font-weight:700;color:#8A5A00;}
+.mineblock .minetag{font-size:10px;font-weight:700;color:#fff;background:#D18A16;border-radius:4px;padding:3px 7px;flex:none;}
+.iend{padding:15px 16px 4px;text-align:center;font-size:12.5px;color:var(--app-faint);}
+
+/* 조건으로 찾기 (파라메트릭 검색) */
+.qform{margin:20px 16px 4px;border:1px solid var(--app-line-2);border-radius:14px;overflow:hidden;background:var(--app-bg);}
+.qformhead{padding:14px 15px 12px;}
+.qformhead h2{margin:0;font-size:14.5px;font-weight:700;letter-spacing:-.02em;}
+.qformhead p{margin:3px 0 0;font-size:11.5px;color:var(--app-faint);}
+.slot{display:flex;align-items:center;gap:10px;width:100%;border:0;background:transparent;padding:13px 15px;cursor:pointer;text-align:left;border-top:1px solid var(--app-line);}
+.slot:hover{background:var(--app-sub);}
+.slabel{width:56px;flex:none;font-size:12.5px;color:var(--app-faint);}
+.svalue{flex:1;min-width:0;font-size:14px;font-weight:650;letter-spacing:-.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.svalue.empty{color:var(--app-faint);font-weight:400;}
+.slot .chev{color:var(--app-faint);flex:none;transition:transform .18s ease;}
+.slot[aria-expanded="true"]{background:var(--app-sub);}
+.slot[aria-expanded="true"] .chev{transform:rotate(180deg);}
+.slotbody{display:none;padding:0 15px 14px;background:var(--app-sub);}
+.slotbody.is-open{display:block;}
+.slotgrp{padding-top:12px;}
+.slotgrp h4{margin:0 0 8px;font-size:11.5px;font-weight:650;color:var(--app-mid);display:flex;flex-wrap:wrap;gap:5px;align-items:baseline;}
+.slotgrp h4 em{font-style:normal;font-weight:400;color:var(--app-faint);font-size:11px;}
+.fchip.minus[aria-pressed="true"]{background:#E8A317;border-color:#E8A317;}
+.fchips{display:flex;flex-wrap:wrap;gap:6px;}
+.fchip{border:1px solid var(--app-line-2);background:var(--app-bg);border-radius:16px;padding:7px 13px;font-size:12.5px;color:var(--app-mid);cursor:pointer;white-space:nowrap;}
+.fchip[aria-pressed="true"]{background:var(--app-accent);border-color:var(--app-accent);color:#fff;font-weight:650;}
+.qsubmit{width:100%;border:0;border-top:1px solid var(--app-line);background:var(--app-accent);color:#fff;padding:15px 0;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:-.02em;font-variant-numeric:tabular-nums;}
+.qreset{width:100%;border:0;border-top:1px solid var(--app-line);background:transparent;color:var(--app-faint);padding:10px 0;font-size:12px;cursor:pointer;}
+
+/* 성분 상세 시트 */
+.isheet{position:absolute;left:0;right:0;bottom:0;background:var(--app-bg);border-radius:20px 20px 0 0;display:flex;flex-direction:column;max-height:72%;}
+.ishead{padding:6px 18px 14px;flex:none;}
+.ishead .top{display:flex;align-items:center;gap:9px;}
+.ishead h3{margin:0;font-size:19px;font-weight:700;letter-spacing:-.03em;flex:1;min-width:0;}
+.ishead .sub{margin:6px 0 0;font-size:12.5px;color:var(--app-mid);}
+.isbody{flex:1;overflow-y:auto;padding:0 18px;}
+.isbody::-webkit-scrollbar{width:0;}
+.isrow{display:flex;gap:14px;padding:11px 0;border-top:1px solid var(--app-line);font-size:13.5px;}
+.isrow dt{width:64px;flex:none;color:var(--app-faint);margin:0;}
+.isrow dd{margin:0;flex:1;}
+.isdesc{margin:14px 0 0;padding:14px;background:var(--app-sub);border-radius:11px;font-size:13px;line-height:1.6;color:var(--app-mid);}
+.isfoot{padding:12px 16px 30px;flex:none;}
+.isbtn{width:100%;border:1px solid var(--app-accent);background:var(--app-bg);color:var(--app-accent-ink);border-radius:11px;padding:14px 0;font-size:15px;font-weight:700;cursor:pointer;}
+.isbtn[data-on="true"]{background:var(--app-accent);border-color:var(--app-accent);color:#fff;}
+
+/* 아코디언 */
+.accrow{display:flex;align-items:center;gap:10px;width:100%;border:0;background:transparent;padding:15px 16px;cursor:pointer;text-align:left;border-top:1px solid var(--app-line);}
+.accrow:hover{background:var(--app-sub);}
+.accrow .alab{flex:1;min-width:0;font-size:14px;letter-spacing:-.02em;}
+.accrow .mineTag{font-size:10px;font-weight:700;color:#fff;background:var(--app-accent);border-radius:4px;padding:2px 6px;flex:none;}
+.accrow .anum{font-size:13.5px;font-weight:700;color:var(--app-ink);font-variant-numeric:tabular-nums;flex:none;}
+.accrow .anum b{color:var(--app-accent-ink);font-weight:700;}
+.accrow .chev{color:var(--app-faint);flex:none;transition:transform .18s ease;}
+.accrow[aria-expanded="true"]{background:var(--app-sub);}
+.accrow[aria-expanded="true"] .alab{font-weight:700;}
+.accrow[aria-expanded="true"] .chev{transform:rotate(90deg);}
+.accbody{display:none;background:var(--app-sub);padding:2px 0 8px;}
+.accbody.is-open{display:block;}
+.accbody .irow{border-top:0;padding-top:8px;padding-bottom:8px;}
+.accbody .irow:hover{background:#EDF1F0;}
+
+@media (max-width:470px){
+  .studio{padding:16px 0;}
+  .deviceframe{transform:scale(.86);transform-origin:top center;}
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></symbol>
+  <symbol id="i-chevd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9l7 7 7-7"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-drop" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.2c0 0 4.6 4.9 4.6 8A4.6 4.6 0 0 1 8 13.8a4.6 4.6 0 0 1-4.6-4.6c0-3.1 4.6-8 4.6-8z"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="3.1" fill="currentColor" stroke="none"/><path d="M8 1.4v1.6M8 13v1.6M1.4 8h1.6M13 8h1.6M3.4 3.4l1.1 1.1M11.5 11.5l1.1 1.1M12.6 3.4l-1.1 1.1M4.5 11.5l-1.1 1.1"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 16 16" fill="currentColor"><path d="M8 .8l1.7 4.5L14.2 7l-4.5 1.7L8 13.2 6.3 8.7 1.8 7l4.5-1.7z"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="7"/><path d="M8 4.2v4.6M8 11.2v.1" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l5.2 2v4.4c0 3.4-2.2 6.2-5.2 7-3-.8-5.2-3.6-5.2-7V3z"/></symbol>
+  <symbol id="i-filter" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1.6 3.4h12.8M3.8 8h8.4M6.2 12.6h3.6"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.2 5L20 6.5"/></symbol>
+  <symbol id="i-reset" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3.6 12a8.4 8.4 0 1 0 2.6-6.1"/><path d="M3.4 3.6v5h5"/></symbol>
+  <symbol id="i-star" viewBox="0 0 16 16" fill="#FFB400"><path d="M8 1.3l2 4.1 4.5.6-3.3 3.2.8 4.5L8 11.6l-4 2.1.8-4.5L1.5 6l4.5-.6z"/></symbol>
+  <symbol id="i-cell" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.6" y="5.6" width="3" height="6.4" rx="1"/><rect x="9.3" y="3" width="3" height="9" rx="1"/><rect x="14" y="0" width="3" height="12" rx="1"/></symbol>
+  <symbol id="i-wifi" viewBox="0 0 18 13" fill="currentColor"><path d="M9 12.4l2.3-2.9a3.7 3.7 0 0 0-4.6 0zM9 6.1c1.6 0 3 .5 4.2 1.5l1.6-2A9.5 9.5 0 0 0 9 3.4c-2.2 0-4.2.8-5.8 2.2l1.6 2A6.5 6.5 0 0 1 9 6.1zM9 .4c3 0 5.7 1.1 7.8 2.9l1.1-1.4A14 14 0 0 0 9-1.5C5.5-1.5 2.3-.3-.1 1.9L1 3.3A11.6 11.6 0 0 1 9 .4z"/></symbol>
+  <symbol id="i-batt" viewBox="0 0 26 13" fill="none"><rect x=".6" y=".6" width="22" height="11.8" rx="3.4" stroke="currentColor" stroke-opacity=".38" stroke-width="1.1"/><rect x="2.2" y="2.2" width="16.5" height="8.6" rx="2.2" fill="currentColor"/><path d="M24.4 4.6v3.8a2.1 2.1 0 0 0 0-3.8z" fill="currentColor" fill-opacity=".45"/></symbol>
+  <symbol id="i-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4.4 7.4h15.2l-1.2 12a1.6 1.6 0 0 1-1.6 1.4H7.2a1.6 1.6 0 0 1-1.6-1.4z"/><path d="M8.6 9.4V6.6a3.4 3.4 0 0 1 6.8 0v2.8"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3.6 6.5h16.8M3.6 12h16.8M3.6 17.5h16.8"/></symbol>
+  <symbol id="i-gem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M6 3.6h12l4 6-10 11L2 9.6z"/><path d="M2 9.6h20M8.6 9.6L12 3.6l3.4 6-3.4 11z"/></symbol>
+  <symbol id="i-house" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.6L2.4 10.6h2.4v10.2h5.4v-5.6h3.6v5.6h5.4V10.6h2.4z"/></symbol>
+  <symbol id="i-houseline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M3.4 10.4L12 3.4l8.6 7v10.2h-5.4v-6h-6.4v6H3.4z"/></symbol>
+  <symbol id="i-store" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 9.4h18v11.2H3z"/><path d="M3 9.4L4.4 4h15.2L21 9.4"/><path d="M8.4 9.4v11.2M15.6 9.4v11.2M3 14.6h18"/></symbol>
+  <symbol id="i-person" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="7.6" r="3.8"/><path d="M4.6 20.6c0-4 3.3-6.4 7.4-6.4s7.4 2.4 7.4 6.4"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24" fill="currentColor"><path d="M12 20.6l-1.5-1.4C5.2 14.4 2 11.5 2 8a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 3.5-3.2 6.4-8.5 11.2z"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="9.4"/><path d="M9.4 9.2a2.7 2.7 0 1 1 3.4 2.6c-.5.2-.8.7-.8 1.3v.5"/><path d="M12 17.2v.05" stroke-width="2.4"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="18.4" cy="5.6" r="2.9"/><circle cx="5.6" cy="12" r="2.9"/><circle cx="18.4" cy="18.4" r="2.9"/><path d="M8.2 10.7l7.6-3.8M8.2 13.3l7.6 3.8"/></symbol>
+  <symbol id="i-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3.4 9.6h17.2v3.2H3.4z"/><path d="M4.8 12.8h14.4v8H4.8z"/><path d="M12 9.6v11.2"/><path d="M12 9.6S9.6 9.6 8.4 8.4a2 2 0 1 1 3-2.6C12.4 6.8 12 9.6 12 9.6zM12 9.6s2.4 0 3.6-1.2a2 2 0 1 0-3-2.6C11.6 6.8 12 9.6 12 9.6z"/></symbol>
+  <symbol id="i-medal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><circle cx="12" cy="15" r="6"/><path d="M9 9.4L6.4 2.8h11.2L15 9.4"/><path d="M12 12.4v5.2M10.6 13.6L12 12.4"/></symbol>
+  <symbol id="i-face" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9.2"/><path d="M8.4 14.6a4.6 4.6 0 0 0 7.2 0"/><path d="M7.4 9.6h2.8M14.4 9.6h2.4"/></symbol>
+  <symbol id="i-bottle" viewBox="0 0 48 62" fill="none"><rect x="18.5" y="1" width="11" height="9" rx="2.5" fill="#C9DAD7"/><path d="M13 11h22a6 6 0 0 1 6 6v39a5 5 0 0 1-5 5H12a5 5 0 0 1-5-5V17a6 6 0 0 1 6-6z" fill="#DCE9E7"/><rect x="11" y="26" width="26" height="21" rx="3" fill="#fff" fill-opacity=".8"/><rect x="14.5" y="31" width="15" height="3" rx="1.5" fill="#9CC0BB"/><rect x="14.5" y="37" width="10" height="2.4" rx="1.2" fill="#BBD3CF"/></symbol>
+  <symbol id="i-tube" viewBox="0 0 48 62" fill="none"><path d="M15 8h18l3 46a6 6 0 0 1-6 6.5H18A6 6 0 0 1 12 54z" fill="#E3E1F2"/><rect x="16" y="1" width="16" height="8" rx="2" fill="#C6C2E4"/><rect x="14" y="28" width="20" height="18" rx="3" fill="#fff" fill-opacity=".85"/><rect x="17.5" y="33" width="13" height="3" rx="1.5" fill="#A9A2D6"/><rect x="17.5" y="39" width="8" height="2.4" rx="1.2" fill="#C7C2E4"/></symbol>
+  <symbol id="i-tube2" viewBox="0 0 48 62" fill="none"><path d="M15 8h18l3 46a6 6 0 0 1-6 6.5H18A6 6 0 0 1 12 54z" fill="#DCEAF6"/><rect x="16" y="1" width="16" height="8" rx="2" fill="#B9D4EA"/><rect x="14" y="28" width="20" height="18" rx="3" fill="#fff" fill-opacity=".9"/><rect x="17.5" y="33" width="13" height="3" rx="1.5" fill="#8FB6D6"/><rect x="17.5" y="39" width="8" height="2.4" rx="1.2" fill="#B6D2E7"/></symbol>
+  <symbol id="i-stick" viewBox="0 0 48 62" fill="none"><rect x="14" y="6" width="20" height="54" rx="7" fill="#FBE7CF"/><rect x="16" y="1" width="16" height="8" rx="3" fill="#EDCFA8"/><rect x="16" y="26" width="16" height="20" rx="3" fill="#fff" fill-opacity=".85"/><rect x="19" y="31" width="10" height="3" rx="1.5" fill="#D9AE78"/><rect x="19" y="37" width="6" height="2.4" rx="1.2" fill="#EAD0AE"/></symbol>
+  <symbol id="i-jar" viewBox="0 0 48 62" fill="none"><rect x="8" y="20" width="32" height="34" rx="6" fill="#D5E7EA"/><rect x="6" y="13" width="36" height="10" rx="4" fill="#BBD8DE"/><rect x="12" y="30" width="24" height="16" rx="3" fill="#fff" fill-opacity=".8"/><rect x="16" y="35" width="14" height="3" rx="1.5" fill="#8FBAC2"/></symbol>
+</svg>
+
+<div class="studio">
+  <div class="deviceframe">
+    <div class="viewport">
+
+          <!-- ================= 홈 ================= -->
+          <section class="screen" data-screen="home">
+            <div class="statusbar"><span class="clock">1:59</span><div class="island"></div><div class="statusicons"><svg width="18" height="12"><use href="#i-cell"/></svg><svg width="17" height="12"><use href="#i-wifi"/></svg><svg width="26" height="13"><use href="#i-batt"/></svg></div></div>
+            <div class="homehead">
+              <button class="field" data-opensearch><span class="ph">아윌미백 브라이트카밍 젤크림</span><svg width="20" height="20"><use href="#i-search"/></svg></button>
+              <button class="cartbtn" aria-label="장바구니, 2개"><svg width="24" height="24"><use href="#i-cart"/></svg><span class="cartbadge">2</span></button>
+            </div>
+            <div class="toptabs" role="tablist" aria-label="홈 상단 탭">
+              <button class="toptab" role="tab" aria-selected="true">홈</button>
+              <button class="toptab" role="tab" aria-selected="false"><span class="medal">1</span>랭킹</button>
+            </div>
+            <div class="scroll" style="padding-bottom:96px">
+              <div class="persona">
+                <div class="pertop">
+                  <span class="pface"><svg width="24" height="24"><use href="#i-face"/></svg></span>
+                  <span class="perinfo">
+                    <span class="plab">내 피부</span>
+                    <span class="pertags"><span class="ptag">지성</span><span class="ptag">모공</span><span class="ptag">미백</span></span>
+                  </span>
+                  <button class="peredit">수정 <svg width="11" height="11"><use href="#i-chev"/></svg></button>
+                </div>
+                <div class="persec">
+                  <h4>피하는 성분</h4>
+                  <div class="perchips" data-per-chips></div>
+                </div>
+                <button class="pergo" data-go="resultsC">
+                  내 피부에 맞는 제품 보기
+                  <span class="cnt" data-persona-count>128</span>
+                  <svg class="chev" width="15" height="15"><use href="#i-chev"/></svg>
+                </button>
+              </div>
+
+              <div class="hero">              <div class="hero">
+                <div class="herotrack">
+                  <div class="herosliver" style="height:216px;background:#EDE9F8"></div>
+                  <div class="herocard">
+                    <svg class="heroscene" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid meet" aria-label="에스네이처 아쿠아 오아시스 제품 라인업">
+                      <rect x="36" y="30" width="70" height="94" rx="4" fill="#63B8DE"/>
+                      <rect x="42" y="38" width="58" height="34" rx="3" fill="#E8F4FB"/>
+                      <text x="71" y="61" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="15" font-weight="800" fill="#1E6E9C" letter-spacing="1">OASIS</text>
+                      <rect x="46" y="80" width="50" height="3" rx="1.5" fill="#B7DEF1"/><rect x="46" y="88" width="38" height="3" rx="1.5" fill="#B7DEF1"/><rect x="46" y="96" width="44" height="3" rx="1.5" fill="#B7DEF1"/>
+                      <path d="M12 62h24a5 5 0 0 1 5 5v52a5 5 0 0 1-5 5H12a5 5 0 0 1-5-5V67a5 5 0 0 1 5-5z" fill="#CFE7F2"/>
+                      <rect x="16" y="80" width="16" height="3" rx="1.5" fill="#8CBDD6"/><rect x="16" y="88" width="11" height="2.4" rx="1.2" fill="#A7CFE3"/>
+                      <rect x="116" y="52" width="30" height="72" rx="6" fill="#2E8FD0"/><rect x="123" y="40" width="16" height="14" rx="3" fill="#1B6FA8"/><rect x="121" y="72" width="20" height="26" rx="3" fill="#BFE2F5" fill-opacity=".55"/>
+                      <rect x="158" y="34" width="46" height="90" rx="6" fill="#EAF4FA"/><rect x="170" y="22" width="22" height="14" rx="3" fill="#C6DEEB"/><rect x="163" y="52" width="36" height="46" rx="3" fill="#fff" fill-opacity=".8"/>
+                      <text x="181" y="66" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="7" font-weight="700" fill="#3D7EA6" letter-spacing=".5">S.NATURE</text>
+                      <rect x="168" y="72" width="26" height="2.6" rx="1.3" fill="#9EC6DC"/><rect x="168" y="79" width="20" height="2.2" rx="1.1" fill="#B9D8E8"/><rect x="168" y="86" width="24" height="2.2" rx="1.1" fill="#B9D8E8"/>
+                      <rect x="216" y="72" width="62" height="52" rx="7" fill="#8FCEE4"/><rect x="212" y="60" width="70" height="16" rx="6" fill="#6EBBD8"/><rect x="224" y="88" width="46" height="24" rx="3" fill="#fff" fill-opacity=".78"/>
+                      <text x="247" y="99" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="6.5" font-weight="700" fill="#2C7BA0" letter-spacing=".4">AQUA OASIS</text>
+                      <rect x="232" y="103" width="30" height="2.2" rx="1.1" fill="#A9D6E7"/>
+                      <rect x="0" y="122" width="320" height="9" fill="#4FB3C9" opacity=".5"/><rect x="0" y="131" width="320" height="26" fill="#8FD6E2" opacity=".26"/>
+                      <path d="M40 131v14M78 131v20M132 131v11M186 131v17M238 131v13M286 131v9" stroke="#6FC6D8" stroke-opacity=".5" stroke-width="3" stroke-linecap="round"/>
+                      <circle cx="58" cy="152" r="3" fill="#7FCDDC" fill-opacity=".55"/><circle cx="160" cy="158" r="2.4" fill="#7FCDDC" fill-opacity=".5"/><circle cx="262" cy="150" r="2.8" fill="#7FCDDC" fill-opacity=".5"/>
+                    </svg>
+                    <span class="heropage">1/10 <svg width="13" height="13" style="opacity:.7"><use href="#i-chev"/></svg></span>
+                    <h3 class="herotitle">에스네이처 브랜드데이<br>NEW 진정천재앰플</h3>
+                    <p class="herosub">~75%특가 +10%쿠폰 혜택까지!</p>
+                  </div>
+                  <div class="herosliver" style="height:216px;background:#F3E9DA"></div>
+                </div>
+              </div>
+              <div class="quick">
+                <button class="quickitem" data-go="dict"><span class="qtile"><svg width="24" height="24"><use href="#i-drop"/></svg></span><span class="qlabel">성분 사전</span></button>
+                <button class="quickitem"><span class="qtile"><svg width="24" height="24"><use href="#i-face"/></svg></span><span class="qlabel">컨디션체크</span></button>
+                <button class="quickitem"><span class="qtile"><span class="qtext" style="font-size:15px">VS</span></span><span class="qlabel">듀프템 찾기</span></button>
+                <button class="quickitem"><span class="qtile"><svg width="24" height="24"><use href="#i-medal"/></svg></span><span class="qlabel">랭킹</span></button>
+              </div>
+
+              <div class="promostrip">
+                <button class="promo"><span class="pic" style="background:linear-gradient(150deg,#8E7BF0,#5B8DEF);color:#fff">PD<br>RN</span><span class="ptxt"><b>수분크림 특가</b><em>5천원 할인</em></span></button>
+                <button class="promo"><span class="pic" style="background:#FDEEF2;color:#E5709B"><svg width="16" height="16"><use href="#i-gift"/></svg></span><span class="ptxt"><b>무료체험</b><em>이번 주 12종</em></span></button>
+                <button class="promo"><span class="pic" style="background:#DFF6F8;color:#12879B">1만</span><span class="ptxt"><b>친구초대</b><em>1만원 적립</em></span></button>
+                <button class="promo"><span class="pic" style="background:var(--app-wash);color:var(--app-accent-ink)">웰컴</span><span class="ptxt"><b>웰컴쿠폰</b><em>최대 20%</em></span></button>
+              </div>
+
+              <button class="wishalert" data-go="wish" data-wishalert>
+                <span class="ic"><svg width="11" height="11"><use href="#i-alert"/></svg></span>
+                <span class="t" data-wish-text>찜한 제품 <b>12개</b> 중 <b>2개</b>에 내가 뺀 성분이 들어 있어요</span>
+                <svg class="chev" width="15" height="15"><use href="#i-chev"/></svg>
+              </button>
+
+              <div class="ingmodule">
+                <div class="sechead"><h2>내가 피하는 성분 없는 제품</h2><button class="morebtn">더보기 <svg width="12" height="12"><use href="#i-chev"/></svg></button></div>
+                <p class="secsub" data-my-home>이번 주 인기 제품 중 마이 성분 3개가 없는 것만 골랐어요</p>
+                <div class="hscroll">
+                  <button class="pcard"><span class="pcardthumb"><svg viewBox="0 0 48 62"><use href="#i-tube2"/></svg></span><span class="brand">라운드랩</span><span class="pcname" data-fit-base="92" data-fit-has="">자작나무 수분 선크림 50ml</span><span class="pcprice"><span class="off">36%</span><span class="price">15,900원</span></span></button>
+                  <button class="pcard"><span class="pcardthumb"><svg viewBox="0 0 48 62"><use href="#i-bottle"/></svg></span><span class="brand">라운드랩</span><span class="pcname" data-fit-base="89" data-fit-has="">1025 독도 토너 200ml</span><span class="pcprice"><span class="off">22%</span><span class="price">14,900원</span></span></button>
+                  <button class="pcard"><span class="pcardthumb"><svg viewBox="0 0 48 62"><use href="#i-jar"/></svg></span><span class="brand">아토팜</span><span class="pcname" data-fit-base="94" data-fit-has="">MLE 판테놀 크림 160ml</span><span class="pcprice"><span class="off">30%</span><span class="price">23,100원</span></span></button>
+                  <button class="pcard"><span class="pcardthumb"><svg viewBox="0 0 48 62"><use href="#i-tube"/></svg></span><span class="brand">토리든</span><span class="pcname" data-fit-base="91" data-fit-has="">다이브인 저분자 세럼 50ml</span><span class="pcprice"><span class="off">28%</span><span class="price">17,900원</span></span></button>
+                </div>
+              </div>
+              <div class="homesec">
+                <div class="sechead">
+                  <div><p class="dateline">같은 피부 타입 회원 리뷰 기준</p><h2 data-skinmod-title>지성 피부 만족도가 높은 제품</h2></div>
+                  <button class="morebtn">더보기 <svg width="12" height="12"><use href="#i-chev"/></svg></button>
+                </div>
+                <div class="hscroll">
+                  <button class="pcard"><span class="pcardthumb"><svg viewBox="0 0 48 62"><use href="#i-bottle"/></svg></span><span class="brand">아누아</span><span class="pcname" data-fit-base="94" data-fit-has="">어성초 77 수딩 토너 250ml</span><span class="starrow" style="font-size:11.5px"><svg width="11" height="11"><use href="#i-star"/></svg>4.81 <span style="color:var(--app-faint)">· 지성 리뷰 8,204</span></span></button>
+                  <button class="pcard"><span class="pcardthumb"><svg viewBox="0 0 48 62"><use href="#i-tube2"/></svg></span><span class="brand">스트라이덱스</span><span class="pcname" data-fit-base="91" data-fit-has="">데일리 클렌징 폼 120ml</span><span class="starrow" style="font-size:11.5px"><svg width="11" height="11"><use href="#i-star"/></svg>4.74 <span style="color:var(--app-faint)">· 지성 리뷰 5,118</span></span></button>
+                  <button class="pcard"><span class="pcardthumb"><svg viewBox="0 0 48 62"><use href="#i-jar"/></svg></span><span class="brand">닥터지</span><span class="pcname" data-fit-base="87" data-fit-has="">레드 블레미쉬 크림 70ml</span><span class="starrow" style="font-size:11.5px"><svg width="11" height="11"><use href="#i-star"/></svg>4.69 <span style="color:var(--app-faint)">· 지성 리뷰 12,940</span></span></button>
+                  <button class="pcard"><span class="pcardthumb"><svg viewBox="0 0 48 62"><use href="#i-tube"/></svg></span><span class="brand">토리든</span><span class="pcname" data-fit-base="89" data-fit-has="">밸런스풀 시카 진정 세럼 50ml</span><span class="starrow" style="font-size:11.5px"><svg width="11" height="11"><use href="#i-star"/></svg>4.66 <span style="color:var(--app-faint)">· 지성 리뷰 3,402</span></span></button>
+                </div>
+              </div>
+
+              <div class="homesec">
+                <div class="sechead"><div><p class="dateline">이번 주 지성 피부 회원이 가장 많이 찾아본 성분</p><h2>오늘의 성분</h2></div></div>
+                <button class="todaycard" data-ingcard>
+                  <span class="todaytop">
+                    <span class="grade g1">1</span>
+                    <span class="iname">나이아신아마이드</span>
+                    <span class="todaymatch good">내 피부에 잘 맞아요</span>
+                  </span>
+                  <p class="todaysub">미백 · 피지 조절 · 지성 추천 성분</p>
+                  <span class="ifn" hidden>미백 · 피지 조절</span>
+                  <p class="todaydesc">비타민 B3 계열로 멜라닌 생성을 억제해 피부톤을 밝히고 피지 분비를 조절해요. <b>지성 피부</b>가 주의할 성분 목록에는 들어 있지 않습니다.</p>
+                  <span class="todayfoot">이 성분이 든 제품 138개 보기 <svg class="chev" width="13" height="13"><use href="#i-chev"/></svg></span>
+                </button>
+              </div>
+
+              <div class="homesec">
+                <div class="sechead"><div><p class="dateline">2026.08.10 13시 업데이트</p><h2>카테고리별 판매 BEST</h2></div><button class="morebtn">전체 <svg width="12" height="12"><use href="#i-chev"/></svg></button></div>
+                <div class="catchips">
+                  <button class="chip" aria-pressed="true">스킨케어</button><button class="chip" aria-pressed="false">선케어</button><button class="chip" aria-pressed="false">클렌징</button><button class="chip" aria-pressed="false">마스크팩</button><button class="chip" aria-pressed="false">메이크업</button>
+                </div>
+                <div class="hscroll">
+                  <button class="pcard"><span class="pcardthumb"><span class="pcardrank">1</span><svg viewBox="0 0 48 62"><use href="#i-bottle"/></svg></span><span class="brand">에스네이처</span><span class="pcname" data-fit-base="85" data-fit-has="">아쿠아 오아시스 토너 300ml 더블 기획</span><span class="pcprice"><span class="off">63%</span><span class="price">19,500원</span></span></button>
+                  <button class="pcard"><span class="pcardthumb"><span class="pcardrank">2</span><svg viewBox="0 0 48 62"><use href="#i-tube"/></svg></span><span class="brand">메이크프렘</span><span class="pcname" data-fit-base="72" data-fit-has="향료">세이프 미 클렌징 밀크 500ml 기획</span><span class="pcprice"><span class="off">33%</span><span class="price">28,140원</span></span></button>
+                  <button class="pcard"><span class="pcardthumb"><span class="pcardrank">3</span><svg viewBox="0 0 48 62"><use href="#i-jar"/></svg></span><span class="brand">웰라쥬</span><span class="pcname" data-fit-base="88" data-fit-has="">리얼 히알루로닉 블루 100 앰플</span><span class="pcprice"><span class="off">40%</span><span class="price">14,400원</span></span></button>
+                  <button class="pcard"><span class="pcardthumb"><span class="pcardrank">4</span><svg viewBox="0 0 48 62"><use href="#i-bottle"/></svg></span><span class="brand">아누아</span><span class="pcname" data-fit-base="90" data-fit-has="">어성초 77 수딩 토너 250ml</span><span class="pcprice"><span class="off">18%</span><span class="price">17,900원</span></span></button>
+                </div>
+              </div>
+            </div>
+            <nav class="tabbar" aria-label="주 메뉴">
+              <button class="tabitem" data-go="dict"><svg width="23" height="23"><use href="#i-menu"/></svg><b>카테고리</b></button>
+              <button class="tabitem"><svg width="23" height="23"><use href="#i-gem"/></svg><b>혜택</b></button>
+              <button class="tabitem" aria-selected="true"><svg width="23" height="23"><use href="#i-house"/></svg><b>홈</b></button>
+              <button class="tabitem"><svg width="23" height="23"><use href="#i-store"/></svg><b>쇼핑</b></button>
+              <button class="tabitem"><span class="dot"></span><svg width="23" height="23"><use href="#i-person"/></svg><b>마이</b></button>
+            </nav>
+            <div class="homebar"><i></i></div>
+          </section>
+
+          <!-- ================= 검색 (입력 + 제안 한 화면) ================= -->
+          <section class="screen" data-screen="search">
+            <div class="statusbar"><span class="clock">2:00</span><div class="island"></div><div class="statusicons"><svg width="18" height="12"><use href="#i-cell"/></svg><svg width="17" height="12"><use href="#i-wifi"/></svg><svg width="26" height="13"><use href="#i-batt"/></svg></div></div>
+            <div class="apphead">
+              <button class="iconbtn" aria-label="뒤로" data-go="home"><svg width="22" height="22"><use href="#i-back"/></svg></button>
+              <label class="field is-focused" for="q">
+                <input id="q" type="search" autocomplete="off" placeholder="제품·성분·브랜드 무엇이든 검색" data-q>
+                <button class="clear" aria-label="지우기" data-qclear hidden><svg width="9" height="9"><use href="#i-x"/></svg></button>
+                <svg width="19" height="19" data-qsearch><use href="#i-search"/></svg>
+              </label>
+            </div>
+
+            <div class="scroll">
+              <!-- 입력 전 -->
+              <div data-qempty>
+                <div class="recent">
+                  <div class="sectop" style="margin-bottom:9px"><h2 class="sectitle" style="font-size:14px">최근 검색어</h2><button class="linkbtn">전체삭제</button></div>
+                  <div class="recentchips">
+                    <button class="rchip" data-fill="조선미녀">조선미녀 <span><svg width="9" height="9"><use href="#i-x"/></svg></span></button>
+                    <button class="rchip" data-fill="선크림">선크림 <span><svg width="9" height="9"><use href="#i-x"/></svg></span></button>
+                    <button class="rchip" data-fill="수분크림">수분크림 <span><svg width="9" height="9"><use href="#i-x"/></svg></span></button>
+                    <button class="rchip" data-fill="나이아신아마이드">나이아신아마이드 <span><svg width="9" height="9"><use href="#i-x"/></svg></span></button>
+                    <button class="rchip" data-fill="쿠션">쿠션 <span><svg width="9" height="9"><use href="#i-x"/></svg></span></button>
+                  </div>
+                </div>
+                <div class="qform">
+                  <div class="qformhead">
+                    <h2>조건으로 찾기</h2>
+                    <p data-qskin>지성 · 모공 / 미백 기준으로 찾아요</p>
+                  </div>
+
+                  <button class="slot" data-slot="cat" aria-expanded="false">
+                    <span class="slabel">카테고리</span>
+                    <span class="svalue empty" data-sv="cat">전체</span>
+                    <svg class="chev" width="14" height="14"><use href="#i-chevd"/></svg>
+                  </button>
+                  <div class="slotbody" data-slotbody="cat">
+                    <div class="slotgrp"><div class="fchips" data-fgroup="cat"></div></div>
+                  </div>
+
+                  <button class="slot" data-slot="ing" aria-expanded="false">
+                    <span class="slabel">성분</span>
+                    <span class="svalue" data-sv="ing">향료 외 2개 빼기</span>
+                    <svg class="chev" width="14" height="14"><use href="#i-chevd"/></svg>
+                  </button>
+                  <div class="slotbody" data-slotbody="ing">
+                    <div class="slotgrp">
+                      <h4>이 성분이 든 제품만</h4>
+                      <div class="fchips" data-fgroup="has"></div>
+                    </div>
+                    <div class="slotgrp">
+                      <h4>이 성분은 빼고 <em>마이 성분이 기본으로 들어가 있어요 · 이 검색에만 적용</em></h4>
+                      <div class="fchips" data-fgroup="excl"></div>
+                    </div>
+                  </div>
+
+                  <button class="qsubmit" data-qsubmit data-go="resultsC"><span data-qcount>3,646</span>개 결과 보기</button>
+                  <button class="qreset" data-qreset>조건 초기화</button>
+                </div>
+
+                <div class="sec">
+                  <div class="sectop"><h2 class="sectitle">인기 검색어</h2><span class="secmeta">08.10 13:00 기준</span></div>
+                  <div class="ranks">
+                    <button class="rank" data-fill="라운드랩"><span class="n">1</span><span class="kw">라운드랩</span><span class="type">브랜드</span></button>
+                    <button class="rank" data-fill="힌스"><span class="n">6</span><span class="kw">힌스</span><span class="type">브랜드</span></button>
+                    <button class="rank" data-fill="선크림"><span class="n">2</span><span class="kw">선크림</span><span class="type">카테고리</span></button>
+                    <button class="rank" data-fill="제로이드 선크림"><span class="n">7</span><span class="kw">제로이드 선크림</span><span class="type">제품</span></button>
+                    <button class="rank" data-fill="나이아신아마이드"><span class="n">3</span><span class="kw">나이아신아마이드</span><span class="type">성분</span></button>
+                    <button class="rank" data-fill="스트라이덱스"><span class="n">8</span><span class="kw">스트라이덱스</span><span class="type">브랜드</span></button>
+                    <button class="rank" data-fill="조선미녀"><span class="n">4</span><span class="kw">조선미녀</span><span class="type">브랜드</span></button>
+                    <button class="rank" data-fill="워터프루프 선크림"><span class="n">9</span><span class="kw">워터프루프 선크림</span><span class="type">카테고리</span></button>
+                    <button class="rank" data-fill="마스크팩"><span class="n">5</span><span class="kw">마스크팩</span><span class="type">카테고리</span></button>
+                    <button class="rank" data-fill="아떼 선크림"><span class="n">10</span><span class="kw">아떼 선크림</span><span class="type">제품</span></button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 입력 중 : 실시간 제안 -->
+              <div class="sugg" data-qlist hidden></div>
+            </div>
+            <div class="homebar"><i></i></div>
+          </section>
+
+          <!-- ================= 결과 · 카테고리 (선크림) ================= -->
+          <section class="screen" data-screen="resultsC">
+            <div class="statusbar"><span class="clock">4:18</span><div class="island"></div><div class="statusicons"><svg width="18" height="12"><use href="#i-cell"/></svg><svg width="17" height="12"><use href="#i-wifi"/></svg><svg width="26" height="13"><use href="#i-batt"/></svg></div></div>
+            <div class="apphead">
+              <button class="iconbtn" aria-label="뒤로" data-go="search"><svg width="22" height="22"><use href="#i-back"/></svg></button>
+              <button class="iconbtn" aria-label="홈" data-go="home"><svg width="22" height="22"><use href="#i-houseline"/></svg></button>
+              <button class="field" data-refine="선크림"><span class="val">선크림</span><span class="clear" aria-label="지우기"><svg width="9" height="9"><use href="#i-x"/></svg></span></button>
+            </div>
+            <div class="tabs" role="tablist" aria-label="검색 결과 분류">
+              <button class="tab" role="tab" aria-selected="true" data-pane="cPrd"><b>제품</b><i>2,140</i></button>
+              <button class="tab" role="tab" aria-selected="false" data-pane="cRev"><b>리뷰</b><i>12만</i></button>
+            </div>
+            <div class="scroll">
+              <div class="pane is-active" data-pane="cPrd">
+                <div class="filterbar">
+                  <button class="chip" data-sort="fit" aria-pressed="false">내 궁합순</button><button class="chip" data-sort="review" aria-pressed="true">리뷰순</button>
+                  <button class="chip ingchip" data-sheet="open" data-on="true"><svg width="12" height="12"><use href="#i-drop"/></svg><span data-ing-label>내 성분 빼기</span><span class="cnt" data-ing-count>3</span></button>
+                  <button class="chip" aria-pressed="false">무기자차</button>
+                  <button class="chip" aria-pressed="false">SPF50+</button>
+                  <button class="chip" aria-pressed="false">피부타입</button>
+                  <button class="chip" aria-pressed="false">가격대</button>
+                </div>
+
+                <div class="onboard" data-onboard>
+                  <b>피하고 싶은 성분이 있나요?</b>
+                  <p>한 번 담아두면 앞으로 모든 검색 결과에서 그 성분이 든 제품이 빠집니다.</p>
+                  <div class="obchips">
+                    <button class="obchip" data-quick-add="레티놀"><svg width="11" height="11"><use href="#i-plus"/></svg>레티놀</button>
+                    <button class="obchip" data-quick-add="향료"><svg width="11" height="11"><use href="#i-plus"/></svg>향료</button>
+                    <button class="obchip" data-quick-add="에탄올"><svg width="11" height="11"><use href="#i-plus"/></svg>에탄올</button>
+                    <button class="obmore" data-sheet="open">성분 더 찾기</button>
+                  </div>
+                </div>
+
+                <div class="filternote" data-filternote>
+                  <svg width="13" height="13" style="flex:none"><use href="#i-drop"/></svg>
+                  <span>마이 성분 <b data-note-my>3개</b>로 <b data-note-hidden>676개</b> 제품을 숨겼어요</span>
+                  <button data-clear-ing>해제</button>
+                </div>
+
+                <div class="countline">제품 <span data-shown>1,464</span>개<span data-hiddensuffix> · 676개 숨김</span></div>
+
+                <div class="plist" style="padding-top:4px">
+                  <div class="prod">
+                    <div class="thumb"><svg viewBox="0 0 48 62"><use href="#i-tube2"/></svg></div>
+                    <div class="prodinfo">
+                      <span class="brand">라운드랩</span>
+                      <span class="pname" data-fit-base="92" data-fit-has="">자작나무 수분 <b>선크림</b></span>
+                      <span class="specline"><span class="sp">무기자차</span><span class="sp">SPF50+ PA++++</span>50ml</span>
+                      <span class="starrow"><svg width="12" height="12"><use href="#i-star"/></svg>4.60 <span style="color:var(--app-faint)">· 리뷰 29,665</span></span>
+                      <span class="pricerow"><span class="off">36%</span><span class="price">15,900원</span><span class="unit">318원/ml</span></span>
+                      
+                    </div>
+                  </div>
+                  <div class="prod">
+                    <div class="thumb"><svg viewBox="0 0 48 62"><use href="#i-tube"/></svg></div>
+                    <div class="prodinfo">
+                      <span class="brand">토리든</span>
+                      <span class="pname" data-fit-base="88" data-fit-has="">다이브인 마일드 <b>선크림</b></span>
+                      <span class="specline"><span class="sp">무기자차</span><span class="sp">SPF50+ PA++++</span>60ml</span>
+                      <span class="starrow"><svg width="12" height="12"><use href="#i-star"/></svg>4.72 <span style="color:var(--app-faint)">· 리뷰 8,104</span></span>
+                      <span class="pricerow"><span class="off">38%</span><span class="price">32,500원</span><span class="unit">542원/ml</span></span>
+                      <div class="badges"><span class="badge only">only화해</span></div>
+                    </div>
+                  </div>
+                  <div class="prod">
+                    <div class="thumb"><svg viewBox="0 0 48 62"><use href="#i-tube2"/></svg></div>
+                    <div class="prodinfo">
+                      <span class="brand">아토팜</span>
+                      <span class="pname" data-fit-base="95" data-fit-has="">징크 마일드 업 <b>선크림</b></span>
+                      <span class="specline"><span class="sp">무기자차</span><span class="sp">SPF50+ PA++++</span>50ml</span>
+                      <span class="starrow"><svg width="12" height="12"><use href="#i-star"/></svg>4.73 <span style="color:var(--app-faint)">· 리뷰 726</span></span>
+                      <span class="pricerow"><span class="off">22%</span><span class="price">18,900원</span><span class="unit">378원/ml</span></span>
+                      
+                    </div>
+                  </div>
+                  <div class="prod">
+                    <div class="thumb"><svg viewBox="0 0 48 62"><use href="#i-tube"/></svg></div>
+                    <div class="prodinfo">
+                      <span class="brand">닥터지</span>
+                      <span class="pname" data-fit-base="74" data-fit-has="향료">그린 마일드 업 <b>선크림</b></span>
+                      <span class="specline"><span class="sp">혼합</span><span class="sp">SPF50+ PA++++</span>50ml</span>
+                      <span class="starrow"><svg width="12" height="12"><use href="#i-star"/></svg>4.55 <span style="color:var(--app-faint)">· 리뷰 41,208</span></span>
+                      <span class="pricerow"><span class="off">30%</span><span class="price">16,800원</span><span class="unit">336원/ml</span></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="pane" data-pane="cRev">
+                <div class="mynote" style="margin-top:16px">
+                  <b>리뷰 탭</b>
+                  <p>선크림 관련 리뷰 12만 건을 피부타입·고민별로 봅니다. 이 프로토타입에서는 필터 구조 시연이 목적이라 목록은 생략했습니다.</p>
+                </div>
+              </div>
+            </div>
+            <div class="homebar"><i></i></div>
+          </section>
+
+          <!-- ================= 결과 · 제품 ================= -->
+          <section class="screen" data-screen="resultsP">
+            <div class="statusbar"><span class="clock">2:01</span><div class="island"></div><div class="statusicons"><svg width="18" height="12"><use href="#i-cell"/></svg><svg width="17" height="12"><use href="#i-wifi"/></svg><svg width="26" height="13"><use href="#i-batt"/></svg></div></div>
+            <div class="apphead">
+              <button class="iconbtn" aria-label="뒤로" data-go="search"><svg width="22" height="22"><use href="#i-back"/></svg></button>
+              <button class="iconbtn" aria-label="홈" data-go="home"><svg width="22" height="22"><use href="#i-houseline"/></svg></button>
+              <button class="field" data-refine="조선미녀 선크림"><span class="val">조선미녀 선크림</span><span class="clear" aria-label="지우기"><svg width="9" height="9"><use href="#i-x"/></svg></span></button>
+            </div>
+            <div class="tabs" role="tablist" aria-label="검색 결과 분류">
+              <button class="tab" role="tab" aria-selected="true" data-pane="pAll"><b>전체</b><i>25</i></button>
+              <button class="tab" role="tab" aria-selected="false" data-pane="pPrd"><b>제품</b><i>24</i></button>
+              <button class="tab" role="tab" aria-selected="false" data-pane="pBrd"><b>브랜드</b><i>1</i></button>
+            </div>
+            <div class="scroll">
+              <div class="pane is-active" data-pane="pAll">
+                <div class="brandcard"><span class="brandmark">조선</span><span class="brandinfo"><b>조선미녀</b><span>제품 47개 · 평균 ★ 4.6 · 리뷰 62,104</span></span><button class="followbtn" data-toggle-follow>팔로우</button></div>
+                <div class="filterbar">
+                  <button class="chip" data-sort="fit" aria-pressed="false">내 궁합순</button><button class="chip" data-sort="review" aria-pressed="true">리뷰순</button>
+                  <button class="chip ingchip" data-sheet="open" data-on="true"><svg width="12" height="12"><use href="#i-drop"/></svg><span data-ing-label>내 성분 빼기</span><span class="cnt" data-ing-count>3</span></button>
+                  <button class="chip" aria-pressed="false">SPF</button>
+                  <button class="chip" aria-pressed="false">가격대</button>
+                </div>
+                <div class="countline">제품 24건</div>
+                <div class="plist" style="padding-top:4px">
+                  <div class="prod">
+                    <div class="thumb"><svg viewBox="0 0 48 62"><use href="#i-tube"/></svg></div>
+                    <div class="prodinfo"><span class="brand">조선미녀</span><span class="pname" data-fit-base="90" data-fit-has="">맑은쌀 <b>선크림</b></span><span class="specline"><span class="sp">무기자차</span><span class="sp">SPF50+ PA++++</span>50ml</span><span class="starrow"><svg width="12" height="12"><use href="#i-star"/></svg>4.7 <span style="color:var(--app-faint)">· 리뷰 9,204</span></span><span class="pricerow"><span class="off">15%</span><span class="price">15,300원</span></span></div>
+                  </div>
+                  <div class="prod">
+                    <div class="thumb"><svg viewBox="0 0 48 62"><use href="#i-tube"/></svg></div>
+                    <div class="prodinfo"><span class="brand">조선미녀</span><span class="pname" data-fit-base="90" data-fit-has="">맑은쌀 <b>선크림</b> 대용량 기획</span><span class="specline"><span class="sp">무기자차</span><span class="sp">SPF50+ PA++++</span>50ml+50ml</span><span class="starrow"><svg width="12" height="12"><use href="#i-star"/></svg>4.7 <span style="color:var(--app-faint)">· 리뷰 2,118</span></span><span class="pricerow"><span class="off">30%</span><span class="price">22,400원</span></span><div class="badges"><span class="badge only">only화해</span></div></div>
+                  </div>
+                  <div class="prod">
+                    <div class="thumb"><svg viewBox="0 0 48 62"><use href="#i-stick"/></svg></div>
+                    <div class="prodinfo"><span class="brand">조선미녀</span><span class="pname" data-fit-base="78" data-fit-has="향료">에어리핏 <b>선</b>스틱</span><span class="specline"><span class="sp">혼합</span><span class="sp">SPF50+ PA++++</span>18g</span><span class="starrow"><svg width="12" height="12"><use href="#i-star"/></svg>4.5 <span style="color:var(--app-faint)">· 리뷰 1,486</span></span><span class="pricerow"><span class="price">18,000원</span></span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="pane" data-pane="pPrd">
+                <div class="filterbar" style="padding-top:14px">
+                  <button class="chip" data-sort="fit" aria-pressed="false">내 궁합순</button><button class="chip" data-sort="review" aria-pressed="true">리뷰순</button>
+                  <button class="chip ingchip" data-sheet="open" data-on="true"><svg width="12" height="12"><use href="#i-drop"/></svg><span data-ing-label>내 성분 빼기</span><span class="cnt" data-ing-count>3</span></button>
+                  <button class="chip" aria-pressed="false">낮은 가격순</button>
+                </div>
+                <div class="countline">제품 24건</div>
+                <div class="plist" style="padding-top:4px">
+                  <div class="prod"><div class="thumb"><svg viewBox="0 0 48 62"><use href="#i-tube"/></svg></div><div class="prodinfo"><span class="brand">조선미녀</span><span class="pname" data-fit-base="90" data-fit-has="">맑은쌀 <b>선크림</b></span><span class="specline"><span class="sp">무기자차</span><span class="sp">SPF50+</span>50ml</span><span class="starrow"><svg width="12" height="12"><use href="#i-star"/></svg>4.7 <span style="color:var(--app-faint)">· 리뷰 9,204</span></span><span class="pricerow"><span class="off">15%</span><span class="price">15,300원</span></span></div></div>
+                  <div class="prod"><div class="thumb"><svg viewBox="0 0 48 62"><use href="#i-bottle"/></svg></div><div class="prodinfo"><span class="brand">조선미녀</span><span class="pname" data-fit-base="83" data-fit-has="">맑은쌀 톤업 <b>선크림</b></span><span class="specline"><span class="sp">무기자차</span><span class="sp">SPF50+</span>50ml</span><span class="starrow"><svg width="12" height="12"><use href="#i-star"/></svg>4.4 <span style="color:var(--app-faint)">· 리뷰 962</span></span><span class="pricerow"><span class="off">10%</span><span class="price">16,800원</span></span></div></div>
+                </div>
+              </div>
+              <div class="pane" data-pane="pBrd">
+                <div class="brandcard" style="margin-top:16px"><span class="brandmark">조선</span><span class="brandinfo"><b>조선미녀</b><span>제품 47개 · 평균 ★ 4.6 · 리뷰 62,104</span></span><button class="followbtn" data-toggle-follow>팔로우</button></div>
+                <div class="mynote"><b>브랜드 결과는 이거 하나뿐입니다</b><p>결과가 1건인 분류는 전체 탭에서도 상단 카드로 이미 보여줍니다. 탭은 “더 깊게 볼 사람”을 위한 통로이지, 필수 경유지가 아닙니다.</p></div>
+              </div>
+            </div>
+            <div class="homebar"><i></i></div>
+          </section>
+
+          <!-- ================= 결과 · 성분 ================= -->
+          <section class="screen" data-screen="resultsI">
+            <div class="statusbar"><span class="clock">2:01</span><div class="island"></div><div class="statusicons"><svg width="18" height="12"><use href="#i-cell"/></svg><svg width="17" height="12"><use href="#i-wifi"/></svg><svg width="26" height="13"><use href="#i-batt"/></svg></div></div>
+            <div class="apphead">
+              <button class="iconbtn" aria-label="뒤로" data-go="search"><svg width="22" height="22"><use href="#i-back"/></svg></button>
+              <button class="iconbtn" aria-label="홈" data-go="home"><svg width="22" height="22"><use href="#i-houseline"/></svg></button>
+              <button class="field" data-refine="나이아신아마이드"><span class="val">나이아신아마이드</span><span class="clear" aria-label="지우기"><svg width="9" height="9"><use href="#i-x"/></svg></span></button>
+            </div>
+            <div class="tabs" role="tablist" aria-label="검색 결과 분류">
+              <button class="tab" role="tab" aria-selected="true" data-pane="iAll"><b>전체</b><i>142</i></button>
+              <button class="tab" role="tab" aria-selected="false" data-pane="iPrd"><b>제품</b><i>138</i></button>
+              <button class="tab" role="tab" aria-selected="false" data-pane="iIng"><b>성분</b><i>4</i></button>
+            </div>
+            <div class="scroll">
+              <div class="pane is-active" data-pane="iAll">
+                <div class="ingcard">
+                  <div class="ingtop">
+                    <div class="ingname"><h3>나이아신아마이드</h3><span class="ewg"><span class="ewgdot"></span>EWG 1 · 낮은 위험</span></div>
+                    <div class="ingfns"><span class="fn">미백 기능성</span><span class="fn">주름 개선</span><span class="fn">지성 추천</span></div>
+                    <p class="ingdesc">비타민 B3 계열 성분으로 멜라닌 생성을 억제해 피부톤을 밝히고, 피지 분비 조절과 장벽 강화에 관여합니다. 고농도에서 일부 민감성 피부에 자극이 있을 수 있습니다.</p>
+                  </div>
+                  <div class="ingact"><button data-toggle-add><svg width="15" height="15"><use href="#i-plus"/></svg><span>마이 성분에 담기</span></button><button>성분 상세</button></div>
+                </div>
+                <div class="resulthead"><h4>이 성분이 든 제품</h4><span>138건</span></div>
+                <div class="filterbar">
+                  <button class="chip" data-sort="fit" aria-pressed="false">내 궁합순</button><button class="chip" data-sort="review" aria-pressed="true">리뷰순</button>
+                  <button class="chip ingchip" data-sheet="open" data-on="true"><svg width="12" height="12"><use href="#i-drop"/></svg><span data-ing-label>내 성분 빼기</span><span class="cnt" data-ing-count>3</span></button>
+                  <button class="chip" aria-pressed="false">내 피부타입</button>
+                </div>
+                <div class="plist" style="padding-top:6px">
+                  <div class="prod"><div class="thumb"><svg viewBox="0 0 48 62"><use href="#i-bottle"/></svg></div><div class="prodinfo"><span class="brand">디오디너리</span><span class="pname" data-fit-base="86" data-fit-has="">나이아신아마이드 10% + 아연 1%</span><span class="specline">30ml</span><span class="starrow"><svg width="12" height="12"><use href="#i-star"/></svg>4.5 <span style="color:var(--app-faint)">· 리뷰 6,102</span></span><span class="pricerow"><span class="price">12,900원</span></span></div></div>
+                  <div class="prod"><div class="thumb"><svg viewBox="0 0 48 62"><use href="#i-tube"/></svg></div><div class="prodinfo"><span class="brand">토리든</span><span class="pname" data-fit-base="91" data-fit-has="">다이브인 저분자 히알루론산 세럼</span><span class="specline">50ml</span><span class="starrow"><svg width="12" height="12"><use href="#i-star"/></svg>4.8 <span style="color:var(--app-faint)">· 리뷰 3,447</span></span><span class="pricerow"><span class="off">28%</span><span class="price">17,900원</span></span><div class="badges"><span class="badge only">only화해</span></div></div></div>
+                  <div class="prod"><div class="thumb"><svg viewBox="0 0 48 62"><use href="#i-bottle"/></svg></div><div class="prodinfo"><span class="brand">아누아</span><span class="pname" data-fit-base="80" data-fit-has="향료">나이아신아마이드 5% 브라이트닝 앰플</span><span class="specline">30ml</span><span class="starrow"><svg width="12" height="12"><use href="#i-star"/></svg>4.6 <span style="color:var(--app-faint)">· 리뷰 2,918</span></span><span class="pricerow"><span class="off">15%</span><span class="price">21,250원</span></span></div></div>
+                </div>
+              </div>
+              <div class="pane" data-pane="iPrd">
+                <div class="filterbar" style="padding-top:14px">
+                  <button class="chip" data-sort="fit" aria-pressed="false">내 궁합순</button><button class="chip" data-sort="review" aria-pressed="true">리뷰순</button>
+                  <button class="chip ingchip" data-sheet="open" data-on="true"><svg width="12" height="12"><use href="#i-drop"/></svg><span data-ing-label>내 성분 빼기</span><span class="cnt" data-ing-count>3</span></button>
+                  <button class="chip" aria-pressed="false">낮은 가격순</button>
+                </div>
+                <div class="countline">제품 138건</div>
+                <div class="plist" style="padding-top:4px">
+                  <div class="prod"><div class="thumb"><svg viewBox="0 0 48 62"><use href="#i-bottle"/></svg></div><div class="prodinfo"><span class="brand">디오디너리</span><span class="pname" data-fit-base="86" data-fit-has="">나이아신아마이드 10% + 아연 1%</span><span class="specline">30ml</span><span class="starrow"><svg width="12" height="12"><use href="#i-star"/></svg>4.5 <span style="color:var(--app-faint)">· 리뷰 6,102</span></span><span class="pricerow"><span class="price">12,900원</span></span></div></div>
+                  <div class="prod"><div class="thumb"><svg viewBox="0 0 48 62"><use href="#i-tube"/></svg></div><div class="prodinfo"><span class="brand">토리든</span><span class="pname" data-fit-base="91" data-fit-has="">다이브인 저분자 히알루론산 세럼</span><span class="specline">50ml</span><span class="starrow"><svg width="12" height="12"><use href="#i-star"/></svg>4.8 <span style="color:var(--app-faint)">· 리뷰 3,447</span></span><span class="pricerow"><span class="off">28%</span><span class="price">17,900원</span></span></div></div>
+                </div>
+              </div>
+              <div class="pane" data-pane="iIng">
+                <div class="ingcard" style="margin-top:16px">
+                  <div class="ingtop"><div class="ingname"><h3>나이아신아마이드</h3><span class="ewg"><span class="ewgdot"></span>EWG 1</span></div><div class="ingfns"><span class="fn">미백 기능성</span><span class="fn">주름 개선</span></div><p class="ingdesc">비타민 B3 계열. 멜라닌 생성 억제와 피지 조절, 장벽 강화에 관여합니다.</p></div>
+                  <div class="ingact"><button data-toggle-add><svg width="15" height="15"><use href="#i-plus"/></svg><span>마이 성분에 담기</span></button><button>성분 상세</button></div>
+                </div>
+                <div class="ingcard">
+                  <div class="ingtop"><div class="ingname"><h3>나이아신아마이드 유도체</h3><span class="ewg"><span class="ewgdot"></span>EWG 1</span></div><div class="ingfns"><span class="fn">미백 기능성</span></div><p class="ingdesc">안정성을 높인 유도체 형태로, 자극이 상대적으로 낮게 보고됩니다.</p></div>
+                  <div class="ingact"><button data-toggle-add><svg width="15" height="15"><use href="#i-plus"/></svg><span>마이 성분에 담기</span></button><button>성분 상세</button></div>
+                </div>
+              </div>
+            </div>
+            <div class="homebar"><i></i></div>
+          </section>
+
+          <!-- ================= 성분 사전 ================= -->
+          <section class="screen" data-screen="dict">
+            <div class="statusbar"><span class="clock">2:03</span><div class="island"></div><div class="statusicons"><svg width="18" height="12"><use href="#i-cell"/></svg><svg width="17" height="12"><use href="#i-wifi"/></svg><svg width="26" height="13"><use href="#i-batt"/></svg></div></div>
+            <div class="dicthead"><button class="iconbtn" aria-label="뒤로" data-go="home"><svg width="22" height="22"><use href="#i-back"/></svg></button><h1>성분 사전</h1></div>
+            <div class="tabs" role="tablist" aria-label="성분 사전 분류">
+              <button class="tab" role="tab" aria-selected="true" data-pane="dictall"><b>카테고리</b></button>
+              <button class="tab" role="tab" aria-selected="false" data-pane="dictmine"><b>마이 성분</b><i data-my-tabcount>3</i></button>
+            </div>
+            <div class="scroll" style="padding-bottom:96px">
+              <div class="pane is-active" data-pane="dictall">
+                <div style="padding:14px 16px 6px"><div class="field" style="height:40px"><svg width="18" height="18"><use href="#i-search"/></svg><span class="ph">성분 이름으로 찾기</span></div></div>
+                <div style="padding-top:6px">
+                  <button class="dictrow"><span class="dicticon" style="background:#FDECEC;color:var(--app-red)"><svg width="15" height="15"><use href="#i-alert"/></svg></span><span class="dicttext"><b>20가지 주의 성분</b><span>성분 20개</span></span><span class="addbtn" data-toggle-add>담기</span></button>
+                  <button class="dictrow"><span class="dicticon" style="background:#FCEEF3;color:var(--app-rose)"><svg width="14" height="14"><use href="#i-spark"/></svg></span><span class="dicttext"><b>알레르기 유발 주의 성분</b><span>성분 25개</span></span><span class="addbtn" data-toggle-add data-on="true">담김</span></button>
+                  <button class="dictrow"><span class="dicticon" style="background:#FEF5E1;color:var(--app-amber)"><svg width="15" height="15"><use href="#i-sun"/></svg></span><span class="dicttext"><b>자외선 차단 기능 성분</b><span>성분 31개</span></span><span class="addbtn" data-toggle-add>담기</span></button>
+                  <button class="dictrow"><span class="dicticon" style="background:#EFECFC;color:var(--app-violet)"><svg width="15" height="15"><use href="#i-shield"/></svg></span><span class="dicttext"><b>주름 개선 기능 성분</b><span>성분 9개</span></span><span class="addbtn" data-toggle-add>담기</span></button>
+                  <button class="dictrow"><span class="dicticon" style="background:#FEF7DE;color:#C99400"><svg width="14" height="14"><use href="#i-spark"/></svg></span><span class="dicttext"><b>미백 기능 성분</b><span>성분 6개</span></span><span class="addbtn" data-toggle-add>담기</span></button>
+                  <button class="dictrow"><span class="dicticon" style="background:#E7F0FE;color:var(--app-blue)"><svg width="14" height="14"><use href="#i-drop"/></svg></span><span class="dicttext"><b>건성 추천 성분</b><span>성분 18개</span></span><span class="addbtn" data-toggle-add>담기</span></button>
+                  <button class="dictrow"><span class="dicticon" style="background:#E3F4F1;color:var(--app-accent)"><svg width="14" height="14"><use href="#i-drop"/></svg></span><span class="dicttext"><b>지성 추천 성분</b><span>성분 15개</span></span><span class="addbtn" data-toggle-add>담기</span></button>
+                  <button class="dictrow"><span class="dicticon" style="background:#FCEEF3;color:var(--app-rose)"><svg width="14" height="14"><use href="#i-drop"/></svg></span><span class="dicttext"><b>민감성 추천 성분</b><span>성분 14개</span></span><span class="addbtn" data-toggle-add>담기</span></button>
+                </div>
+              </div>
+              <div class="pane" data-pane="dictmine">
+                <div class="mynote">
+                  <b>담은 성분은 검색 결과에서 걸러집니다</b>
+                  <p>결과 화면의 <em style="font-style:normal;color:var(--app-accent-ink);font-weight:600">내 성분 빼기</em> 칩, 홈의 <em style="font-style:normal;color:var(--app-accent-ink);font-weight:600">내가 피하는 성분 없는 제품</em> 모듈이 모두 이 목록을 씁니다.</p>
+                </div>
+                <div class="mychips" data-my-chips></div>
+                <div class="resulthead" style="padding-top:22px"><h4>최근 본 성분</h4></div>
+                <button class="dictrow"><span class="dicticon" style="background:var(--app-wash);color:var(--app-accent)"><svg width="14" height="14"><use href="#i-drop"/></svg></span><span class="dicttext"><b>나이아신아마이드</b><span>EWG 1 · 미백, 주름 개선</span></span><span class="addbtn" data-toggle-add>담기</span></button>
+                <button class="dictrow"><span class="dicticon" style="background:var(--app-wash);color:var(--app-accent)"><svg width="14" height="14"><use href="#i-drop"/></svg></span><span class="dicttext"><b>판테놀</b><span>EWG 1 · 진정, 보습</span></span><span class="addbtn" data-toggle-add>담기</span></button>
+              </div>
+            </div>
+            <nav class="tabbar" aria-label="주 메뉴">
+              <button class="tabitem" aria-selected="true"><svg width="23" height="23"><use href="#i-menu"/></svg><b>카테고리</b></button>
+              <button class="tabitem"><svg width="23" height="23"><use href="#i-gem"/></svg><b>혜택</b></button>
+              <button class="tabitem" data-go="home"><svg width="23" height="23"><use href="#i-house"/></svg><b>홈</b></button>
+              <button class="tabitem"><svg width="23" height="23"><use href="#i-store"/></svg><b>쇼핑</b></button>
+              <button class="tabitem"><span class="dot"></span><svg width="23" height="23"><use href="#i-person"/></svg><b>마이</b></button>
+            </nav>
+            <div class="homebar"><i></i></div>
+          </section>
+
+          <!-- ================= 상세 페이지 ================= -->
+          <section class="screen" data-screen="detail">
+            <div class="statusbar"><span class="clock">2:46</span><div class="island"></div><div class="statusicons"><svg width="18" height="12"><use href="#i-cell"/></svg><svg width="17" height="12"><use href="#i-wifi"/></svg><svg width="26" height="13"><use href="#i-batt"/></svg></div></div>
+            <div class="dhead">
+              <button class="iconbtn" aria-label="뒤로" data-go="resultsC"><svg width="22" height="22"><use href="#i-back"/></svg></button>
+              <button class="iconbtn" aria-label="홈" data-go="home"><svg width="22" height="22"><use href="#i-houseline"/></svg></button>
+              <span class="spacer"></span>
+              <button class="iconbtn" aria-label="공유"><svg width="21" height="21"><use href="#i-share"/></svg></button>
+              <button class="iconbtn" aria-label="검색" data-go="search"><svg width="21" height="21"><use href="#i-search"/></svg></button>
+              <button class="cartbtn" aria-label="장바구니, 2개"><svg width="23" height="23"><use href="#i-cart"/></svg><span class="cartbadge">2</span></button>
+            </div>
+
+            <div class="scroll" style="padding-bottom:104px">
+              <div class="gallery">
+                <span class="gbadge">화해배송 →</span>
+                <svg class="gscene" viewBox="0 0 390 390" preserveAspectRatio="xMidYMid slice" aria-label="닥터오라클 화이트 미백 레시피 마스크팩">
+                  <rect x="0" y="0" width="390" height="390" fill="#E8F3F5"/>
+                  <path d="M0 250c60-26 118 14 186-6s142-52 204-26v172H0z" fill="#DCEAEE" opacity=".8"/>
+                  <g transform="rotate(-9 150 200)">
+                    <rect x="72" y="108" width="118" height="168" rx="7" fill="#F7FAFB" stroke="#D2E0E4" stroke-width="1.5"/>
+                    <circle cx="131" cy="132" r="8" fill="none" stroke="#C6D6DB" stroke-width="1.6"/>
+                    <text x="131" y="196" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="15" font-weight="700" fill="#2A3742">Dr. O'racle</text>
+                    <text x="131" y="216" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10.5" font-weight="600" fill="#5E7686">Niacinamide Recipe</text>
+                    <text x="131" y="230" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" fill="#8FA5B0">Brightening Mask</text>
+                    <rect x="104" y="242" width="54" height="3" rx="1.5" fill="#D6E3E7"/>
+                  </g>
+                  <g transform="rotate(6 250 210)">
+                    <rect x="196" y="126" width="118" height="168" rx="7" fill="#FDFEFE" stroke="#D2E0E4" stroke-width="1.5"/>
+                    <circle cx="255" cy="150" r="8" fill="none" stroke="#C6D6DB" stroke-width="1.6"/>
+                    <text x="255" y="214" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="15" font-weight="700" fill="#2A3742">Dr. O'racle</text>
+                    <text x="255" y="234" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10.5" font-weight="600" fill="#5E7686">Niacinamide Recipe</text>
+                    <text x="255" y="248" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" fill="#8FA5B0">Brightening Mask</text>
+                    <rect x="228" y="260" width="54" height="3" rx="1.5" fill="#D6E3E7"/>
+                  </g>
+                </svg>
+                <span class="gdots"><i class="on"></i><i></i><i></i><i></i></span>
+                <span class="gbrandbar">only hwahae</span>
+              </div>
+              <div class="gonlywrap"><span class="gonly">only화해</span></div>
+
+              <div class="dbody">
+                <button class="dbrand">닥터오라클 <svg width="13" height="13"><use href="#i-chev"/></svg></button>
+                <h1 class="dname">[only화해] 화이트 미백 레시피 마스크팩 25ml(25매입/1box)</h1>
+                <div class="dmeta">
+                  <span class="rate"><svg width="15" height="15"><use href="#i-star"/></svg>4.70 <span class="cnt">(2,322)</span></span>
+                  <span class="sep">·</span>
+                  <button class="inglink" data-go="ing">주의 성분 0개 · 미백 성분 2개 <svg width="12" height="12"><use href="#i-chev"/></svg></button>
+                </div>
+              </div>
+
+              <!-- 궁합 카드 : 결론만, 근거는 성분 페이지에서 -->
+              <button class="fitcard" data-go="ing">
+                <span class="fitrow">
+                  <span class="fitface"><svg width="18" height="18"><use href="#i-face"/></svg></span>
+                  <span class="fitnum">내 피부와 <b data-fit-score>85</b><i>점</i></span>
+                  <span class="fitband" data-fit-band>잘 맞아요</span>
+                  <svg class="chev" width="15" height="15"><use href="#i-chev"/></svg>
+                </span>
+                <span class="fitmeter"><span class="fill" data-fit-fill style="width:85%"></span><span class="tick" style="left:71%"></span></span>
+                <span class="fitavg">시트마스크 평균 71점 · <span data-fit-brief>내가 뺀 향료 1개가 걸려요</span></span>
+              </button>
+
+              <div class="dprice">
+                <span class="was">75,000원</span>
+                <div class="now"><span class="pct">80%</span><span class="amt">14,750원</span></div>
+                <button class="benefitrow">
+                  <span>카드·쿠폰 적용 시 <b>14,740원</b> · 최대 <b>2,575P</b> 적립</span>
+                  <svg class="chev" width="14" height="14"><use href="#i-chevd"/></svg>
+                </button>
+              </div>
+
+              <dl class="specrows">
+                <div class="specrow"><dt>용량</dt><dd>25ml x 25EA</dd></div>
+                <div class="specrow"><dt>랭킹</dt><dd>시트마스크 · 브라이트닝 2위 <svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></dd></div>
+                <div class="specrow"><dt>수상</dt><dd>2025 하반기 효능/효과 — 스킨케어 브라이트닝, 시트마스크 1위 <svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></dd></div>
+                <div class="specrow"><dt>배송비</dt><dd><span class="free">무료배송</span> · 한진택배</dd></div>
+                <div class="specrow"><dt>정품인증</dt><dd>화해 모든 상품은 100% 정품입니다</dd></div>
+              </dl>
+
+              <div class="dactions">
+                <button><svg width="15" height="15"><use href="#i-plus"/></svg>비교함 담기</button>
+                <button><svg width="15" height="15"><use href="#i-heart"/></svg>즐겨찾기</button>
+              </div>
+
+              <div class="dsec">
+                <h3>리뷰 2,322개</h3>
+                <div class="rdist">
+                  <div class="rbig">
+                    <b>4.70</b>
+                    <span class="stars"><svg width="11" height="11"><use href="#i-star"/></svg><svg width="11" height="11"><use href="#i-star"/></svg><svg width="11" height="11"><use href="#i-star"/></svg><svg width="11" height="11"><use href="#i-star"/></svg><svg width="11" height="11"><use href="#i-star"/></svg></span>
+                    <em>5점 만점</em>
+                  </div>
+                  <div class="rbars">
+                    <div class="rbar"><span class="lab">5점</span><span class="track"><i style="width:78%"></i></span><span class="pc">78%</span></div>
+                    <div class="rbar"><span class="lab">4점</span><span class="track"><i style="width:15%"></i></span><span class="pc">15%</span></div>
+                    <div class="rbar"><span class="lab">3점</span><span class="track"><i style="width:4%"></i></span><span class="pc">4%</span></div>
+                    <div class="rbar"><span class="lab">2점</span><span class="track"><i style="width:2%"></i></span><span class="pc">2%</span></div>
+                    <div class="rbar"><span class="lab">1점</span><span class="track"><i style="width:1%"></i></span><span class="pc">1%</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="revscroll">
+                <div class="revcard">
+                  <div class="revtop"><span class="rstar"><svg width="12" height="12"><use href="#i-star"/></svg>5</span><span class="rwho">50대 · 복합성</span></div>
+                  <p class="revbody" style="margin:0">세일할 때 사서 데일리로 사용하기 좋아요. 자극도 덜한 편이고 에센스가 넉넉해서 목까지 바릅니다.</p>
+                </div>
+                <div class="revcard">
+                  <div class="revtop"><span class="rstar"><svg width="12" height="12"><use href="#i-star"/></svg>5</span><span class="rwho">30대 · 지성</span></div>
+                  <p class="revbody" style="margin:0">너무 좋아요. 아침에 하면 화장이 잘 먹어서 계속 재구매하는 제품이에요.</p>
+                </div>
+                <div class="revcard">
+                  <div class="revtop"><span class="rstar"><svg width="12" height="12"><use href="#i-star"/></svg>3</span><span class="rwho">20대 · 민감성</span></div>
+                  <p class="revbody" style="margin:0">향이 좀 있는 편이라 향에 민감하면 참고하세요. 수분감은 확실히 좋습니다.</p>
+                </div>
+              </div>
+
+              <div class="brandrow">
+                <span class="bmark">Dr.O</span>
+                <span class="binfo"><b>닥터오라클 <svg width="12" height="12"><use href="#i-chev"/></svg></b><span>즐겨찾기 3,908 · 제품 166</span></span>
+                <button class="heartbtn" data-toggle-follow2 aria-label="브랜드 찜"><svg width="21" height="21"><use href="#i-heart"/></svg></button>
+              </div>
+
+              <div class="tabs" role="tablist" aria-label="상세 탭" style="margin-top:20px">
+                <button class="tab" role="tab" aria-selected="false" data-pane="dInfo" style="flex:1;justify-content:center"><b>상품정보</b></button>
+                <button class="tab" role="tab" aria-selected="true" data-pane="dRev" style="flex:1;justify-content:center"><b>리뷰/성분</b></button>
+              </div>
+
+              <div class="pane" data-pane="dInfo">
+                <div class="mynote"><b>상품정보 탭</b><p>브랜드가 등록한 상세 이미지·사용법·주의사항이 들어가는 자리입니다. 이 프로토타입에서는 상단 궁합·성분 구조 시연이 목적이라 생략했습니다.</p></div>
+              </div>
+
+              <div class="pane is-active" data-pane="dRev">
+                <!-- 탭 이름이 약속한 '성분'을 실제로 배치 -->
+                <div class="ingsum">
+                  <div class="ingsumhead"><h4>성분 구성</h4></div>
+                  <p class="ingsumstat">전성분 <b>51개</b> · 20가지 주의 성분 <b>0개</b> · 알레르기 유발 성분 <b>1개</b></p>
+                  <div class="ingitem">
+                    <span class="idot" style="background:var(--app-wash);color:var(--app-accent)"><svg width="14" height="14"><use href="#i-drop"/></svg></span>
+                    <span class="itext"><b>나이아신아마이드</b><span>EWG 1 · 미백 기능성 · 지성 추천</span></span>
+                  </div>
+                  <div class="ingitem">
+                    <span class="idot" style="background:var(--app-wash);color:var(--app-accent)"><svg width="14" height="14"><use href="#i-drop"/></svg></span>
+                    <span class="itext"><b>판테놀</b><span>EWG 1 · 진정, 보습</span></span>
+                  </div>
+                  <div class="ingitem">
+                    <span class="idot" style="background:var(--app-wash);color:var(--app-accent)"><svg width="14" height="14"><use href="#i-drop"/></svg></span>
+                    <span class="itext"><b>알란토인</b><span>EWG 1 · 진정</span></span>
+                  </div>
+                  <div class="ingitem">
+                    <span class="idot" style="background:#FDF0DC;color:#B87400"><svg width="13" height="13"><use href="#i-alert"/></svg></span>
+                    <span class="itext"><b>향료</b><span>EWG 4 · 알레르기 유발 주의</span></span>
+                    <span class="iflag mine" data-ing-flag>내가 뺀 성분</span>
+                  </div>
+                  <button class="allingbtn" data-go="ing">전성분 51개 모두 보기 <svg width="13" height="13"><use href="#i-chev"/></svg></button>
+                </div>
+
+                <div class="dsec">
+                  <div class="ingsumhead" style="margin-bottom:8px">
+                    <h4 style="display:flex;align-items:center;gap:7px">리뷰토픽 <span class="aitag">AI 리뷰 분석</span></h4>
+                    <span style="font-size:11px;color:var(--app-faint)">매일 0시 업데이트</span>
+                  </div>
+                  <p style="margin:0;font-size:12.5px;color:var(--app-mid)">리뷰에서 많이 언급된 이 제품의 특징이에요</p>
+                  <div class="topicgrid">
+                    <div class="topiccol">
+                      <h5>좋았던 점</h5>
+                      <button class="topicitem"><span>수분이 있어요</span><em>734</em><svg width="11" height="11" style="color:var(--app-faint)"><use href="#i-chev"/></svg></button>
+                      <button class="topicitem"><span>에센스 양이 많아요</span><em>435</em><svg width="11" height="11" style="color:var(--app-faint)"><use href="#i-chev"/></svg></button>
+                      <button class="topicitem"><span>미백 효과가 있어요</span><em>296</em><svg width="11" height="11" style="color:var(--app-faint)"><use href="#i-chev"/></svg></button>
+                    </div>
+                    <div class="topiccol">
+                      <h5>아쉬운 점</h5>
+                      <button class="topicitem"><span>흘러내려요</span><em>97</em><svg width="11" height="11" style="color:var(--app-faint)"><use href="#i-chev"/></svg></button>
+                      <button class="topicitem"><span>따가워요</span><em>65</em><svg width="11" height="11" style="color:var(--app-faint)"><use href="#i-chev"/></svg></button>
+                      <button class="topicitem"><span>잘 굳어요</span><em>40</em><svg width="11" height="11" style="color:var(--app-faint)"><use href="#i-chev"/></svg></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="dbottom">
+              <button class="zzim" data-toggle-zzim><svg width="21" height="21"><use href="#i-heart"/></svg><b>찜하기</b></button>
+              <button class="dbtn cart">장바구니 담기</button>
+              <button class="dbtn buy">바로 구매</button>
+            </div>
+            <div class="homebar"><i></i></div>
+          </section>
+
+          <!-- ================= 성분 페이지 : 결론 → 근거 → 원자료 ================= -->
+          <section class="screen" data-screen="ing">
+            <div class="statusbar"><span class="clock">4:18</span><div class="island"></div><div class="statusicons"><svg width="18" height="12"><use href="#i-cell"/></svg><svg width="17" height="12"><use href="#i-wifi"/></svg><svg width="26" height="13"><use href="#i-batt"/></svg></div></div>
+            <div class="ihead">
+              <button class="iconbtn" aria-label="뒤로" data-go="detail"><svg width="22" height="22"><use href="#i-back"/></svg></button>
+              <h1>성분</h1>
+              <button class="iconbtn" aria-label="도움말"><svg width="20" height="20"><use href="#i-help"/></svg></button>
+            </div>
+
+            <div class="scroll">
+              <!-- 1층 : 결론 -->
+              <div class="verdict">
+                <div class="vtop">
+                  <span class="vface"><svg width="22" height="22"><use href="#i-face"/></svg></span>
+                  <span class="vnum">내 피부와 <b data-v-score>85</b><i>점</i></span>
+                  <span class="vband" data-v-band>잘 맞아요</span>
+                </div>
+                <div class="vmeterwrap">
+                  <div class="vmeter"><span class="fill" data-v-fill style="width:85%"></span><span class="tick" style="left:71%"></span></div>
+                  <span class="vticklab" style="left:71%">시트마스크 평균 71</span>
+                </div>
+              </div>
+
+              <!-- 2층 : 내 피부 기준 (판단 근거) -->
+              <div class="skinbox">
+                <h2><b>지성 피부</b> 기준으로 봤어요</h2>
+                <div class="sbrow good">
+                  <span class="sbic"><svg width="10" height="10"><use href="#i-check"/></svg></span>
+                  <span class="sblab">잘 맞는 성분</span>
+                  <span class="sbval">3개</span>
+                </div>
+                <p class="sbnames"><span>나이아신아마이드</span><span>알란토인</span><span>버지니아풍년화추출물</span></p>
+                <div class="sbrow none">
+                  <span class="sbic"><svg width="10" height="10"><use href="#i-check"/></svg></span>
+                  <span class="sblab">지성이 주의할 성분</span>
+                  <span class="sbval">없어요</span>
+                </div>
+                <div class="sbrow warn" data-v-warn>
+                  <span class="sbic"><svg width="10" height="10"><use href="#i-alert"/></svg></span>
+                  <span class="sblab">내가 뺀 성분</span>
+                  <span class="sbval"><b data-v-warn-name>향료</b><em data-v-warn-pen>−7점</em></span>
+                </div>
+                <div class="sbrow none">
+                  <span class="sbic"><svg width="10" height="10"><use href="#i-check"/></svg></span>
+                  <span class="sblab">20가지 주의 성분</span>
+                  <span class="sbval">없어요</span>
+                </div>
+
+                <button class="sbmore" data-acc="other" aria-expanded="false">다른 피부 타입은 어떤가요? <svg class="chev" width="13" height="13"><use href="#i-chevd"/></svg></button>
+                <div class="otherbox" data-accbody="other">
+                  <div class="otherrow"><span class="olab">건성</span><span class="oval"><b>잘 맞는 성분 5</b> · 주의 0</span></div>
+                  <div class="otherrow"><span class="olab">민감성</span><span class="oval"><b>잘 맞는 성분 3</b> · 주의 0</span></div>
+                  <div class="otherrow"><span class="olab">복합성</span><span class="oval"><b>잘 맞는 성분 4</b> · 주의 0</span></div>
+                </div>
+              </div>
+
+              <!-- 3층 : 원자료 -->
+              <p class="morelabel">성분을 직접 확인하고 싶다면</p>
+              <div class="tabs" role="tablist" aria-label="성분 보기 방식">
+                <button class="tab" role="tab" aria-selected="true" data-pane="iAll" style="flex:1;justify-content:center"><b>전성분</b><i>51</i></button>
+                <button class="tab" role="tab" aria-selected="false" data-pane="iPurp" style="flex:1;justify-content:center"><b>목적별</b></button>
+              </div>
+
+              <!-- 전성분 -->
+              <div class="pane is-active" data-pane="iAll">
+                <div class="gradelegend">
+                  <span><i class="sw" style="background:#CDEDF1"></i>1–2 낮음</span>
+                  <span><i class="sw" style="background:#FBE3B8"></i>3–6 중간</span>
+                  <span><i class="sw" style="background:#FBD2D2"></i>7–10 높음</span>
+                  <span class="ln">EWG 등급</span>
+                </div>
+
+                <div class="mineblock" data-mineblock>
+                  <div class="ilisthead"><h2>눈여겨볼 성분</h2><span class="cnt" data-mine-count>1개</span></div>
+                  <button class="irow" data-ing-row><span class="grade g3">4</span><span class="iname" data-mine-name>향료</span><span class="minetag">내가 뺀 성분</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
+                </div>
+
+                <div class="ilisthead"><h2>전성분</h2><span class="cnt">51개</span><span class="sub">함량 높은 순</span></div>
+                  <button class="irow"><span class="grade g1">1</span><span class="iname">정제수</span><span class="ifn">보습</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
+                  <button class="irow"><span class="grade g1">1-2</span><span class="iname">나이아신아마이드</span><span class="ifn">미백 · 피지 조절</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
+                  <button class="irow"><span class="grade g1">1</span><span class="iname">사이클로헥사실록세인</span><span class="ifn">수분 증발 차단</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
+                  <button class="irow"><span class="grade g1">1</span><span class="iname">소듐하이알루로네이트</span><span class="ifn">강력 보습</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
+                  <button class="irow"><span class="grade g1">1</span><span class="iname">판테놀</span><span class="ifn">보습 · 컨디셔닝</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
+                  <button class="irow"><span class="grade g1">1</span><span class="iname">알란토인</span><span class="ifn">수렴 · 진정</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
+                  <button class="irow"><span class="grade g3">1-4</span><span class="iname">부틸옥틸살리실레이트</span><span class="ifn">보습</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
+                  <button class="irow"><span class="grade g3">4</span><span class="iname">향료</span><span class="ifn">착향</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
+                  <button class="irow"><span class="grade g1">1</span><span class="iname">버지니아풍년화추출물</span><span class="ifn">수렴 · 진정</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
+                  <button class="irow"><span class="grade g0">–</span><span class="iname">병풀추출물</span><span class="ifn">진정</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
+                <div class="iend">나머지 41개 더 보기</div>
+              </div>
+
+              <!-- 목적별 -->
+              <div class="pane" data-pane="iPurp">
+                <p class="ewgnote">배합 목적 기준이에요. 완제품의 효능을 보장하진 않아요.</p>
+                <button class="accrow" data-acc="p1" aria-expanded="false"><span class="alab">피부 보습</span><span class="anum">32개</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+                <div class="accbody" data-accbody="p1">
+                  <button class="irow"><span class="grade g1">1</span><span class="iname">정제수</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
+                  <button class="irow"><span class="grade g3">1-4</span><span class="iname">부틸옥틸살리실레이트</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
+                  <button class="irow"><span class="grade g1">1</span><span class="iname">소듐하이알루로네이트</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
+                  <button class="irow"><span class="grade g1">1</span><span class="iname">하이알루로닉애씨드</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
+                  <button class="irow"><span class="grade g1">1</span><span class="iname">글리세린</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
+                  <div class="iend">나머지 27개 더 보기</div>
+                </div>
+                <button class="accrow" data-acc="p2" aria-expanded="false"><span class="alab">피부 보호</span><span class="anum">8개</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+                <div class="accbody" data-accbody="p2">
+                  <button class="irow"><span class="grade g1">1</span><span class="iname">나이아신아마이드</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
+                  <button class="irow"><span class="grade g1">1</span><span class="iname">판테놀</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
+                  <button class="irow"><span class="grade g1">1</span><span class="iname">세라마이드엔피</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
+                  <div class="iend">나머지 5개 더 보기</div>
+                </div>
+                <button class="accrow" data-acc="p3" aria-expanded="false"><span class="alab">수분 증발 차단</span><span class="anum">5개</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+                <div class="accbody" data-accbody="p3">
+                  <button class="irow"><span class="grade g1">1</span><span class="iname">사이클로헥사실록세인</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
+                  <button class="irow"><span class="grade g1">1</span><span class="iname">다이메티콘</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
+                  <div class="iend">나머지 3개 더 보기</div>
+                </div>
+                <button class="accrow" data-acc="p4" aria-expanded="false"><span class="alab">미백</span><span class="anum">2개</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+                <div class="accbody" data-accbody="p4">
+                  <button class="irow"><span class="grade g1">1</span><span class="iname">나이아신아마이드</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
+                  <button class="irow"><span class="grade g1">1</span><span class="iname">알부틴</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
+                </div>
+                <button class="accrow" data-acc="p5" aria-expanded="false"><span class="alab">수렴 진정</span><span class="anum">1개</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+                <div class="accbody" data-accbody="p5">
+                  <button class="irow"><span class="grade g1">1</span><span class="iname">알란토인</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
+                </div>
+              </div>
+
+            </div>
+            <div class="homebar"><i></i></div>
+          </section>
+
+          <!-- ================= 찜한 제품 ================= -->
+          <section class="screen" data-screen="wish">
+            <div class="statusbar"><span class="clock">2:12</span><div class="island"></div><div class="statusicons"><svg width="18" height="12"><use href="#i-cell"/></svg><svg width="17" height="12"><use href="#i-wifi"/></svg><svg width="26" height="13"><use href="#i-batt"/></svg></div></div>
+            <div class="dicthead">
+              <button class="iconbtn" aria-label="뒤로" data-go="home"><svg width="22" height="22"><use href="#i-back"/></svg></button>
+              <h1>찜한 제품</h1>
+            </div>
+            <div class="scroll" style="padding-bottom:96px">
+              <div class="filterbar" style="padding-top:12px">
+                <button class="chip" data-sort="fit" aria-pressed="false">내 궁합순</button>
+                <button class="chip" data-sort="review" aria-pressed="true">찜한 순</button>
+                <button class="chip" data-wishonly aria-pressed="true">내가 뺀 성분 있는 것만 2</button>
+              </div>
+              <div class="countline">찜한 제품 12개 · <span data-wish-hit>2개</span>에 내가 뺀 성분</div>
+              <div class="plist" style="padding-top:4px">
+                <div class="prod">
+                  <div class="thumb"><svg viewBox="0 0 48 62"><use href="#i-tube"/></svg></div>
+                  <div class="prodinfo">
+                    <span class="brand">닥터오라클</span>
+                    <span class="pname" data-fit-base="92" data-fit-has="향료">화이트 미백 레시피 마스크팩 25ml (25매입)</span>
+                    <span class="starrow"><svg width="12" height="12"><use href="#i-star"/></svg>4.70 <span style="color:var(--app-faint)">· 리뷰 2,322</span></span>
+                    <span class="pricerow"><span class="off">80%</span><span class="price">14,750원</span></span>
+                  </div>
+                </div>
+                <div class="prod">
+                  <div class="thumb"><svg viewBox="0 0 48 62"><use href="#i-bottle"/></svg></div>
+                  <div class="prodinfo">
+                    <span class="brand">메이크프렘</span>
+                    <span class="pname" data-fit-base="79" data-fit-has="향료">세이프 미 릴리프 모이스처 크림 60ml</span>
+                    <span class="starrow"><svg width="12" height="12"><use href="#i-star"/></svg>4.58 <span style="color:var(--app-faint)">· 리뷰 6,041</span></span>
+                    <span class="pricerow"><span class="off">25%</span><span class="price">21,000원</span></span>
+                  </div>
+                </div>
+                <div class="prod">
+                  <div class="thumb"><svg viewBox="0 0 48 62"><use href="#i-tube2"/></svg></div>
+                  <div class="prodinfo">
+                    <span class="brand">라운드랩</span>
+                    <span class="pname" data-fit-base="92" data-fit-has="">자작나무 수분 선크림 50ml</span>
+                    <span class="starrow"><svg width="12" height="12"><use href="#i-star"/></svg>4.60 <span style="color:var(--app-faint)">· 리뷰 29,665</span></span>
+                    <span class="pricerow"><span class="off">36%</span><span class="price">15,900원</span></span>
+                  </div>
+                </div>
+                <div class="prod">
+                  <div class="thumb"><svg viewBox="0 0 48 62"><use href="#i-jar"/></svg></div>
+                  <div class="prodinfo">
+                    <span class="brand">아토팜</span>
+                    <span class="pname" data-fit-base="94" data-fit-has="">MLE 판테놀 크림 160ml</span>
+                    <span class="starrow"><svg width="12" height="12"><use href="#i-star"/></svg>4.77 <span style="color:var(--app-faint)">· 리뷰 9,120</span></span>
+                    <span class="pricerow"><span class="off">30%</span><span class="price">23,100원</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <nav class="tabbar" aria-label="주 메뉴">
+              <button class="tabitem" data-go="dict"><svg width="23" height="23"><use href="#i-menu"/></svg><b>카테고리</b></button>
+              <button class="tabitem"><svg width="23" height="23"><use href="#i-gem"/></svg><b>혜택</b></button>
+              <button class="tabitem" data-go="home"><svg width="23" height="23"><use href="#i-house"/></svg><b>홈</b></button>
+              <button class="tabitem"><svg width="23" height="23"><use href="#i-store"/></svg><b>쇼핑</b></button>
+              <button class="tabitem" aria-selected="true"><span class="dot"></span><svg width="23" height="23"><use href="#i-person"/></svg><b>마이</b></button>
+            </nav>
+            <div class="homebar"><i></i></div>
+          </section>
+
+          <!-- ================= 성분 상세 시트 ================= -->
+          <div class="sheetwrap" data-isheetwrap>
+            <button class="sheetdim" data-isheet="close" aria-label="닫기"></button>
+            <div class="isheet" role="dialog" aria-label="성분 상세">
+              <div class="sheethandle"></div>
+              <div class="ishead">
+                <div class="top">
+                  <h3 data-is-name>향료</h3>
+                  <span class="grade" data-is-grade>4</span>
+                </div>
+                <p class="sub" data-is-sub>알레르기 유발 주의 성분</p>
+              </div>
+              <div class="isbody">
+                <dl style="margin:0">
+                  <div class="isrow" style="border-top:0"><dt>배합 목적</dt><dd data-is-fn>착향</dd></div>
+                  <div class="isrow"><dt>EWG 등급</dt><dd data-is-ewg>4 · 중간 위험</dd></div>
+                  <div class="isrow"><dt>이 제품에서</dt><dd data-is-pos>함량 8번째</dd></div>
+                </dl>
+                <p class="isdesc" data-is-desc>향을 내기 위해 넣는 성분이에요. 여러 향 물질을 묶어 부르는 이름이라 정확한 구성이 공개되지 않고, 민감성 피부에서 자극이나 알레르기 반응이 보고됩니다.</p>
+              </div>
+              <div class="isfoot">
+                <button class="isbtn" data-is-toggle>마이 성분에 담기</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ================= 성분 필터 시트 (공용 오버레이) ================= -->
+          <div class="sheetwrap" data-sheetwrap>
+            <button class="sheetdim" data-sheet="close" aria-label="닫기"></button>
+            <div class="sheet" role="dialog" aria-label="내 성분 빼기">
+              <div class="sheethandle"></div>
+              <div class="sheethead">
+                <h3>내 성분 빼기</h3>
+                <p>여기 담은 성분이 든 제품은 모든 결과에서 빠집니다.</p>
+              </div>
+              <div class="sheetbody">
+                <div class="sheetsec">
+                  <div class="field" style="height:40px"><svg width="18" height="18"><use href="#i-search"/></svg><span class="ph">성분 이름으로 찾기</span></div>
+                </div>
+                <div class="sheetsec">
+                  <h4>내가 뺀 성분 <em data-sheet-count>3</em></h4>
+                  <div class="pickedwrap" data-picked></div>
+                </div>
+                <div class="sheetsec">
+                  <h4>자주 빼는 성분</h4>
+                  <div class="addchips" data-addchips></div>
+                </div>
+                <div class="sheetsec" style="padding-left:0;padding-right:0">
+                  <h4 style="padding:0 18px">한 번에 담기</h4>
+                  <button class="sheetrow"><span class="dicticon" style="background:#FDECEC;color:var(--app-red)"><svg width="14" height="14"><use href="#i-alert"/></svg></span><span class="dicttext"><b>20가지 주의 성분</b><span>성분 20개</span></span><span class="addbtn" data-toggle-add>담기</span></button>
+                  <button class="sheetrow"><span class="dicticon" style="background:#FCEEF3;color:var(--app-rose)"><svg width="13" height="13"><use href="#i-spark"/></svg></span><span class="dicttext"><b>알레르기 유발 주의 성분</b><span>성분 25개</span></span><span class="addbtn" data-toggle-add>담기</span></button>
+                </div>
+              </div>
+              <div class="sheetfoot">
+                <button class="resetbtn" data-clear-ing><svg width="15" height="15"><use href="#i-reset"/></svg>초기화</button>
+                <button class="applybtn" data-sheet="close"><span data-apply-count>1,464</span>개 결과 보기</button>
+              </div>
+            </div>
+          </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  /* ================= 마이 성분 상태 ================= */
+  var EXCL = {'레티놀':62,'향료':486,'벤조페논-3':128,'에탄올':312,'멘톨':44,'파라벤':96,'인공색소':71,'미네랄오일':58};
+  var POOL = ['레티놀','향료','벤조페논-3','에탄올','멘톨','파라벤','인공색소','미네랄오일'];
+  var BASE = 2140;
+  var DETAIL_ING = ['향료'];          // 상세 제품에 실제로 든 성분
+  var FIT_BASE = 92, FIT_PENALTY = 7; // 피부타입 궁합 92점, 뺀 성분 1개당 -7
+  var my = ['레티놀','향료','벤조페논-3'];
+
+  function fmt(n){ return n.toLocaleString('ko-KR'); }
+  function hidden(){ return my.reduce(function(s,k){ return s + (EXCL[k]||0); }, 0); }
+  function icon(id,sz){ return '<svg width="'+sz+'" height="'+sz+'" aria-hidden="true"><use href="#'+id+'"/></svg>'; }
+  function band(n){ return n >= 90 ? '매우 잘 맞아요' : n >= 75 ? '잘 맞아요' : n >= 60 ? '보통이에요' : '잘 안 맞아요'; }
+  function show(el, on){ if(el){ el.style.display = on ? '' : 'none'; } }
+  function setText(sel, txt){ var e = document.querySelector(sel); if(e){ e.textContent = txt; } }
+
+  function fitBand(n){ return n >= 90 ? 'hi' : n >= 75 ? 'mid' : n >= 60 ? 'low' : 'warn'; }
+
+  function renderFitPills(){
+    document.querySelectorAll('[data-fit-base]').forEach(function(nameEl){
+      var base = parseInt(nameEl.dataset.fitBase, 10);
+      var has = (nameEl.dataset.fitHas || '').split(',').filter(Boolean);
+      var hit = has.filter(function(k){ return my.indexOf(k) !== -1; });
+      var sc = base - FIT_PENALTY * hit.length;
+      var cls = fitBand(sc);
+      var card = nameEl.closest('.pcard');
+      if(card){
+        var thumb = card.querySelector('.pcardthumb');
+        var pill = thumb.querySelector('.pcfit');
+        if(!pill){ pill = document.createElement('span'); pill.className = 'pcfit'; thumb.appendChild(pill); }
+        pill.className = 'pcfit ' + cls;
+        pill.textContent = sc + '점';
+        pill.title = '내 피부와 ' + sc + '점';
+      } else {
+        var info = nameEl.closest('.prodinfo');
+        if(!info) return;
+        var p2 = info.querySelector('.fitpill');
+        if(!p2){
+          p2 = document.createElement('span');
+          p2.className = 'fitpill';
+          var anchor = info.querySelector('.starrow');
+          info.insertBefore(p2, anchor);
+        }
+        p2.className = 'fitpill ' + cls;
+        p2.innerHTML = '내 피부 ' + sc + '점' + (hit.length ? '<span class="dot"></span>' + hit.join(', ') + ' 있음' : '');
+      }
+      var row = nameEl.closest('.prod, .pcard');
+      if(row){ row.dataset.fitScore = sc; }
+    });
+  }
+
+  function sortList(mode){
+    document.querySelectorAll('.plist, .hscroll').forEach(function(list){
+      var items = [...list.children].filter(function(x){ return x.dataset.fitScore !== undefined; });
+      if(items.length < 2) return;
+      items.forEach(function(el, i){ if(el.dataset.origIdx === undefined){ el.dataset.origIdx = i; } });
+      items.sort(function(a, b){
+        return mode === 'fit'
+          ? (b.dataset.fitScore - a.dataset.fitScore)
+          : (a.dataset.origIdx - b.dataset.origIdx);
+      });
+      items.forEach(function(el){ list.appendChild(el); });
+    });
+  }
+
+  function renderIng(){
+    var on = my.length > 0, hid = hidden(), shown = BASE - hid;
+    var hits = my.filter(function(k){ return DETAIL_ING.indexOf(k) !== -1; });
+    var score = FIT_BASE - FIT_PENALTY * hits.length;
+
+    /* 결과 화면 필터 칩 */
+    document.querySelectorAll('.ingchip').forEach(function(c){
+      c.dataset.on = String(on);
+      c.querySelector('[data-ing-label]').textContent = on ? '내 성분 빼기' : '성분으로 거르기';
+      var n = c.querySelector('[data-ing-count]');
+      n.textContent = on ? String(my.length) : '';
+      n.style.display = on ? '' : 'none';
+    });
+    var note = document.querySelector('[data-filternote]');
+    if(note){
+      show(note, on);
+      note.querySelector('[data-note-my]').textContent = my.length + '개';
+      note.querySelector('[data-note-hidden]').textContent = fmt(hid) + '개';
+    }
+    var ob = document.querySelector('[data-onboard]');
+    if(ob){ ob.classList.toggle('is-shown', !on); }
+    setText('[data-shown]', fmt(on ? shown : BASE));
+    setText('[data-hiddensuffix]', on ? ' · ' + fmt(hid) + '개 숨김' : '');
+    document.querySelectorAll('[data-safe]').forEach(function(b){ show(b, on); });
+
+    /* 필터 시트 */
+    setText('[data-sheet-count]', String(my.length));
+    setText('[data-apply-count]', fmt(on ? shown : BASE));
+    var picked = document.querySelector('[data-picked]');
+    if(picked){
+      picked.innerHTML = my.length
+        ? my.map(function(k){ return '<button class="picked" data-remove-ing="'+k+'">'+k+'<span>'+icon('i-x',9)+'</span></button>'; }).join('')
+        : '<span class="emptypick">아직 담은 성분이 없어요. 아래에서 골라보세요.</span>';
+    }
+    var addc = document.querySelector('[data-addchips]');
+    if(addc){
+      addc.innerHTML = POOL.filter(function(k){ return my.indexOf(k) === -1; })
+        .map(function(k){ return '<button class="addchip" data-quick-add="'+k+'">'+icon('i-plus',11)+k+' <em>'+fmt(EXCL[k])+'</em></button>'; }).join('');
+    }
+
+    /* 홈 · 검색 */
+    setText('[data-my-home]', on ? ('마이 성분 ' + my.length + '개를 뺀 이번 주 인기 제품이에요') : '피하고 싶은 성분을 담으면 여기서 걸러 보여드려요');
+    setText('[data-my-shortcut]', on ? ('마이 성분 ' + my.length + '개 · 성분 사전에서 관리') : '아직 담은 성분이 없어요 · 성분 사전에서 담기');
+    setText('[data-my-tabcount]', String(my.length));
+    var perchips = document.querySelector('[data-per-chips]');
+    if(perchips){
+      perchips.innerHTML = (my.length
+        ? my.map(function(k){ return '<button class="perchip" data-remove-ing="' + k + '">' + k + '<span>' + icon('i-x',9) + '</span></button>'; }).join('')
+        : '<span class="perempty">피하고 싶은 성분을 담아보세요</span>')
+        + '<button class="perchip add" data-sheet="open">' + icon('i-plus',11) + ' 추가</button>';
+    }
+    var wishHit = document.querySelectorAll('[data-screen="wish"] [data-fit-has]');
+    var hitN = 0;
+    wishHit.forEach(function(el){
+      (el.dataset.fitHas || '').split(',').filter(Boolean).forEach(function(k){ if(my.indexOf(k) !== -1){ hitN++; } });
+    });
+    setText('[data-wish-hit]', hitN + '개');
+    var wonly = document.querySelector('[data-wishonly]');
+    if(wonly){ wonly.textContent = '내가 뺀 성분 있는 것만 ' + hitN; }
+    if(document.querySelector('[data-fgroup="cat"]')){ renderQForm(); }
+    var wish = document.querySelector('[data-wishalert]');
+    if(wish){
+      wish.classList.toggle('calm', my.length === 0);
+      wish.querySelector('[data-wish-text]').innerHTML = my.length
+        ? ('찜한 제품 <b>12개</b> 중 <b>2개</b>에 내가 뺀 성분이 들어 있어요')
+        : ('피하고 싶은 성분을 담으면 <b>찜한 제품 12개</b>도 함께 확인해드려요');
+    }
+    var mychips = document.querySelector('[data-my-chips]');
+    if(mychips){
+      mychips.innerHTML = my.length
+        ? my.map(function(k){ return '<button class="mychip" data-remove-ing="'+k+'">'+k+'<span style="opacity:.55">'+icon('i-x',9)+'</span></button>'; }).join('')
+        : '<span class="emptypick" style="padding-left:0">담은 성분이 없습니다.</span>';
+    }
+
+    /* 상세 궁합 카드 — 점수에 마이 성분 반영 */
+    setText('[data-fit-score]', String(score));
+    setText('[data-fit-band]', band(score));
+    var fill = document.querySelector('[data-fit-fill]');
+    if(fill){ fill.style.width = score + '%'; }
+    setText('[data-fit-brief]', hits.length
+      ? ('내가 뺀 ' + hits.join(', ') + ' ' + hits.length + '개가 걸려요')
+      : '걸리는 성분이 없어요');
+
+    /* 성분 페이지 : 결론 + 근거 */
+    setText('[data-v-score]', String(score));
+    setText('[data-v-band]', band(score));
+    var vfill = document.querySelector('[data-v-fill]');
+    if(vfill){ vfill.style.width = score + '%'; }
+    var vwarn = document.querySelector('[data-v-warn]');
+    if(vwarn){
+      show(vwarn, hits.length > 0);
+      vwarn.querySelector('[data-v-warn-name]').textContent = hits.join(', ');
+      vwarn.querySelector('[data-v-warn-pen]').textContent = '−' + (FIT_PENALTY * hits.length) + '점';
+    }
+    renderFitPills();
+    show(document.querySelector('[data-mineblock]'), hits.length > 0);
+    setText('[data-mine-count]', hits.length + '개');
+    setText('[data-mine-name]', hits.join(', '));
+    show(document.querySelector('[data-ing-flag]'), hits.length > 0);
+  }
+
+  /* ================= 검색 ================= */
+  var SUGG = [
+    {kw:'선크림',type:'카테고리',sub:'제품 2,140개 · 리뷰 12만',dest:'resultsC'},
+    {kw:'무기자차 선크림',type:'카테고리',sub:'제품 612개 · 백탁 적은 순',dest:'resultsC'},
+    {kw:'톤업 선크림',type:'카테고리',sub:'제품 288개',dest:'resultsC'},
+    {kw:'선크림 스틱',type:'카테고리',sub:'제품 96개',dest:'resultsC'},
+    {kw:'라운드랩 자작나무 수분 선크림',type:'제품',sub:'라운드랩 · ★ 4.60 · 리뷰 29,665',dest:'detail'},
+    {kw:'라운드랩',type:'브랜드',sub:'제품 62개 · 평균 ★ 4.6',dest:'resultsP'},
+    {kw:'조선미녀',type:'브랜드',sub:'제품 47개 · 평균 ★ 4.6',dest:'resultsP'},
+    {kw:'조선미녀 선크림',type:'카테고리',sub:'브랜드 안에서 찾기 · 24개',dest:'resultsP'},
+    {kw:'조선미녀 맑은쌀 선크림',type:'제품',sub:'조선미녀 · ★ 4.7 · 리뷰 9,204',dest:'detail'},
+    {kw:'조선미녀 맑은쌀 토너',type:'제품',sub:'조선미녀 · ★ 4.8 · 리뷰 15,330',dest:'detail'},
+    {kw:'나이아신아마이드',type:'성분',sub:'EWG 1 · 미백, 주름 개선 기능성',dest:'resultsI'},
+    {kw:'나이아신아마이드 유도체',type:'성분',sub:'EWG 1 · 미백 기능성',dest:'resultsI'},
+    {kw:'판테놀',type:'성분',sub:'EWG 1 · 진정, 보습',dest:'resultsI'},
+    {kw:'향료',type:'성분',sub:'EWG 4 · 알레르기 유발 주의',dest:'resultsI'},
+    {kw:'화이트 미백 레시피 마스크팩',type:'제품',sub:'닥터오라클 · ★ 4.70 · 리뷰 2,322',dest:'detail'},
+    {kw:'마스크팩',type:'카테고리',sub:'제품 3,204개',dest:'resultsC'},
+    {kw:'수분크림',type:'카테고리',sub:'제품 1,880개',dest:'resultsC'},
+    {kw:'토리든',type:'브랜드',sub:'제품 38개 · 평균 ★ 4.7',dest:'resultsP'},
+    {kw:'쿠션',type:'카테고리',sub:'제품 940개',dest:'resultsC'},
+    {kw:'힌스',type:'브랜드',sub:'제품 51개 · 평균 ★ 4.5',dest:'resultsP'},
+    {kw:'스트라이덱스',type:'브랜드',sub:'제품 22개 · 평균 ★ 4.4',dest:'resultsP'},
+    {kw:'제로이드 선크림',type:'제품',sub:'제로이드 · ★ 4.6 · 리뷰 4,180',dest:'detail'},
+    {kw:'아떼 선크림',type:'제품',sub:'아떼 · ★ 4.5 · 리뷰 2,905',dest:'detail'},
+    {kw:'워터프루프 선크림',type:'카테고리',sub:'제품 431개',dest:'resultsC'}
+  ];
+  var TYPE = {
+    '성분':   {cls:'ing', bg:'var(--app-wash)',  fg:'var(--app-accent)', icon:'i-drop'},
+    '제품':   {cls:'prd', bg:'#EDF1FE',          fg:'var(--app-blue)',   icon:'i-bottle'},
+    '브랜드': {cls:'brd', bg:'#FBF0F3',          fg:'var(--app-rose)',   icon:'i-spark'},
+    '카테고리':{cls:'cat', bg:'var(--app-sub-2)', fg:'var(--app-mid)',    icon:'i-filter'}
+  };
+  var esc = function(v){ return v.replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); };
+
+  function suggestFor(q){
+    var t = q.trim();
+    if(!t) return [];
+    var hit = SUGG.filter(function(x){ return x.kw.indexOf(t) !== -1; });
+    hit.sort(function(a,b){ return a.kw.indexOf(t) - b.kw.indexOf(t) || a.kw.length - b.kw.length; });
+    return hit.slice(0,8);
+  }
+
+  function renderSuggest(){
+    var input = document.querySelector('[data-q]');
+    if(!input) return;
+    var q = input.value, has = q.trim().length > 0;
+    document.querySelector('[data-qempty]').hidden = has;
+    document.querySelector('[data-qclear]').hidden = !has;
+    document.querySelector('[data-qsearch]').style.display = has ? 'none' : '';
+    var list = document.querySelector('[data-qlist]');
+    list.hidden = !has;
+    if(!has){ list.innerHTML = ''; return; }
+
+    var items = suggestFor(q);
+    if(!items.length){
+      list.innerHTML = '<p class="qhint"><b>' + esc(q) + '</b> 검색 결과가 없어요<br>제품명·성분명·브랜드로 다시 찾아보세요</p>';
+      return;
+    }
+    list.innerHTML = items.map(function(x){
+      var t = TYPE[x.type];
+      var i = x.kw.indexOf(q.trim());
+      var name = esc(x.kw.slice(0,i)) + '<b>' + esc(x.kw.substr(i, q.trim().length)) + '</b>' + esc(x.kw.slice(i + q.trim().length));
+      return '<button class="suggrow" data-go="' + x.dest + '">' +
+        '<span class="sicon-round" style="background:' + t.bg + ';color:' + t.fg + '">' + icon(t.icon, 15) + '</span>' +
+        '<span class="suggtext"><span class="suggmain">' + name + '</span><span class="suggsub">' + x.sub + '</span></span>' +
+        '<span class="tbadge ' + t.cls + '">' + x.type + '</span></button>';
+    }).join('');
+  }
+
+  function openSearch(q){
+    go('search');
+    var input = document.querySelector('[data-q]');
+    input.value = q || '';
+    renderSuggest();
+    setTimeout(function(){ input.focus(); }, 20);
+  }
+
+  /* ================= 조건으로 찾기 (카테고리 + 성분) ================= */
+  var CATS = {'전체':12840,'선크림':2140,'토너':1880,'크림':2410,'세럼·앰플':1620,'마스크팩':3204,'클렌징':1740,'쿠션':940};
+  var HAS_POOL = ['나이아신아마이드','히알루론산','판테놀','세라마이드','어성초','비타민C'];
+  var EXCL_POOL = ['향료','레티놀','벤조페논-3','에탄올','파라벤','인공색소','멘톨'];
+  var Q = { cat:'전체', has:[], excl:null };   // excl:null = 아직 마이 성분 그대로
+
+  function qExcl(){ return Q.excl === null ? my.slice() : Q.excl; }
+  function qCount(){
+    var n = CATS[Q.cat] * 0.62 * 0.82 * 0.82;          // 내 피부 · 고민 (프로필 고정)
+    Q.has.forEach(function(){ n *= 0.28; });
+    qExcl().forEach(function(){ n *= 0.88; });
+    return Math.max(0, Math.round(n));
+  }
+  function qChips(group, items, isOn, extraCls){
+    var el = document.querySelector('[data-fgroup="' + group + '"]');
+    if(!el) return;
+    el.innerHTML = items.map(function(v){
+      return '<button class="fchip ' + (extraCls || '') + '" data-fchip="' + group + '" data-v="' + v + '" aria-pressed="' + (isOn(v) ? 'true' : 'false') + '">' + v + '</button>';
+    }).join('');
+  }
+  function renderQForm(){
+    var ex = qExcl();
+    qChips('cat', Object.keys(CATS), function(v){ return Q.cat === v; });
+    qChips('has', HAS_POOL, function(v){ return Q.has.indexOf(v) !== -1; });
+    var pool = EXCL_POOL.slice();
+    my.forEach(function(k){ if(pool.indexOf(k) === -1){ pool.unshift(k); } });
+    qChips('excl', pool, function(v){ return ex.indexOf(v) !== -1; }, 'minus');
+
+    var svCat = document.querySelector('[data-sv="cat"]');
+    svCat.textContent = Q.cat;
+    svCat.classList.toggle('empty', Q.cat === '전체');
+
+    var parts = [];
+    if(Q.has.length) parts.push(Q.has[0] + (Q.has.length > 1 ? ' 외 ' + (Q.has.length - 1) + '개' : '') + ' 넣기');
+    if(ex.length)   parts.push(ex[0] + (ex.length > 1 ? ' 외 ' + (ex.length - 1) + '개' : '') + ' 빼기');
+    var svIng = document.querySelector('[data-sv="ing"]');
+    svIng.textContent = parts.length ? parts.join(' · ') : '조건 없음';
+    svIng.classList.toggle('empty', !parts.length);
+
+    setText('[data-qcount]', fmt(qCount()));
+  }
+
+  /* ================= 화면 전환 ================= */
+  function go(id){
+    var target = document.querySelector('.screen[data-screen="'+id+'"]');
+    if(!target){ return; }
+    document.querySelectorAll('.screen').forEach(function(s){ s.classList.toggle('is-active', s === target); });
+    target.querySelectorAll('.scroll').forEach(function(sc){ sc.scrollTop = 0; });
+    sheet(false); isheet(false);
+  }
+  function sheet(open){ document.querySelector('[data-sheetwrap]').classList.toggle('is-open', open); }
+  function isheet(open){ document.querySelector('[data-isheetwrap]').classList.toggle('is-open', open); }
+
+  var ING_DESC = {
+    '향료':'향을 내기 위해 넣는 성분이에요. 여러 향 물질을 묶어 부르는 이름이라 정확한 구성이 공개되지 않고, 민감성 피부에서 자극이나 알레르기 반응이 보고됩니다.',
+    '정제수':'화장품의 기본 용매예요. 대부분 제품에서 함량 1위이며, 그 자체로는 피부에 영향을 주지 않습니다.',
+    '나이아신아마이드':'비타민 B3 계열이에요. 멜라닌 생성을 억제해 피부톤을 밝히고 피지 분비를 조절합니다. 지성 피부에 특히 잘 맞습니다.',
+    '판테놀':'프로비타민 B5예요. 진정과 보습에 관여하고 자극이 적어 민감성 피부에도 널리 쓰입니다.',
+    '알란토인':'수렴과 진정에 관여해요. 자극이 낮아 트러블성 피부 제품에 자주 들어갑니다.',
+    '소듐하이알루로네이트':'히알루론산의 염 형태로 보습력이 강해요. 분자가 작아 흡수가 잘 됩니다.',
+    '병풀추출물':'시카로 알려진 성분이에요. 진정에 관여하지만 EWG 등급 자료가 충분하지 않아 미정으로 표시됩니다.'
+  };
+  function openIngSheet(row){
+    var name = (row.querySelector('.iname') || row.querySelector('.dicttext b'));
+    name = name ? name.textContent.trim() : '';
+    var gEl = row.querySelector('.grade');
+    var g = gEl ? gEl.textContent.trim() : '–';
+    var fn = row.querySelector('.ifn');
+    fn = fn ? fn.textContent.trim() : (row.querySelector('.dicttext span') ? row.querySelector('.dicttext span').textContent.trim() : '정보 없음');
+    var risk = g === '–' ? '등급 미정' : (parseFloat(g) >= 7 ? '높은 위험' : parseFloat(g) >= 3 ? '중간 위험' : '낮은 위험');
+    setText('[data-is-name]', name);
+    setText('[data-is-sub]', my.indexOf(name) !== -1 ? '내가 뺀 성분이에요' : (risk === '낮은 위험' ? '순한 편이에요' : risk));
+    setText('[data-is-fn]', fn);
+    setText('[data-is-ewg]', g === '–' ? '자료 부족' : (g + ' · ' + risk));
+    setText('[data-is-desc]', ING_DESC[name] || '이 성분에 대한 설명이 아직 준비되지 않았어요.');
+    var gd = document.querySelector('[data-is-grade]');
+    gd.textContent = g;
+    gd.className = 'grade ' + (g === '–' ? 'g0' : parseFloat(g) >= 7 ? 'g7' : parseFloat(g) >= 3 ? 'g3' : 'g1');
+    var btn = document.querySelector('[data-is-toggle]');
+    var on = my.indexOf(name) !== -1;
+    btn.dataset.on = String(on);
+    btn.dataset.name = name;
+    btn.textContent = on ? '마이 성분에서 빼기' : '마이 성분에 담기';
+    isheet(true);
+  }
+
+  document.addEventListener('click', function(e){
+    var t;
+
+    if((t = e.target.closest('[data-sheet]'))){ e.stopPropagation(); sheet(t.dataset.sheet === 'open'); return; }
+    if((t = e.target.closest('[data-isheet]'))){ e.stopPropagation(); isheet(false); return; }
+    if((t = e.target.closest('[data-is-toggle]'))){
+      e.stopPropagation();
+      var nm = t.dataset.name;
+      if(my.indexOf(nm) !== -1){ my = my.filter(function(x){ return x !== nm; }); }
+      else if(nm){ my.push(nm); }
+      renderIng(); isheet(false); return;
+    }
+    if((t = e.target.closest('.irow, .dictrow, [data-ingcard]'))){ e.stopPropagation(); openIngSheet(t); return; }
+    /* 제품 행·카드 → 상세 */
+    if((t = e.target.closest('.prod, .pcard, .suggrow[data-go="detail"]'))){ e.stopPropagation(); go('detail'); return; }
+
+    if((t = e.target.closest('[data-quick-add]'))){
+      e.stopPropagation();
+      if(my.indexOf(t.dataset.quickAdd) === -1){ my.push(t.dataset.quickAdd); }
+      renderIng(); return;
+    }
+    if((t = e.target.closest('[data-remove-ing]'))){
+      e.stopPropagation();
+      my = my.filter(function(x){ return x !== t.dataset.removeIng; });
+      renderIng(); return;
+    }
+    if((t = e.target.closest('[data-clear-ing]'))){ e.stopPropagation(); my = []; renderIng(); return; }
+
+    if((t = e.target.closest('[data-go]'))){ e.stopPropagation(); go(t.dataset.go); return; }
+
+    /* 탭 */
+    if((t = e.target.closest('.tab'))){
+      var grp = t.closest('.tabs'), scope = t.closest('.screen');
+      grp.querySelectorAll('.tab').forEach(function(x){ x.setAttribute('aria-selected', String(x === t)); });
+      scope.querySelectorAll('.pane').forEach(function(p){
+        if(p.dataset.pane){ p.classList.toggle('is-active', p.dataset.pane === t.dataset.pane); }
+      });
+      if(!grp.closest('.scroll')){ scope.querySelector('.scroll').scrollTop = 0; }
+      return;
+    }
+
+    /* 목적별 / 피부 타입별 하위 전환 */
+    if((t = e.target.closest('[data-sub]'))){
+      var pane = t.closest('.pane');
+      pane.querySelectorAll('[data-sub][role="tab"]').forEach(function(x){ x.setAttribute('aria-selected', String(x === t)); });
+      pane.querySelectorAll('.subpane').forEach(function(p){ p.classList.toggle('is-active', p.dataset.sub === t.dataset.sub); });
+      var lab = t.querySelector('.plab, .tlab'), num = t.querySelector('.pnum, .tup');
+      var title = pane.querySelector('[data-purp-title], [data-skin-title]');
+      if(title && lab){
+        var n = num ? num.textContent.replace(/[^0-9]/g,'') : '';
+        title.innerHTML = title.hasAttribute('data-skin-title')
+          ? (lab.textContent + '에 좋은 성분 <em>' + n + '개</em>')
+          : (lab.textContent + ' <em>' + n + '개</em>');
+      }
+      return;
+    }
+
+    /* 아코디언 (목적별 · 피부 타입별) */
+    if((t = e.target.closest('[data-slot]'))){
+      var open = t.getAttribute('aria-expanded') === 'true';
+      var form = t.closest('.qform');
+      form.querySelectorAll('[data-slot]').forEach(function(x){ x.setAttribute('aria-expanded','false'); });
+      form.querySelectorAll('.slotbody').forEach(function(x){ x.classList.remove('is-open'); });
+      if(!open){
+        t.setAttribute('aria-expanded','true');
+        form.querySelector('[data-slotbody="' + t.dataset.slot + '"]').classList.add('is-open');
+      }
+      return;
+    }
+    if((t = e.target.closest('[data-fchip]'))){
+      var g = t.dataset.fchip, v = t.dataset.v;
+      if(g === 'cat'){ Q.cat = v; }
+      else if(g === 'has'){ Q.has = Q.has.indexOf(v) !== -1 ? Q.has.filter(function(x){ return x !== v; }) : Q.has.concat(v); }
+      else if(g === 'excl'){
+        var cur = qExcl();
+        Q.excl = cur.indexOf(v) !== -1 ? cur.filter(function(x){ return x !== v; }) : cur.concat(v);
+      }
+      renderQForm();
+      return;
+    }
+    if((t = e.target.closest('[data-qreset]'))){
+      Q = { cat:'전체', has:[], excl:null };
+      renderQForm();
+      return;
+    }
+    if((t = e.target.closest('[data-acc]'))){
+      var open = t.getAttribute('aria-expanded') === 'true';
+      var grp = t.closest('.pane') || t.closest('.skinbox') || t.closest('.screen');
+      grp.querySelectorAll('[data-acc]').forEach(function(x){ x.setAttribute('aria-expanded','false'); });
+      grp.querySelectorAll('.accbody, .otherbox').forEach(function(x){ x.classList.remove('is-open'); });
+      if(!open){
+        t.setAttribute('aria-expanded','true');
+        var body = grp.querySelector('[data-accbody="' + t.dataset.acc + '"]');
+        if(body){ body.classList.add('is-open'); }
+      }
+      return;
+    }
+
+    if((t = e.target.closest('.toptab'))){
+      t.closest('.toptabs').querySelectorAll('.toptab').forEach(function(x){ x.setAttribute('aria-selected', String(x === t)); });
+      return;
+    }
+
+    if((t = e.target.closest('[data-toggle-add]'))){
+      e.stopPropagation();
+      var on = t.dataset.on === 'true';
+      t.dataset.on = String(!on);
+      if(t.classList.contains('addbtn')){ t.textContent = !on ? '담김' : '담기'; }
+      else {
+        t.querySelector('span').textContent = !on ? '마이 성분에 담김' : '마이 성분에 담기';
+        t.querySelector('use').setAttribute('href', !on ? '#i-check' : '#i-plus');
+      }
+      return;
+    }
+    if((t = e.target.closest('[data-toggle-follow]'))){
+      e.stopPropagation();
+      var f = t.dataset.on === 'true';
+      t.dataset.on = String(!f);
+      t.textContent = !f ? '팔로잉' : '팔로우';
+      return;
+    }
+    if((t = e.target.closest('[data-toggle-follow2], [data-toggle-zzim]'))){
+      e.stopPropagation();
+      t.dataset.on = t.dataset.on === 'true' ? 'false' : 'true';
+      return;
+    }
+
+    if((t = e.target.closest('[data-sort]'))){
+      var bar = t.closest('.filterbar');
+      bar.querySelectorAll('[data-sort]').forEach(function(x){ x.setAttribute('aria-pressed','false'); });
+      t.setAttribute('aria-pressed','true');
+      sortList(t.dataset.sort);
+      return;
+    }
+    if((t = e.target.closest('.chip')) && !t.classList.contains('ingchip')){
+      var wrap = t.closest('.chiprow, .filterbar, .catchips');
+      if(wrap && !wrap.classList.contains('filterbar')){
+        wrap.querySelectorAll('.chip').forEach(function(c){ c.setAttribute('aria-pressed','false'); });
+        t.setAttribute('aria-pressed','true');
+      } else if(wrap){
+        t.setAttribute('aria-pressed', t.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+      }
+    }
+  });
+
+  var qInput = document.querySelector('[data-q]');
+  if(qInput){
+    qInput.addEventListener('input', renderSuggest);
+    qInput.addEventListener('keydown', function(e){
+      if(e.key === 'Enter'){
+        var first = document.querySelector('[data-qlist] .suggrow');
+        if(first){ first.click(); }
+      }
+    });
+  }
+  document.addEventListener('click', function(e){
+    var c = e.target.closest('[data-qclear]');
+    if(c){ e.stopPropagation(); qInput.value = ''; renderSuggest(); qInput.focus(); return; }
+    var f = e.target.closest('[data-fill]');
+    if(f){ e.stopPropagation(); qInput.value = f.dataset.fill; renderSuggest(); qInput.focus(); return; }
+    var r = e.target.closest('[data-refine]');
+    if(r){ e.stopPropagation(); openSearch(r.dataset.refine); return; }
+    var o = e.target.closest('[data-opensearch]');
+    if(o){ e.stopPropagation(); openSearch(''); return; }
+  }, true);
+
+  document.querySelectorAll('[data-go]').forEach(function(el){
+    if(el.tagName === 'DIV' || el.getAttribute('role') === 'button'){ el.style.cursor = 'pointer'; }
+    el.addEventListener('keydown', function(e){
+      if((e.key === 'Enter' || e.key === ' ') && el.getAttribute('role') === 'button'){ e.preventDefault(); go(el.dataset.go); }
+    });
+  });
+
+  renderIng();
+  renderQForm();
+  go('home');
+})();
+</script>
