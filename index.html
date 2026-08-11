@@ -659,10 +659,13 @@ button.field{cursor:pointer;text-align:left;}
 .accbody .irow{border-top:0;padding-top:8px;padding-bottom:8px;}
 .accbody .irow:hover{background:#EDF1F0;}
 
-@media (max-width:470px){
-  .studio{padding:16px 0;}
-  .deviceframe{transform:scale(.86);transform-origin:top center;}
-}
+
+/* ===== 목업 없음 : 앱 화면만. 큰 화면에서는 최대 폰 폭(430px)으로 가운데 정렬 ===== */
+.studio{min-height:100vh;min-height:100dvh;padding:0;display:flex;justify-content:center;place-items:initial;background:var(--studio-bg);}
+.deviceframe{width:100%;max-width:430px;padding:0;border-radius:0;background:none;box-shadow:none;transform:none;margin:0;}
+.viewport{width:100%;height:100vh;height:100dvh;border-radius:0;}
+.statusbar{display:none;}
+.homebar{display:none;}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
