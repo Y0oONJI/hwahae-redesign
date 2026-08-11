@@ -1,0 +1,398 @@
+<meta charset="utf-8">
+<title>화해 원본 UI — 제품 상세</title>
+<style>
+:root{
+  --studio-bg:#E9EDEC;
+  --studio-shadow:0 24px 60px -20px rgba(21,34,32,.34), 0 4px 12px -4px rgba(21,34,32,.14);
+
+  --ink:#1A1A1A;
+  --mid:#6B7280;
+  --faint:#9CA3AF;
+  --line:#F0F1F3;
+  --line2:#E5E7EB;
+  --bg:#FFFFFF;
+  --sub:#F7F8FA;
+  --teal:#3FD1D6;
+  --teal-ink:#00B2B8;
+  --red:#FF3B45;
+  --blue:#3B72F6;
+  --violet:#7A5CF0;
+  --violet-wash:#F0EBFE;
+  --pink-wash:#FDE9F0;
+  --pink-ink:#F0568F;
+
+  --ui:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic",sans-serif;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){ --studio-bg:#0B1211; } }
+:root[data-theme="dark"]{ --studio-bg:#0B1211; }
+
+*{box-sizing:border-box;}
+html{background:var(--studio-bg);}
+body{margin:0;background:var(--studio-bg);font-family:var(--ui);-webkit-font-smoothing:antialiased;line-height:1.6;}
+:where(button){font:inherit;color:inherit;}
+[hidden]{display:none!important;}
+:focus-visible{outline:2px solid var(--teal-ink);outline-offset:2px;}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
+
+.studio{min-height:100vh;display:grid;place-items:center;padding:40px 16px;}
+.deviceframe{width:414px;padding:12px;border-radius:56px;background:linear-gradient(160deg,#333c3a,#121817 45%,#2b3533);box-shadow:var(--studio-shadow);}
+.viewport{position:relative;width:390px;height:844px;border-radius:45px;overflow:hidden;background:var(--bg);color:var(--ink);}
+
+/* iOS chrome */
+.statusbar{position:relative;height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 26px 0 32px;flex:none;}
+.statusbar .clock{font-size:15px;font-weight:650;letter-spacing:-.01em;padding-top:6px;}
+.island{position:absolute;left:50%;transform:translateX(-50%);top:11px;width:124px;height:35px;border-radius:19px;background:#000;}
+.statusicons{display:flex;align-items:center;gap:5px;padding-top:6px;}
+.statusicons .g5{font-size:12px;font-weight:600;letter-spacing:-.02em;}
+.homebar{position:absolute;bottom:0;left:0;right:0;height:26px;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:6;}
+.homebar i{display:block;width:140px;height:5px;border-radius:3px;background:var(--ink);opacity:.85;}
+
+.screen{position:absolute;inset:0;display:none;flex-direction:column;background:var(--bg);font-size:14px;letter-spacing:-.01em;}
+.screen.is-active{display:flex;}
+.scroll{flex:1;overflow-y:auto;overscroll-behavior:contain;position:relative;}
+.scroll::-webkit-scrollbar{width:0;}
+
+/* ---------- header ---------- */
+.dhead{padding:0 12px 8px;display:flex;align-items:center;gap:2px;flex:none;}
+.iconbtn{border:0;background:transparent;padding:0;width:34px;height:34px;flex:none;display:grid;place-items:center;cursor:pointer;color:var(--ink);}
+.dhead .spacer{flex:1;}
+.cartbtn{position:relative;}
+.cartbadge{position:absolute;top:0;right:1px;min-width:16px;height:16px;border-radius:8px;background:var(--red);color:#fff;font-size:9.5px;font-weight:700;display:grid;place-items:center;padding:0 4px;font-variant-numeric:tabular-nums;}
+
+/* ---------- gallery ---------- */
+.gallery{position:relative;width:100%;aspect-ratio:1/1;overflow:hidden;flex:none;background:#9BD0C2;}
+.gscene{position:absolute;inset:0;width:100%;height:100%;}
+.gband{position:absolute;left:0;right:0;bottom:0;height:52px;background:var(--teal);color:#fff;display:grid;place-items:center;font-size:23px;font-weight:800;font-style:italic;letter-spacing:-.03em;}
+.gonlywrap{display:flex;justify-content:center;margin-top:-13px;position:relative;z-index:3;}
+.gonly{background:var(--pink-wash);color:var(--pink-ink);font-size:12px;font-weight:700;border-radius:14px;padding:5px 13px;}
+
+/* ---------- 궁합 점수 스티커 (원본: 오른쪽 가장자리에 잘려서 붙어 있음) ---------- */
+.fitsticker{position:absolute;right:-16px;top:118px;width:66px;padding:10px 20px 12px 10px;border-radius:16px;background:#5B62B8;color:#fff;text-align:center;z-index:5;box-shadow:0 3px 10px -3px rgba(0,0,0,.28);cursor:pointer;border:0;}
+.fitsticker .fface{width:34px;height:34px;border-radius:17px;background:#CFE7F7;margin:0 auto 3px;display:grid;place-items:center;color:#5B62B8;}
+.fitsticker .flab{font-size:10.5px;font-weight:600;opacity:.92;white-space:nowrap;}
+.fitsticker .fnum{font-size:15px;font-weight:800;letter-spacing:-.02em;}
+.fitsticker.lower{top:auto;bottom:150px;}
+
+/* ---------- 본문 ---------- */
+.dbody{padding:14px 16px 0;}
+.dbrand{border:0;background:transparent;padding:0;display:flex;align-items:center;gap:2px;font-size:13.5px;color:var(--mid);cursor:pointer;}
+.dname{margin:6px 0 0;font-size:18px;line-height:1.42;font-weight:700;letter-spacing:-.035em;padding-right:44px;}
+.dmeta{display:flex;align-items:center;gap:7px;margin-top:9px;flex-wrap:wrap;}
+.dmeta .rate{display:flex;align-items:center;gap:4px;font-size:14.5px;font-weight:700;font-variant-numeric:tabular-nums;}
+.dmeta .cnt{color:var(--faint);font-weight:400;text-decoration:underline;text-underline-offset:2px;}
+.dmeta .sep{color:var(--line2);}
+.inglink{border:0;background:transparent;padding:0;font-size:13.5px;color:var(--mid);cursor:pointer;text-decoration:underline;text-underline-offset:3px;}
+
+.dprice{padding:16px 16px 0;}
+.dprice .was{font-size:13px;color:var(--faint);text-decoration:line-through;font-variant-numeric:tabular-nums;}
+.dprice .now{display:flex;align-items:baseline;gap:2px;margin-top:1px;}
+.dprice .pct{font-size:25px;font-weight:800;color:var(--red);font-variant-numeric:tabular-nums;letter-spacing:-.04em;}
+.dprice .amt{font-size:25px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.04em;}
+.usual{display:flex;align-items:center;gap:3px;margin-top:5px;font-size:12.5px;color:var(--blue);font-weight:500;cursor:pointer;border:0;background:transparent;padding:0;}
+
+.benefitbox{margin:14px 16px 0;border:1px solid #FFCED1;border-radius:10px;overflow:hidden;}
+.benefitrow{display:flex;align-items:center;gap:6px;padding:12px 13px;}
+.benefitrow .amt{font-size:17px;font-weight:800;color:var(--red);font-variant-numeric:tabular-nums;letter-spacing:-.03em;}
+.benefitrow .q{width:15px;height:15px;border-radius:8px;background:var(--line2);color:#fff;font-size:10px;font-weight:700;display:grid;place-items:center;flex:none;}
+.benefitrow .rgt{margin-left:auto;display:flex;align-items:center;gap:3px;font-size:12.5px;color:var(--mid);}
+.pointrow{display:flex;align-items:center;gap:6px;padding:10px 13px;border-top:1px solid #FFE3E5;background:#FFF9F9;font-size:13px;font-weight:700;color:#E8811A;font-variant-numeric:tabular-nums;}
+.pointrow .p{width:16px;height:16px;border-radius:8px;background:#F5A623;color:#fff;font-size:10px;font-weight:800;display:grid;place-items:center;flex:none;}
+
+.promocard{margin:10px 16px 0;border:1px solid var(--line2);border-radius:10px;padding:11px 12px;display:flex;align-items:center;gap:8px;}
+.promocard .p{width:17px;height:17px;border-radius:9px;background:#F5A623;color:#fff;font-size:10px;font-weight:800;display:grid;place-items:center;flex:none;}
+.promocard .t{flex:1;font-size:13.5px;font-weight:600;}
+.promocard .go{background:var(--violet-wash);color:var(--violet);border:0;border-radius:7px;padding:7px 11px;font-size:12.5px;font-weight:700;cursor:pointer;}
+
+.optionrow{margin:10px 16px 0;border:1px solid var(--line2);border-radius:10px;padding:12px 13px;display:flex;align-items:center;gap:9px;width:calc(100% - 32px);background:transparent;cursor:pointer;text-align:left;}
+.optionrow .oic{width:24px;height:24px;border-radius:6px;background:#DFF3E9;display:grid;place-items:center;flex:none;}
+.optionrow .t{flex:1;font-size:13.5px;font-weight:600;}
+.optionrow .chev{color:var(--faint);flex:none;}
+
+.specrows{padding:22px 16px 0;}
+.specrow{display:flex;gap:16px;padding:9px 0;font-size:13.5px;align-items:flex-start;}
+.specrow dt{width:52px;flex:none;color:var(--faint);margin:0;font-size:13px;}
+.specrow dd{margin:0;flex:1;display:flex;align-items:flex-start;gap:6px;line-height:1.5;}
+.specrow dd .sub{display:block;color:var(--faint);font-size:12.5px;margin-top:3px;}
+.specrow dd .free{color:var(--teal-ink);font-weight:700;}
+.specrow dd .bar{color:var(--line2);}
+.specrow dd .chev{margin-left:auto;color:var(--faint);flex:none;margin-top:2px;}
+
+.dactions{display:grid;grid-template-columns:1fr 1fr;margin:16px 0 0;border-top:1px solid var(--line);border-bottom:8px solid var(--sub);}
+.dactions button{border:0;background:transparent;padding:15px 0;cursor:pointer;font-size:13.5px;color:var(--mid);display:flex;align-items:center;justify-content:center;gap:7px;}
+.dactions button + button{border-left:1px solid var(--line);}
+.dactions .aic{width:19px;height:19px;border-radius:5px;border:1.6px solid var(--line2);display:grid;place-items:center;color:var(--faint);flex:none;}
+
+.revhead{padding:18px 16px 0;display:flex;align-items:center;gap:6px;font-size:15px;font-weight:700;letter-spacing:-.03em;}
+.revhead .q{width:15px;height:15px;border-radius:8px;background:var(--line2);color:#fff;font-size:10px;font-weight:700;display:grid;place-items:center;flex:none;}
+.revscroll{display:flex;gap:9px;overflow-x:auto;padding:12px 16px 0;}
+.revscroll::-webkit-scrollbar{height:0;}
+.revcard{flex:none;width:250px;border:1px solid var(--line2);border-radius:10px;padding:12px 13px;display:flex;flex-direction:column;gap:7px;}
+.revtop{display:flex;align-items:center;gap:8px;}
+.revtop .rstar{display:flex;align-items:center;gap:3px;font-size:13px;font-weight:700;}
+.revtop .tags{display:flex;gap:5px;font-size:11px;color:var(--teal-ink);}
+.revbody{display:flex;gap:9px;}
+.revbody p{margin:0;font-size:12.5px;line-height:1.5;color:var(--ink);flex:1;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.revthumb{width:44px;height:44px;border-radius:7px;background:var(--sub);display:grid;place-items:center;flex:none;}
+
+.brandrow{display:flex;align-items:center;gap:11px;margin:22px 16px 0;padding:14px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.brandrow .bmark{width:40px;height:40px;border-radius:20px;border:1px solid var(--line2);display:grid;place-items:center;font-size:8px;font-weight:800;color:var(--mid);flex:none;letter-spacing:-.03em;text-align:center;line-height:1.1;}
+.brandrow .binfo{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
+.brandrow .binfo b{font-size:14.5px;font-weight:700;display:flex;align-items:center;gap:2px;}
+.brandrow .binfo span{font-size:12px;color:var(--faint);font-variant-numeric:tabular-nums;}
+.brandrow .heartbtn{border:0;background:transparent;padding:0;cursor:pointer;color:var(--line2);flex:none;}
+.brandrow .heartbtn[data-on="true"]{color:var(--red);}
+
+.dtabs{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--line);margin-top:14px;flex:none;}
+.dtab{position:relative;border:0;background:transparent;padding:14px 0 12px;cursor:pointer;font-size:15px;font-weight:600;color:var(--faint);}
+.dtab[aria-selected="true"]{color:var(--ink);font-weight:700;}
+.dtab[aria-selected="true"]::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2.5px;background:var(--ink);}
+.pane{display:none;}
+.pane.is-active{display:block;}
+
+.onlycard{margin:16px;border-radius:12px;background:linear-gradient(170deg,#E9F3FE,#EFEAFC);padding:16px;display:flex;gap:12px;}
+.onlylogo{width:46px;height:46px;border-radius:10px;background:#fff;display:grid;place-items:center;flex:none;font-size:9px;font-weight:800;color:var(--teal-ink);font-style:italic;line-height:1.1;text-align:center;}
+.onlytext{flex:1;min-width:0;font-size:12px;line-height:1.65;color:#3A4A63;}
+.onlytext b{color:var(--teal-ink);font-weight:700;}
+.onlybadges{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 16px;}
+.onlybadge{background:var(--sub);border-radius:9px;padding:14px 6px;text-align:center;font-size:11.5px;font-weight:700;color:var(--faint);line-height:1.35;}
+.moreinfo{margin:14px 16px 0;width:calc(100% - 32px);border:1px solid var(--line2);border-radius:9px;background:transparent;padding:14px 0;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;}
+
+.linkrow{display:flex;align-items:center;gap:8px;width:100%;border:0;background:transparent;padding:16px;cursor:pointer;text-align:left;font-size:14.5px;font-weight:600;border-top:1px solid var(--line);}
+.linkrow:first-of-type{border-top:8px solid var(--sub);}
+.linkrow .n{color:var(--faint);font-weight:500;font-variant-numeric:tabular-nums;}
+.linkrow .chev{margin-left:auto;color:var(--faint);flex:none;}
+
+.dbottom{position:absolute;left:0;right:0;bottom:0;height:94px;padding:10px 14px 30px;background:var(--bg);border-top:1px solid var(--line);display:flex;align-items:center;gap:9px;z-index:4;}
+.zzim{display:flex;flex-direction:column;align-items:center;gap:2px;border:0;background:transparent;padding:0 8px;cursor:pointer;color:var(--faint);flex:none;}
+.zzim b{font-size:10.5px;font-weight:600;}
+.zzim[data-on="true"]{color:var(--red);}
+.dbtn{flex:1;border:0;border-radius:9px;padding:15px 0;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:-.03em;}
+.dbtn.cart{background:var(--bg);border:1px solid var(--teal);color:var(--teal-ink);}
+.dbtn.buy{background:var(--teal);color:#fff;}
+
+@media (max-width:470px){
+  .studio{padding:16px 0;}
+  .deviceframe{transform:scale(.86);transform-origin:top center;}
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></symbol>
+  <symbol id="i-houseline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3.4 10.4L12 3.4l8.6 7v10.2h-5.4v-6h-6.4v6H3.4z"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18.4" cy="5.6" r="2.7"/><circle cx="5.6" cy="12" r="2.7"/><circle cx="18.4" cy="18.4" r="2.7"/><path d="M8.2 10.7l7.6-3.8M8.2 13.3l7.6 3.8"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.8-3.8"/></symbol>
+  <symbol id="i-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.6 7.6h14.8l-1.1 11.6a1.5 1.5 0 0 1-1.5 1.3H7.2a1.5 1.5 0 0 1-1.5-1.3z"/><path d="M8.8 9.4V6.8a3.2 3.2 0 0 1 6.4 0v2.6"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></symbol>
+  <symbol id="i-chevd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9l7 7 7-7"/></symbol>
+  <symbol id="i-star" viewBox="0 0 16 16" fill="#FFB400"><path d="M8 1.3l2 4.1 4.5.6-3.3 3.2.8 4.5L8 11.6l-4 2.1.8-4.5L1.5 6l4.5-.6z"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 6v12M6 12h12"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24" fill="currentColor"><path d="M12 20.6l-1.5-1.4C5.2 14.4 2 11.5 2 8a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 3.5-3.2 6.4-8.5 11.2z"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 6.4h6l1.8 2.2H21v9.4H3z"/></symbol>
+  <symbol id="i-face" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="9.2"/><path d="M8.4 14.6a4.6 4.6 0 0 0 7.2 0"/><path d="M7.6 9.6h2.8M13.6 9.6h2.8"/></symbol>
+  <symbol id="i-cell" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="4.6" y="5.6" width="3" height="6.4" rx="1"/><rect x="9.3" y="3" width="3" height="9" rx="1"/><rect x="14" y="0" width="3" height="12" rx="1"/></symbol>
+  <symbol id="i-batt" viewBox="0 0 26 13" fill="none"><rect x=".6" y=".6" width="22" height="11.8" rx="3.4" stroke="currentColor" stroke-opacity=".38" stroke-width="1.1"/><rect x="2.2" y="2.2" width="18" height="8.6" rx="2.2" fill="currentColor"/><path d="M24.4 4.6v3.8a2.1 2.1 0 0 0 0-3.8z" fill="currentColor" fill-opacity=".45"/></symbol>
+  <symbol id="i-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3.6 9.8h16.8v3H3.6zM5 12.8h14v7.6H5zM12 9.8v10.6"/><path d="M12 9.8S9.8 9.8 8.7 8.8a1.9 1.9 0 1 1 2.8-2.4C12.4 7.2 12 9.8 12 9.8zM12 9.8s2.2 0 3.3-1a1.9 1.9 0 1 0-2.8-2.4C11.6 7.2 12 9.8 12 9.8z"/></symbol>
+</svg>
+
+<div class="studio">
+  <div class="deviceframe">
+    <div class="viewport">
+
+      <section class="screen is-active" data-screen="detail">
+        <div class="statusbar">
+          <span class="clock">10:41</span><div class="island"></div>
+          <div class="statusicons"><svg width="18" height="12"><use href="#i-cell"/></svg><span class="g5">5G</span><svg width="26" height="13"><use href="#i-batt"/></svg></div>
+        </div>
+
+        <div class="dhead">
+          <button class="iconbtn" aria-label="뒤로"><svg width="23" height="23"><use href="#i-back"/></svg></button>
+          <button class="iconbtn" aria-label="홈"><svg width="23" height="23"><use href="#i-houseline"/></svg></button>
+          <span class="spacer"></span>
+          <button class="iconbtn" aria-label="공유"><svg width="22" height="22"><use href="#i-share"/></svg></button>
+          <button class="iconbtn" aria-label="검색"><svg width="22" height="22"><use href="#i-search"/></svg></button>
+          <button class="iconbtn cartbtn" aria-label="장바구니, 2개"><svg width="22" height="22"><use href="#i-cart"/></svg><span class="cartbadge">2</span></button>
+        </div>
+
+        <div class="scroll">
+          <!-- 궁합 점수 : 원본대로 오른쪽 가장자리에 잘려 붙어 있음 -->
+          <button class="fitsticker" data-fit>
+            <span class="fface"><svg width="20" height="20"><use href="#i-face"/></svg></span>
+            <span class="flab">궁합 점</span>
+            <span class="fnum" data-fit-score>__점</span>
+          </button>
+
+          <div class="gallery">
+            <svg class="gscene" viewBox="0 0 390 390" preserveAspectRatio="xMidYMid slice" aria-label="라운드랩 소나무 진정 시카 로션">
+              <rect width="390" height="390" fill="#9BD0C2"/>
+              <circle cx="298" cy="96" r="62" fill="#F4F7F3"/>
+              <circle cx="298" cy="96" r="62" fill="#fff" fill-opacity=".35"/>
+              <rect x="130" y="74" width="112" height="250" rx="12" fill="#FBFAF4"/>
+              <rect x="152" y="52" width="68" height="26" rx="6" fill="#E8E6DC"/>
+              <rect x="130" y="150" width="112" height="112" fill="#F2EFE2"/>
+              <path d="M150 232c10-30 22-46 36-56 14 10 26 26 36 56z" fill="#2E5B46"/>
+              <path d="M170 246c8-22 14-32 16-38 4 6 10 16 16 38z" fill="#3E7357"/>
+              <circle cx="186" cy="182" r="15" fill="#2E5B46" fill-opacity=".18"/>
+              <text x="186" y="140" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" font-weight="700" fill="#2E5B46" letter-spacing="-.4">소나무 진정 시카 로션</text>
+              <text x="186" y="154" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="6.5" fill="#7C9587">PINE CALMING CICA LOTION</text>
+              <rect x="150" y="278" width="72" height="3" rx="1.5" fill="#D8D4C4"/>
+              <rect x="158" y="288" width="56" height="2.6" rx="1.3" fill="#E2DFD2"/>
+              <circle cx="302" cy="268" r="52" fill="#fff"/>
+              <rect x="272" y="238" width="26" height="52" rx="4" fill="#EDEAE0"/>
+              <rect x="304" y="246" width="30" height="42" rx="4" fill="#2E5B46"/>
+              <rect x="309" y="256" width="20" height="22" rx="2" fill="#F2EFE2"/>
+              <circle cx="272" cy="222" r="15" fill="#2E5B46"/>
+              <path d="M266 222h12M272 216v12" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+            </svg>
+            <span class="gband">only hwahae</span>
+          </div>
+          <div class="gonlywrap"><span class="gonly">only화해</span></div>
+
+          <div class="dbody">
+            <button class="dbrand">라운드랩 <svg width="13" height="13"><use href="#i-chev"/></svg></button>
+            <h1 class="dname">[only화해] 소나무 진정 시카 로션 250ml 기획 (+앰플15ml+마스크1매)</h1>
+            <div class="dmeta">
+              <span class="rate"><svg width="15" height="15"><use href="#i-star"/></svg>4.57 <span class="cnt">(1,161)</span></span>
+              <span class="sep">·</span>
+              <button class="inglink" data-go-ing>성분 구성 보기</button>
+            </div>
+          </div>
+
+          <div class="dprice">
+            <span class="was">25,000원</span>
+            <div class="now"><span class="pct">40%</span><span class="amt">14,900원</span></div>
+            <button class="usual">평소보다 600원 <svg width="11" height="11"><use href="#i-chevd"/></svg></button>
+          </div>
+
+          <div class="benefitbox">
+            <div class="benefitrow">
+              <span class="amt">14,890원</span>
+              <span class="q">?</span>
+              <span class="rgt">최대 혜택가 <svg width="13" height="13"><use href="#i-chevd"/></svg></span>
+            </div>
+            <div class="pointrow"><span class="p">P</span>2,590P 최대 적립</div>
+          </div>
+
+          <div class="promocard">
+            <span class="p">P</span>
+            <span class="t">혜택가보다 더 할인 받으려면?</span>
+            <button class="go">포인트 받기</button>
+          </div>
+
+          <button class="optionrow">
+            <span class="oic"><svg width="14" height="14" style="color:#2E7D5B"><use href="#i-gift"/></svg></span>
+            <span class="t">판매 중인 다른 상품 옵션 3개</span>
+            <svg class="chev" width="15" height="15"><use href="#i-chevd"/></svg>
+          </button>
+
+          <dl class="specrows">
+            <div class="specrow"><dt>용량</dt><dd>250ml</dd></div>
+            <div class="specrow"><dt>랭킹</dt><dd>로션/에멀전 · 진정 2위 <svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></dd></div>
+            <div class="specrow"><dt>수상</dt><dd><span>2026 상반기 효능/효과 - 스킨케어 부문 - 진정<span class="sub">로션/에멀전 1위</span></span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></dd></div>
+            <div class="specrow"><dt>증정</dt><dd>동백 겔 마스크 1매 (주소지당 1회)</dd></div>
+            <div class="specrow"><dt>배송비</dt><dd><span class="free">무료배송</span><span class="bar">|</span>한진택배</dd></div>
+            <div class="specrow"><dt>정품인증</dt><dd>화해 모든 상품은 100% 정품입니다</dd></div>
+          </dl>
+
+          <div class="dactions">
+            <button><span class="aic"><svg width="11" height="11"><use href="#i-plus"/></svg></span>비교함 담기</button>
+            <button><span class="aic"><svg width="11" height="11"><use href="#i-folder"/></svg></span>즐겨찾기</button>
+          </div>
+
+          <div class="revhead">4점 이상 리뷰가 92% 예요 <span class="q">i</span></div>
+          <div class="revscroll">
+            <div class="revcard">
+              <div class="revtop">
+                <span class="rstar"><svg width="13" height="13"><use href="#i-star"/></svg>5</span>
+                <span class="tags"><span>30대</span><span>복합성</span><span>민감성</span></span>
+              </div>
+              <div class="revbody">
+                <p>smooth texture good for skin</p>
+                <span class="revthumb"><svg width="22" height="28" viewBox="0 0 48 62"><rect x="14" y="8" width="20" height="48" rx="4" fill="#DCE7DF"/><rect x="18" y="2" width="12" height="8" rx="2" fill="#B9CFC0"/></svg></span>
+              </div>
+            </div>
+            <div class="revcard">
+              <div class="revtop">
+                <span class="rstar"><svg width="13" height="13"><use href="#i-star"/></svg>5</span>
+                <span class="tags"><span>20대</span><span>건성</span></span>
+              </div>
+              <div class="revbody"><p>저녁에 여러 번 덧발라도 안 밀리고 다음 날 아침까지 촉촉해요</p></div>
+            </div>
+            <div class="revcard">
+              <div class="revtop">
+                <span class="rstar"><svg width="13" height="13"><use href="#i-star"/></svg>4</span>
+                <span class="tags"><span>30대</span><span>지성</span></span>
+              </div>
+              <div class="revbody"><p>가볍고 산뜻해서 여름에 쓰기 좋아요. 향은 호불호가 있을 듯</p></div>
+            </div>
+          </div>
+
+          <div class="brandrow">
+            <span class="bmark">R:UND<br>LAB</span>
+            <span class="binfo"><b>라운드랩 <svg width="12" height="12"><use href="#i-chev"/></svg></b><span>즐겨찾기 34,306 · 제품 136</span></span>
+            <button class="heartbtn" data-toggle-heart aria-label="브랜드 찜"><svg width="22" height="22"><use href="#i-heart"/></svg></button>
+          </div>
+
+          <div class="dtabs" role="tablist" aria-label="상세 탭">
+            <button class="dtab" role="tab" aria-selected="true" data-pane="info">상품정보</button>
+            <button class="dtab" role="tab" aria-selected="false" data-pane="rev">리뷰/성분</button>
+          </div>
+
+          <div class="pane is-active" data-pane="info">
+            <div class="onlycard">
+              <span class="onlylogo">only<br>hwahae</span>
+              <span class="onlytext">
+                · 지금 보고 계신 상품은 <b>only화해 상품</b>입니다.<br>
+                · 화해 쇼핑몰&amp;홈화면에서 실시간 only화해 상품을 확인하실 수 있습니다.
+              </span>
+            </div>
+            <div class="onlybadges">
+              <span class="onlybadge">무료배송</span>
+              <span class="onlybadge">화해가<br>안심할 상품</span>
+              <span class="onlybadge">only화해 상품<br>구매시 포인트10%</span>
+            </div>
+            <button class="moreinfo">상품소개 더보기 <svg width="14" height="14"><use href="#i-chevd"/></svg></button>
+
+            <button class="linkrow">상품 문의 <span class="n">12</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+            <button class="linkrow">상품정보 제공고시 <svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+            <button class="linkrow">배송/교환/반품안내 <svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+            <button class="linkrow">판매자 정보 <svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+            <div style="height:24px"></div>
+          </div>
+
+          <div class="pane" data-pane="rev">
+            <div style="padding:40px 24px;text-align:center;font-size:13px;color:var(--faint);line-height:1.7">
+              리뷰 / 성분 탭<br>캡처를 받으면 채웁니다
+            </div>
+          </div>
+        </div>
+
+        <div class="dbottom">
+          <button class="zzim" data-toggle-zzim><svg width="22" height="22"><use href="#i-heart"/></svg><b>찜하기</b></button>
+          <button class="dbtn cart">장바구니 담기</button>
+          <button class="dbtn buy">바로 구매</button>
+        </div>
+        <div class="homebar"><i></i></div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  document.addEventListener('click', function(e){
+    var t;
+    if((t = e.target.closest('.dtab'))){
+      var scope = t.closest('.screen');
+      scope.querySelectorAll('.dtab').forEach(function(x){ x.setAttribute('aria-selected', String(x === t)); });
+      scope.querySelectorAll('.pane').forEach(function(p){ p.classList.toggle('is-active', p.dataset.pane === t.dataset.pane); });
+      return;
+    }
+    if((t = e.target.closest('[data-toggle-heart], [data-toggle-zzim]'))){
+      t.dataset.on = t.dataset.on === 'true' ? 'false' : 'true';
+      return;
+    }
+  });
+})();
+</script>
