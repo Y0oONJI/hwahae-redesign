@@ -614,52 +614,24 @@ button.field{cursor:pointer;text-align:left;}
 .qformhead{padding:14px 15px 12px;}
 .qformhead h2{margin:0;font-size:14.5px;font-weight:700;letter-spacing:-.02em;}
 .qformhead p{margin:3px 0 0;font-size:11.5px;color:var(--app-faint);}
-.slot{display:flex;align-items:center;gap:10px;width:100%;border:0;background:transparent;padding:13px 15px;cursor:pointer;text-align:left;border-top:1px solid var(--app-line);}
-.slot:hover{background:var(--app-sub);}
-.slabel{width:56px;flex:none;font-size:12.5px;color:var(--app-faint);}
-.svalue{flex:1;min-width:0;font-size:14px;font-weight:650;letter-spacing:-.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.svalue.empty{color:var(--app-faint);font-weight:400;}
-.slot .chev{color:var(--app-faint);flex:none;transition:transform .18s ease;}
-.slot[aria-expanded="true"]{background:var(--app-sub);}
-.slot[aria-expanded="true"] .chev{transform:rotate(180deg);}
-.slotbody{display:none;padding:0 15px 14px;background:var(--app-sub);}
-.slotbody.is-open{display:block;}
-.slotgrp{padding-top:12px;}
-.slotgrp h4{margin:0 0 8px;font-size:11.5px;font-weight:650;color:var(--app-mid);display:flex;flex-wrap:wrap;gap:5px;align-items:baseline;}
-.slotgrp h4 em{font-style:normal;font-weight:400;color:var(--app-faint);font-size:11px;}
+/* 마이 성분 상태 : 여기서 편집하지 않고 이미 있는 성분 시트로 보낸다 */
+.qbase{display:flex;align-items:center;gap:7px;padding:11px 15px;border-top:1px solid var(--app-line);background:var(--app-sub);color:var(--app-accent-ink);}
+.qbase svg{flex:none;}
+.qbasetxt{flex:1;min-width:0;font-size:12.5px;color:var(--app-mid);}
+.qbasetxt b{color:var(--app-ink);font-weight:700;}
+.qbaseedit{border:0;background:transparent;padding:0;font-size:12px;font-weight:650;color:var(--app-accent-ink);cursor:pointer;text-decoration:underline;text-underline-offset:3px;flex:none;}
+.qgrp{padding:13px 15px 0;}
+.qgrp h4{margin:0 0 9px;font-size:11.5px;font-weight:650;color:var(--app-mid);display:flex;flex-wrap:wrap;gap:5px;align-items:baseline;}
+.qgrp h4 em{font-style:normal;font-weight:400;color:var(--app-faint);font-size:11px;}
+.qform .qsubmit{margin-top:14px;}
 .fchip.minus[aria-pressed="true"]{background:#E8A317;border-color:#E8A317;}
 .fchips{display:flex;flex-wrap:wrap;gap:6px;}
 .fchip{border:1px solid var(--app-line-2);background:var(--app-bg);border-radius:16px;padding:7px 13px;font-size:12.5px;color:var(--app-mid);cursor:pointer;white-space:nowrap;}
 .fchip[aria-pressed="true"]{background:var(--app-accent);border-color:var(--app-accent);color:#fff;font-weight:650;}
 
 /* 성분 : 검색 + 자동완성 */
-.ingq{display:flex;align-items:center;gap:7px;background:var(--app-bg);border:1px solid var(--app-line-2);border-radius:9px;padding:0 11px;margin-bottom:8px;color:var(--app-faint);}
-.ingq input{flex:1;min-width:0;border:0;background:transparent;padding:10px 0;font-size:13px;color:var(--app-ink);outline:none;}
-.ingq input::placeholder{color:var(--app-faint);}
-.ingq svg{flex:none;}
-.fchips.fsel:empty{display:none;}
-.fchip.pick{display:inline-flex;align-items:center;gap:5px;background:var(--app-accent);border-color:var(--app-accent);color:#fff;font-weight:650;}
-.fchip.pick.minus{background:var(--app-amber);border-color:var(--app-amber);}
-.fchip.pick .x{display:grid;place-items:center;opacity:.75;}
-.acbox{margin-top:8px;background:var(--app-bg);border:1px solid var(--app-line-2);border-radius:9px;overflow:hidden;}
-.acbox:empty{display:none;}
-.acrow{display:flex;align-items:center;gap:8px;width:100%;border:0;background:transparent;padding:10px 11px;cursor:pointer;text-align:left;font-size:12.5px;color:var(--app-ink);border-top:1px solid var(--app-line);}
-.acrow:first-child{border-top:0;}
-.acrow .an{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.acrow .ag{font-size:10.5px;font-weight:700;color:var(--app-mid);background:var(--app-sub-2);border-radius:4px;padding:2px 5px;flex:none;}
-.acrow .plus{color:var(--app-accent);flex:none;}
-.acempty{padding:10px 11px;font-size:12px;color:var(--app-faint);}
 
 /* 성분 안전도 */
-.safechk{display:flex;align-items:center;gap:8px;width:100%;border:0;background:transparent;padding:8px 0;cursor:pointer;text-align:left;font-size:13px;color:var(--app-mid);}
-.safechk .box{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--app-line-2);background:var(--app-bg);display:grid;place-items:center;flex:none;color:transparent;}
-.safechk[aria-pressed="true"]{color:var(--app-ink);font-weight:650;}
-.safechk[aria-pressed="true"] .box{background:var(--app-accent);border-color:var(--app-accent);color:#fff;}
-.segrow{display:flex;align-items:center;gap:10px;margin-top:8px;}
-.seglab{font-size:12.5px;color:var(--app-mid);flex:none;}
-.seg{display:flex;flex:1;background:var(--app-sub-2);border-radius:9px;padding:2px;}
-.seg button{flex:1;border:0;background:transparent;border-radius:7px;padding:7px 0;font-size:12px;color:var(--app-mid);cursor:pointer;font-variant-numeric:tabular-nums;}
-.seg button[aria-pressed="true"]{background:var(--app-bg);color:var(--app-ink);font-weight:700;box-shadow:0 1px 3px rgba(27,31,30,.12);}
 .qsubmit{width:100%;border:0;border-top:1px solid var(--app-line);background:var(--app-accent);color:#fff;padding:15px 0;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:-.02em;font-variant-numeric:tabular-nums;}
 .qreset{width:100%;border:0;border-top:1px solid var(--app-line);background:transparent;color:var(--app-faint);padding:10px 0;font-size:12px;cursor:pointer;}
 
@@ -920,44 +892,24 @@ button.field{cursor:pointer;text-align:left;}
                     <p data-qskin>지성 · 모공 / 미백 기준으로 찾아요</p>
                   </div>
 
-                  <button class="slot" data-slot="ing" aria-expanded="false">
-                    <span class="slabel">성분</span>
-                    <span class="svalue" data-sv="ing">향료 외 2개 빼기</span>
-                    <svg class="chev" width="14" height="14"><use href="#i-chevd"/></svg>
-                  </button>
-                  <div class="slotbody" data-slotbody="ing">
-                    <div class="slotgrp">
-                      <h4>이 성분이 든 제품만</h4>
-                      <div class="ingq"><svg width="13" height="13"><use href="#i-search"/></svg><input type="text" data-ingq="has" placeholder="성분 이름으로 검색" autocomplete="off" spellcheck="false"></div>
-                      <div class="fchips fsel" data-fgroup="has"></div>
-                      <div class="acbox" data-ac="has"></div>
-                    </div>
-                    <div class="slotgrp">
-                      <h4>이 성분은 빼고 <em>마이 성분이 기본으로 들어가 있어요 · 이 검색에만 적용</em></h4>
-                      <div class="ingq"><svg width="13" height="13"><use href="#i-search"/></svg><input type="text" data-ingq="excl" placeholder="성분 이름으로 검색" autocomplete="off" spellcheck="false"></div>
-                      <div class="fchips fsel" data-fgroup="excl"></div>
-                      <div class="acbox" data-ac="excl"></div>
-                    </div>
-                    <div class="slotgrp">
-                      <h4>성분 안전도</h4>
-                      <button class="safechk" data-safe="noWarn20" aria-pressed="false"><span class="box"><svg width="11" height="11"><use href="#i-check"/></svg></span>20가지 주의 성분 없는 것만</button>
-                      <button class="safechk" data-safe="noAllergen" aria-pressed="false"><span class="box"><svg width="11" height="11"><use href="#i-check"/></svg></span>알레르기 유발 성분 없는 것만</button>
-                      <div class="segrow">
-                        <span class="seglab">EWG 등급</span>
-                        <div class="seg">
-                          <button data-ewg="low" aria-pressed="false">1–2만</button>
-                          <button data-ewg="mid" aria-pressed="false">1–6</button>
-                          <button data-ewg="all" aria-pressed="true">전체</button>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="slotgrp">
-                      <h4>배합 목적 <em>전성분의 배합 목적 기준 · 완제품 효능은 아니에요</em></h4>
-                      <div class="fchips" data-fgroup="purpose"></div>
-                    </div>
+                  <!-- 성분 넣기/빼기 검색은 검색창(type:성분)과 마이 성분 시트에 이미 있어서 뺐다.
+                       여기 남긴 두 축은 앱 어디에도 없던 것들 : 깐깐함 정도 + 목적 -->
+                  <div class="qbase">
+                    <svg width="13" height="13"><use href="#i-drop"/></svg>
+                    <span class="qbasetxt">마이 성분 <b data-qmy>3개</b> 빼고 찾고 있어요</span>
+                    <button class="qbaseedit" data-sheet="open">바꾸기</button>
                   </div>
 
-                  <button class="qsubmit" data-qsubmit data-go="resultsC"><span data-qcount>3,646</span>개 결과 보기</button>
+                  <div class="qgrp">
+                    <h4>얼마나 깐깐하게 볼까요</h4>
+                    <div class="fchips" data-fgroup="safe"></div>
+                  </div>
+                  <div class="qgrp">
+                    <h4>무엇을 위해 찾나요 <em>배합 목적 기준 · 완제품 효능은 아니에요</em></h4>
+                    <div class="fchips" data-fgroup="purpose"></div>
+                  </div>
+
+                  <button class="qsubmit" data-qsubmit data-go="resultsC"><span data-qcount>3,648</span>개 결과 보기</button>
                   <button class="qreset" data-qreset>조건 초기화</button>
                 </div>
 
@@ -1952,66 +1904,32 @@ button.field{cursor:pointer;text-align:left;}
     setTimeout(function(){ input.focus(); }, 20);
   }
 
-  /* ================= 조건으로 찾기 (성분 전용) =================
-     카테고리는 검색어·인기검색어·홈 랭킹으로 이미 도달 가능하고 폼을 무겁게 만들어서 빼고,
-     화해의 차별점인 성분만 넣기·빼기·안전도·배합목적 4축으로 다룬다. */
+  /* ================= 조건으로 찾기 =================
+     앱에 이미 있는 것과 겹치는 축은 여기서 빼서 폼을 가볍게 유지한다.
+       · 성분 넣기 → 검색창이 이미 함 (type:'성분' → resultsI)
+       · 성분 빼기 → 마이 성분 시트 + 결과 filterbar가 이미 함 (여기선 상태만 보여주고 시트로 보냄)
+       · 카테고리 → 검색어 · 인기검색어 · 홈 랭킹으로 이미 도달 가능
+     남긴 두 축은 앱 어디에도 없던 것들이라 여기가 유일한 자리다. */
   var QBASE = 12840;   // 내 프로필(지성 · 모공/미백) 적용 전 전체 모집단
-  /* EWG 등급은 성분 페이지 gradelegend와 같은 구간(1–2 낮음 / 3–6 중간 / 7–10 높음)을 쓴다 */
-  var ING_GRADE = {
-    '나이아신아마이드':'1','히알루론산':'1','판테놀':'1','세라마이드':'1','어성초':'1','비타민C':'1-2',
-    '아데노신':'1','알란토인':'1','병풀추출물':'1','마데카소사이드':'1','알부틴':'1','트라넥사믹애씨드':'1',
-    '살리실릭애씨드':'4','스쿠알란':'1','펩타이드':'1','레티날':'3-6','글리세린':'1-2','아줄렌':'1',
-    '향료':'4','레티놀':'9','벤조페논-3':'8','에탄올':'4','파라벤':'7','인공색소':'6','멘톨':'4',
-    '미네랄오일':'3','페녹시에탄올':'4','트리클로산':'7','옥시벤존':'8','프탈레이트':'10','SLS':'3'
-  };
-  var HAS_POOL = ['나이아신아마이드','히알루론산','판테놀','세라마이드','어성초','비타민C','아데노신','알란토인','병풀추출물','마데카소사이드','알부틴','트라넥사믹애씨드','살리실릭애씨드','아줄렌','스쿠알란','펩타이드','레티날','글리세린'];
-  var EXCL_POOL = ['향료','레티놀','벤조페논-3','에탄올','파라벤','인공색소','멘톨','미네랄오일','페녹시에탄올','트리클로산','옥시벤존','프탈레이트','SLS'];
-  var PURPOSE_POOL = ['보습','미백','진정','피부 보호','수분 증발 차단','주름 개선','피지 조절'];
+
+  /* t=라벨, k=상태 키, f=건수 계수. '저자극'은 EWG 1–2를 사용자 말로 옮긴 것 */
+  var SAFE_POOL = [
+    { t:'저자극만',      k:'lowIrritant', f:0.41 },
+    { t:'주의 성분 없음', k:'noWarn20',    f:0.74 },
+    { t:'알레르기 없음',  k:'noAllergen',  f:0.66 }
+  ];
+  var PURPOSE_POOL = ['보습','미백','진정','피부 보호'];
 
   // excl:null = 아직 마이 성분 그대로
-  var Q = { has:[], excl:null, purpose:[], noWarn20:false, noAllergen:false, ewg:'all' };
-  var ACQ = { has:'', excl:'' };   // 자동완성 입력값
+  var Q = { excl:null, purpose:[], lowIrritant:false, noWarn20:false, noAllergen:false };
 
   function qExcl(){ return Q.excl === null ? my.slice() : Q.excl; }
   function qCount(){
     var n = QBASE * 0.62 * 0.82 * 0.82;                // 내 피부 · 고민 (프로필 고정)
-    Q.has.forEach(function(){ n *= 0.28; });
-    qExcl().forEach(function(){ n *= 0.88; });
+    qExcl().forEach(function(){ n *= 0.88; });         // 마이 성분 (프로필에서 옴)
     Q.purpose.forEach(function(){ n *= 0.55; });
-    if(Q.noWarn20){ n *= 0.74; }
-    if(Q.noAllergen){ n *= 0.66; }
-    if(Q.ewg === 'low'){ n *= 0.41; }
-    else if(Q.ewg === 'mid'){ n *= 0.86; }
+    SAFE_POOL.forEach(function(s){ if(Q[s.k]){ n *= s.f; } });
     return Math.max(0, Math.round(n));
-  }
-  /* 자동완성 : 입력이 비어 있으면 상위 항목을 그대로 노출해서 예전 고정 칩의 탐색성을 유지한다 */
-  function renderAC(group, pool, picked){
-    var el = document.querySelector('[data-ac="' + group + '"]');
-    if(!el){ return; }
-    var q = (ACQ[group] || '').trim();
-    /* 검색 중이면 6줄, 비었을 땐 4줄만 — 슬롯이 화면을 다 잡아먹지 않게 */
-    var hits = pool.filter(function(v){
-      return picked.indexOf(v) === -1 && (!q || v.indexOf(q) !== -1);
-    }).slice(0, q ? 6 : 4);
-    if(!hits.length){
-      el.innerHTML = q ? '<div class="acempty">‘' + esc(q) + '’ 와 일치하는 성분이 없어요</div>' : '';
-      return;
-    }
-    el.innerHTML = hits.map(function(v){
-      var g = ING_GRADE[v];
-      return '<button class="acrow" data-acadd="' + group + '" data-v="' + v + '">' +
-        '<span class="an">' + esc(v) + '</span>' +
-        (g ? '<span class="ag">EWG ' + g + '</span>' : '') +
-        '<span class="plus">' + icon('i-plus', 13) + '</span></button>';
-    }).join('');
-  }
-  function renderPicked(group, picked, extraCls){
-    var el = document.querySelector('[data-fgroup="' + group + '"]');
-    if(!el){ return; }
-    el.innerHTML = picked.map(function(v){
-      return '<button class="fchip pick ' + (extraCls || '') + '" data-fchipdel="' + group + '" data-v="' + v + '">' +
-        esc(v) + '<span class="x">' + icon('i-x', 9) + '</span></button>';
-    }).join('');
   }
   function qChips(group, items, isOn, extraCls){
     var el = document.querySelector('[data-fgroup="' + group + '"]');
@@ -2021,35 +1939,12 @@ button.field{cursor:pointer;text-align:left;}
     }).join('');
   }
   function renderQForm(){
-    var ex = qExcl();
-    var exPool = EXCL_POOL.slice();
-    my.forEach(function(k){ if(exPool.indexOf(k) === -1){ exPool.unshift(k); } });
-
-    renderPicked('has', Q.has);
-    renderPicked('excl', ex, 'minus');
-    renderAC('has', HAS_POOL, Q.has);
-    renderAC('excl', exPool, ex);
+    qChips('safe', SAFE_POOL.map(function(s){ return s.t; }), function(t){
+      var s = SAFE_POOL.filter(function(x){ return x.t === t; })[0];
+      return !!Q[s.k];
+    });
     qChips('purpose', PURPOSE_POOL, function(v){ return Q.purpose.indexOf(v) !== -1; });
-
-    document.querySelectorAll('[data-safe]').forEach(function(b){
-      b.setAttribute('aria-pressed', Q[b.dataset.safe] ? 'true' : 'false');
-    });
-    document.querySelectorAll('[data-ewg]').forEach(function(b){
-      b.setAttribute('aria-pressed', Q.ewg === b.dataset.ewg ? 'true' : 'false');
-    });
-
-    var parts = [];
-    if(Q.has.length){ parts.push(Q.has[0] + (Q.has.length > 1 ? ' 외 ' + (Q.has.length - 1) + '개' : '') + ' 넣기'); }
-    if(ex.length){   parts.push(ex[0] + (ex.length > 1 ? ' 외 ' + (ex.length - 1) + '개' : '') + ' 빼기'); }
-    if(Q.noWarn20){   parts.push('주의 성분 없음'); }
-    if(Q.noAllergen){ parts.push('알레르기 없음'); }
-    if(Q.ewg === 'low'){ parts.push('EWG 1–2'); }
-    else if(Q.ewg === 'mid'){ parts.push('EWG 1–6'); }
-    if(Q.purpose.length){ parts.push(Q.purpose[0] + (Q.purpose.length > 1 ? ' 외 ' + (Q.purpose.length - 1) + '개' : '')); }
-    var svIng = document.querySelector('[data-sv="ing"]');
-    svIng.textContent = parts.length ? parts.join(' · ') : '조건 없음';
-    svIng.classList.toggle('empty', !parts.length);
-
+    setText('[data-qmy]', qExcl().length + '개');
     setText('[data-qcount]', fmt(qCount()));
   }
 
@@ -2154,65 +2049,21 @@ button.field{cursor:pointer;text-align:left;}
       return;
     }
 
-    /* 아코디언 (목적별 · 피부 타입별) */
-    if((t = e.target.closest('[data-slot]'))){
-      var open = t.getAttribute('aria-expanded') === 'true';
-      var form = t.closest('.qform');
-      form.querySelectorAll('[data-slot]').forEach(function(x){ x.setAttribute('aria-expanded','false'); });
-      form.querySelectorAll('.slotbody').forEach(function(x){ x.classList.remove('is-open'); });
-      if(!open){
-        t.setAttribute('aria-expanded','true');
-        form.querySelector('[data-slotbody="' + t.dataset.slot + '"]').classList.add('is-open');
-      }
-      return;
-    }
-    /* 성분 자동완성 : 추가 · 제거 */
-    if((t = e.target.closest('[data-acadd]'))){
-      var ag = t.dataset.acadd, av = t.dataset.v;
-      if(ag === 'has'){
-        if(Q.has.indexOf(av) === -1){ Q.has = Q.has.concat(av); }
-      } else {
-        var cur = qExcl();
-        if(cur.indexOf(av) === -1){ Q.excl = cur.concat(av); }
-      }
-      ACQ[ag] = '';
-      var inp = document.querySelector('[data-ingq="' + ag + '"]');
-      if(inp){ inp.value = ''; }
-      renderQForm();
-      return;
-    }
-    if((t = e.target.closest('[data-fchipdel]'))){
-      var dg = t.dataset.fchipdel, dv = t.dataset.v;
-      if(dg === 'has'){ Q.has = Q.has.filter(function(x){ return x !== dv; }); }
-      else { Q.excl = qExcl().filter(function(x){ return x !== dv; }); }
-      renderQForm();
-      return;
-    }
-    /* 성분 안전도 */
-    if((t = e.target.closest('[data-safe]'))){
-      Q[t.dataset.safe] = !Q[t.dataset.safe];
-      renderQForm();
-      return;
-    }
-    if((t = e.target.closest('[data-ewg]'))){
-      Q.ewg = t.dataset.ewg;
-      renderQForm();
-      return;
-    }
     if((t = e.target.closest('[data-fchip]'))){
       var g = t.dataset.fchip, v = t.dataset.v;
       if(g === 'purpose'){
         Q.purpose = Q.purpose.indexOf(v) !== -1
           ? Q.purpose.filter(function(x){ return x !== v; })
           : Q.purpose.concat(v);
+      } else if(g === 'safe'){
+        var s = SAFE_POOL.filter(function(x){ return x.t === v; })[0];
+        if(s){ Q[s.k] = !Q[s.k]; }
       }
       renderQForm();
       return;
     }
     if((t = e.target.closest('[data-qreset]'))){
-      Q = { has:[], excl:null, purpose:[], noWarn20:false, noAllergen:false, ewg:'all' };
-      ACQ = { has:'', excl:'' };
-      document.querySelectorAll('[data-ingq]').forEach(function(i){ i.value = ''; });
+      Q = { excl:null, purpose:[], lowIrritant:false, noWarn20:false, noAllergen:false };
       renderQForm();
       return;
     }
@@ -2302,21 +2153,6 @@ button.field{cursor:pointer;text-align:left;}
     el.addEventListener('keydown', function(e){
       if((e.key === 'Enter' || e.key === ' ') && el.getAttribute('role') === 'button'){ e.preventDefault(); go(el.dataset.go); }
     });
-  });
-
-  /* 성분 검색 입력 : 타이핑하면 자동완성만 다시 그린다 (칩·카운트는 그대로) */
-  document.addEventListener('input', function(e){
-    var el = e.target.closest ? e.target.closest('[data-ingq]') : null;
-    if(!el){ return; }
-    var g = el.dataset.ingq;
-    ACQ[g] = el.value;
-    if(g === 'has'){
-      renderAC('has', HAS_POOL, Q.has);
-    } else {
-      var exPool = EXCL_POOL.slice();
-      my.forEach(function(k){ if(exPool.indexOf(k) === -1){ exPool.unshift(k); } });
-      renderAC('excl', exPool, qExcl());
-    }
   });
 
   renderIng();
