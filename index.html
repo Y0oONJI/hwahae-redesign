@@ -1,4 +1,5 @@
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>화해 리디자인 — 홈에서 검색까지</title>
 <style>
 /* ============================================================
@@ -53,6 +54,7 @@
 }
 
 *{box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;overscroll-behavior-y:none;}
 html{background:var(--studio-bg);}
 body{margin:0;background:var(--studio-bg);color:var(--studio-ink);font-family:var(--ui);-webkit-font-smoothing:antialiased;line-height:1.6;}
 :where(button){font:inherit;color:inherit;}
@@ -78,6 +80,7 @@ body{margin:0;background:var(--studio-bg);color:var(--studio-ink);font-family:va
 .screen{position:absolute;inset:0;display:none;flex-direction:column;background:var(--app-bg);font-size:14px;letter-spacing:-.01em;}
 .screen.is-active{display:flex;}
 .scroll{flex:1;overflow-y:auto;overscroll-behavior:contain;padding-bottom:34px;}
+.scroll{-webkit-overflow-scrolling:touch;}
 .scroll::-webkit-scrollbar{width:0;}
 
 /* ============================================================ HOME */

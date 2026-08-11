@@ -1,4 +1,5 @@
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>화해 원본 UI — 제품 상세</title>
 <style>
 :root{
@@ -28,6 +29,7 @@
 :root[data-theme="dark"]{ --studio-bg:#0B1211; }
 
 *{box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;overscroll-behavior-y:none;}
 html{background:var(--studio-bg);}
 body{margin:0;background:var(--studio-bg);font-family:var(--ui);-webkit-font-smoothing:antialiased;line-height:1.6;}
 :where(button){font:inherit;color:inherit;}
@@ -51,6 +53,7 @@ body{margin:0;background:var(--studio-bg);font-family:var(--ui);-webkit-font-smo
 .screen{position:absolute;inset:0;display:none;flex-direction:column;background:var(--bg);font-size:14px;letter-spacing:-.01em;}
 .screen.is-active{display:flex;}
 .scroll{flex:1;overflow-y:auto;overscroll-behavior:contain;position:relative;}
+.scroll{-webkit-overflow-scrolling:touch;}
 .scroll::-webkit-scrollbar{width:0;}
 
 /* ---------- header ---------- */
@@ -520,45 +523,57 @@ body{margin:0;background:var(--studio-bg);font-family:var(--ui);-webkit-font-smo
           <div class="pane" data-ipane="purp">
             <div class="plead">
               <p class="h">목적별 성분</p>
-              <p class="msg"><em>피부 보습, 피부 보호</em> 등 도움을 주는 성분이 있어요.</p>
+              <p class="msg"><em>피부 보습, 수분 증발 차단</em> 등 도움을 주는 성분이 있어요.</p>
             </div>
             <div class="pbars">
-              <span class="pcol"><span class="num">18개</span><span class="track"><span class="fill" style="height:100%"></span></span><span class="lab">피부 보습</span></span>
-              <span class="pcol"><span class="num">4개</span><span class="track"><span class="fill" style="height:72%"></span></span><span class="lab">피부 보호</span></span>
-              <span class="pcol"><span class="num">1개</span><span class="track"><span class="fill" style="height:22%"></span></span><span class="lab">수분 증발 차단</span></span>
-              <span class="pcol zero"><span class="num">0개</span><span class="track"></span><span class="lab">수렴 진정</span></span>
+              <span class="pcol"><span class="num">14개</span><span class="track"><span class="fill" style="height:100%"></span></span><span class="lab">피부 보습</span></span>
+              <span class="pcol"><span class="num">6개</span><span class="track"><span class="fill" style="height:92%"></span></span><span class="lab">수분 증발 차단</span></span>
+              <span class="pcol"><span class="num">3개</span><span class="track"><span class="fill" style="height:55%"></span></span><span class="lab">수렴 진정</span></span>
+              <span class="pcol"><span class="num">2개</span><span class="track"><span class="fill" style="height:44%"></span></span><span class="lab">피부 보호</span></span>
               <span class="pcol zero"><span class="num">0개</span><span class="track"></span><span class="lab">각질 제거</span></span>
               <span class="pcol zero"><span class="num">0개</span><span class="track"></span><span class="lab">미백</span></span>
             </div>
             <p class="pdisc">목적별 성분 정보는 포함된 성분의 배합목적에 관한 정보로서, 완제품인 화장품의 기능성 효능·효과에 관한 정보가 아니며, 해당 성분의 포함 사실만으로 관련 기능이 보장되지 않습니다.</p>
 
-            <div class="pgrp"><h3>피부 보습 <em>18개</em></h3></div>
+            <div class="pgrp"><h3>피부 보습 <em>14개</em></h3></div>
             <div style="padding-top:8px">
+              <button class="prow"><span class="grade g1">1</span><span class="nm">녹차씨오일</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
               <button class="prow"><span class="grade g1">1</span><span class="nm">정제수</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
-              <button class="prow"><span class="grade g1">1-2</span><span class="nm">글리세린</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
-              <button class="prow"><span class="grade g1">1</span><span class="nm">하이알루로닉애씨드</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
-              <button class="prow"><span class="grade g1">1</span><span class="nm">하이드롤라이즈드하이알루로닉애씨드</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
-              <button class="prow"><span class="grade g1">1</span><span class="nm">소듐하이알루로네이트</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
-              <button class="prow"><span class="grade g1">1</span><span class="nm">인도멀구슬나무잎추출물</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
-              <button class="prow"><span class="grade g1">1</span><span class="nm">부틸렌글라이콜</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+              <button class="prow"><span class="grade g1">2</span><span class="nm">녹차추출물</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+              <button class="prow"><span class="grade g1">1</span><span class="nm">드럼스틱잎추출물</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+              <button class="prow"><span class="grade g3">2-4</span><span class="nm">홍차추출물</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+              <button class="prow"><span class="grade g1">2</span><span class="nm">은행나무잎추출물</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+              <button class="prow"><span class="grade g1">1</span><span class="nm">황금추출물</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+              <button class="prow"><span class="grade g1">1</span><span class="nm">모란뿌리추출물</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+              <button class="prow"><span class="grade g3">5</span><span class="nm">스페인감초뿌리추출물</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+              <button class="prow"><span class="grade g3">3</span><span class="nm">로즈우드오일</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+              <button class="prow"><span class="grade g3">4</span><span class="nm">로즈마리잎오일</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+              <button class="prow"><span class="grade g1">2</span><span class="nm">라벤더오일</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+              <button class="prow"><span class="grade g1">1</span><span class="nm">스피루리나 플라텐시스추출물</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
               <button class="prow"><span class="grade g1">2</span><span class="nm">에틸헥실글리세린</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
-              <button class="prow"><span class="grade g1">1</span><span class="nm">아시아티코사이드</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
-              <button class="prow"><span class="grade g1">1</span><span class="nm">아시아틱애씨드</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
-              <button class="prow"><span class="grade g1">1</span><span class="nm">마데카소사이드</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
-              <button class="prow"><span class="grade g1">1</span><span class="nm">마데카식애씨드</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
             </div>
 
-            <div class="pgrp"><h3>피부 보호 <em>4개</em></h3></div>
+            <div class="pgrp"><h3>수분 증발 차단 <em>6개</em></h3></div>
             <div style="padding-top:8px">
-              <button class="prow"><span class="grade g1">1-2</span><span class="nm">글리세린</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
-              <button class="prow"><span class="grade g1">1</span><span class="nm">세틸에틸헥사노에이트</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
-              <button class="prow"><span class="grade g1">2</span><span class="nm">하이드로제네이티드폴리데센</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
-              <button class="prow"><span class="grade g1">1</span><span class="nm">마데카소사이드</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+              <button class="prow"><span class="grade g1">1</span><span class="nm">옥수수배아오일</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+              <button class="prow"><span class="grade g1">1</span><span class="nm">녹차씨오일</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+              <button class="prow"><span class="grade g1">1</span><span class="nm">마카다미아넛오일(1)</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+              <button class="prow"><span class="grade g1">1</span><span class="nm">잇꽃씨오일</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+              <button class="prow"><span class="grade g1">1</span><span class="nm">호호바씨오일</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+              <button class="prow"><span class="grade g1">1</span><span class="nm">스쿠알란</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
             </div>
 
-            <div class="pgrp"><h3>수분 증발 차단 <em>1개</em></h3></div>
+            <div class="pgrp"><h3>수렴 진정 <em>3개</em></h3></div>
             <div style="padding-top:8px">
-              <button class="prow"><span class="grade g1">1</span><span class="nm">세테아릴올리베이트</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+              <button class="prow"><span class="grade g1">2</span><span class="nm">녹차추출물</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+              <button class="prow"><span class="grade g3">2-4</span><span class="nm">홍차추출물</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+              <button class="prow"><span class="grade g3">3</span><span class="nm">로즈우드오일</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+            </div>
+
+            <div class="pgrp"><h3>피부 보호 <em>2개</em></h3></div>
+            <div style="padding-top:8px">
+              <button class="prow"><span class="grade g1">2</span><span class="nm">녹차추출물</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
+              <button class="prow"><span class="grade g3">2-4</span><span class="nm">홍차추출물</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
             </div>
 
             <div class="discl">
