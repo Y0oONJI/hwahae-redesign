@@ -418,25 +418,20 @@ button.field{cursor:pointer;text-align:left;}
 .dmeta .cnt{color:var(--app-faint);font-weight:400;text-decoration:underline;}
 .dmeta .sep{color:var(--app-line-2);}
 
-/* --- 궁합 카드 (컴팩트 · 카드 전체가 링크) --- */
-.fitcard{margin:14px 16px 0;width:calc(100% - 32px);display:flex;flex-direction:column;border:1px solid var(--app-accent);border-radius:13px;background:var(--app-bg);padding:12px 14px 11px;cursor:pointer;text-align:left;}
-.fitcard:active{background:var(--app-wash);}
-.fitrow{display:flex;align-items:center;gap:9px;}
-.fitface{width:30px;height:30px;border-radius:15px;background:#5B62B8;display:grid;place-items:center;flex:none;color:#CFE7F7;}
-.fitnum{flex:1;min-width:0;display:flex;align-items:baseline;gap:1px;font-size:14.5px;font-weight:650;letter-spacing:-.03em;color:var(--app-accent-ink);}
-.fitnum b{font-size:21px;font-weight:800;font-variant-numeric:tabular-nums;margin-left:4px;}
-.fitnum i{font-style:normal;font-size:13px;font-weight:700;}
-.fitrow .chev{color:var(--app-accent);flex:none;}
-.fitmeter{position:relative;height:6px;border-radius:3px;background:var(--app-sub-2);margin-top:9px;}
-.fitmeter .fill{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:var(--app-accent);}
-.fitmeter .tick{position:absolute;top:-3px;bottom:-3px;width:2px;border-radius:1px;background:var(--app-mid);opacity:.5;}
-.fitavg{margin-top:6px;font-size:11px;color:var(--app-faint);letter-spacing:-.01em;}
-/* 제품 속성 칩 : 점수와 달리 개인화되지 않은 사실만 */
-.fitchips{margin-top:11px;padding-top:11px;border-top:1px solid var(--app-line);display:flex;flex-wrap:wrap;gap:6px;}
-.fitchip{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:700;letter-spacing:-.01em;border-radius:8px;padding:4px 9px 4px 8px;background:var(--app-wash);color:var(--app-accent-ink);}
-.fitchip.warn{background:#FDF0DC;color:#B87400;}
-.fitchip.flat{background:var(--app-sub);color:var(--app-mid);}
-.fitchip svg{flex:none;}
+/* --- 궁합 점수 한 줄 ---
+   점수 칩 + 점수를 만든 내역 칩. 가로 스크롤은 정보를 화면 밖에 숨기므로 쓰지 않고,
+   라벨을 짧게 유지해 390px 안에서 한 줄로 끝낸다 (측정치 293 / 가용 398). */
+.fitline{display:flex;align-items:center;gap:6px;padding:14px 16px 0;}
+.fchipx{display:inline-flex;align-items:center;gap:4px;border:0;border-radius:9px;padding:6px 10px;
+  font-size:12px;font-weight:700;letter-spacing:-.02em;white-space:nowrap;cursor:pointer;}
+.fchipx svg{flex:none;}
+.fchipx .pt{font-size:11px;font-variant-numeric:tabular-nums;opacity:.9;}
+.fchipx.score{background:#5B62B8;color:#fff;padding-right:8px;}
+.fchipx.score b{font-size:15px;font-weight:800;font-variant-numeric:tabular-nums;margin:0 1px 0 3px;}
+.fchipx.score svg{opacity:.85;}
+.fchipx.score:active{background:#4A50A0;}
+.fchipx.warn{background:#FDF0DC;color:#B87400;}
+.fchipx.good{background:var(--app-wash);color:var(--app-accent-ink);}
 .fitfacts{margin-top:10px;padding-top:9px;border-top:1px solid var(--app-line);display:flex;flex-direction:column;gap:5px;}
 .fact{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--app-mid);letter-spacing:-.02em;}
 .fact .t{flex:1;min-width:0;}
@@ -1245,16 +1240,10 @@ button.field{cursor:pointer;text-align:left;}
               </div>
 
               <!-- 궁합 카드 : 점수는 평균 대비로만 제시하고, 판정 문구 대신 제품 속성을 칩으로 -->
-              <button class="fitcard" data-go="ing">
-                <span class="fitrow">
-                  <span class="fitface"><svg width="18" height="18"><use href="#i-face"/></svg></span>
-                  <span class="fitnum">내 피부와 <b data-fit-score>85</b><i>점</i></span>
-                  <svg class="chev" width="15" height="15"><use href="#i-chev"/></svg>
-                </span>
-                <span class="fitmeter"><span class="fill" data-fit-fill style="width:85%"></span><span class="tick" style="left:71%"></span></span>
-                <span class="fitavg">시트마스크 평균 71점</span>
-                <span class="fitchips" data-fit-chips></span>
-              </button>
+              <!-- 궁합 점수 : 점수 + 점수를 만든 내역을 한 줄 칩으로.
+                   게이지와 '시트마스크 평균 71'은 성분 페이지 .verdict에 그대로 있어 여기서는 빼고,
+                   칩을 누르면 그 화면으로 보낸다. 가로 스크롤이 생기지 않도록 라벨을 짧게 유지할 것. -->
+              <div class="fitline" data-fit-chips></div>
 
               <div class="dprice">
                 <span class="was">75,000원</span>
@@ -1660,24 +1649,24 @@ button.field{cursor:pointer;text-align:left;}
 
   function fitBand(n){ return n >= 90 ? 'hi' : n >= 75 ? 'mid' : n >= 60 ? 'low' : 'warn'; }
 
-  /* 상세 궁합 카드 칩 — 성분 페이지에 이미 있는 값만 사용한다.
-     DETAIL_ING(제품에 실제로 든 성분)은 늘 사실로 보여주고, 내가 뺀 성분일 때만 경고로 승격. */
-  var DETAIL_FACTS = [
-    { t:'20가지 주의 성분 0개', ic:'i-check', sz:10 },
-    { t:'미백 기능성 2개',      ic:'i-drop',  sz:10 },
-    { t:'진정 성분 3개',        ic:'i-drop',  sz:10 }
-  ];
-  function renderFitChips(hits){
+  /* 상세 궁합 점수 한 줄 — 점수와 그 점수를 만든 내역만 보여준다.
+     부호(−7)는 FIT_PENALTY에서 실제로 나온 값일 때만 붙인다.
+     '지성에 맞음 3개'는 개수라서 점수 계산과 무관하므로 부호를 붙이지 않는다
+     (성분 페이지 '잘 맞는 성분 3개'와 같은 값). */
+  var SKIN_TYPE = '지성';
+  var SKIN_FIT_COUNT = 3;
+  function renderFitChips(hits, score){
     var el = document.querySelector('[data-fit-chips]');
     if(!el){ return; }
-    var out = DETAIL_ING.map(function(k){
-      var mine = hits.indexOf(k) !== -1;
-      return '<span class="fitchip ' + (mine ? 'warn' : 'flat') + '">'
-        + icon(mine ? 'i-alert' : 'i-drop', 11) + k + ' 있음</span>';
+    // 점수와 '점'은 한 span으로 묶는다 — 텍스트 노드도 flex 항목이 되어 gap이 끼어들기 때문
+    var out = ['<button class="fchipx score" data-go="ing"><span>내 피부와 <b>' + score + '</b>점</span>'
+      + icon('i-chev', 12) + '</button>'];
+    hits.forEach(function(k){
+      out.push('<button class="fchipx warn" data-go="ing">' + icon('i-alert', 11) + k
+        + '<span class="pt">−' + FIT_PENALTY + '</span></button>');
     });
-    DETAIL_FACTS.forEach(function(f){
-      out.push('<span class="fitchip">' + icon(f.ic, f.sz) + f.t + '</span>');
-    });
+    out.push('<button class="fchipx good" data-go="ing">' + icon('i-check', 11)
+      + SKIN_TYPE + '에 맞음<span class="pt">' + SKIN_FIT_COUNT + '개</span></button>');
     el.innerHTML = out.join('');
   }
 
@@ -1802,11 +1791,8 @@ button.field{cursor:pointer;text-align:left;}
         : '<span class="emptypick" style="padding-left:0">담은 성분이 없습니다.</span>';
     }
 
-    /* 상세 궁합 카드 — 점수에 마이 성분 반영 */
-    setText('[data-fit-score]', String(score));
-    var fill = document.querySelector('[data-fit-fill]');
-    if(fill){ fill.style.width = score + '%'; }
-    renderFitChips(hits);
+    /* 상세 궁합 점수 — 점수와 내역 칩을 한 번에 그린다 (게이지는 성분 페이지 담당) */
+    renderFitChips(hits, score);
 
     /* 성분 페이지 : 결론 + 근거 */
     setText('[data-v-score]', String(score));
