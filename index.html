@@ -530,64 +530,76 @@ button.field{cursor:pointer;text-align:left;}
 .ihead{padding:2px 8px 4px;display:flex;align-items:center;gap:4px;flex:none;}
 .ihead h1{flex:1;text-align:center;margin:0;font-size:16.5px;font-weight:700;letter-spacing:-.02em;}
 
-/* --- 1층 : 결론 --- */
-.verdict{padding:16px 16px 22px;border-bottom:8px solid var(--app-sub);}
-.vtop{display:flex;align-items:center;gap:11px;}
-.vface{width:40px;height:40px;border-radius:20px;background:#5B62B8;display:grid;place-items:center;flex:none;color:#CFE7F7;}
-.vnum{flex:1;min-width:0;display:flex;align-items:baseline;font-size:16px;font-weight:650;letter-spacing:-.03em;}
-.vnum b{font-size:30px;font-weight:800;font-variant-numeric:tabular-nums;margin:0 1px 0 6px;}
-.vnum i{font-style:normal;font-size:14px;font-weight:700;}
-.vband{font-size:13px;font-weight:700;background:var(--app-accent);color:#fff;border-radius:12px;padding:5px 12px;flex:none;}
-.vmeterwrap{position:relative;margin-top:16px;padding-bottom:17px;}
-.vmeter{position:relative;height:8px;border-radius:4px;background:var(--app-sub-2);}
-.vmeter .fill{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:var(--app-accent);}
-.vmeter .tick{position:absolute;top:-4px;bottom:-4px;width:2px;border-radius:1px;background:var(--app-ink);opacity:.32;}
-.vticklab{position:absolute;top:14px;transform:translateX(-50%);font-size:10.5px;color:var(--app-faint);white-space:nowrap;font-variant-numeric:tabular-nums;}
+/* ================= 성분 화면 =================
+   간격(padding·margin·gap)은 전부 4의 배수로 맞춘다.
+   font-size·border-radius·stroke는 타입/장식 값이라 대상이 아니다. */
 
-/* --- 2층 : 내 피부 기준 스코어카드 --- */
-.skinbox{padding:0 16px 18px;border-bottom:8px solid var(--app-sub);}
-.skinbox h2{margin:0 0 4px;font-size:14.5px;font-weight:700;letter-spacing:-.02em;}
-.skinbox h2 b{color:var(--app-accent-ink);font-weight:800;}
-.sbrow{display:flex;align-items:center;gap:10px;padding:12px 0;border-top:1px solid var(--app-line);font-size:14px;}
-.sbrow:first-of-type{border-top:0;}
-.sbic{width:19px;height:19px;border-radius:10px;display:grid;place-items:center;flex:none;}
-.sbrow.good .sbic{background:var(--app-wash);color:var(--app-accent-ink);}
-.sbrow.none .sbic{background:var(--app-sub-2);color:var(--app-faint);}
-.sbrow.warn .sbic{background:#FADFB4;color:#B87400;}
-.sbrow.warn{color:#8A5A00;}
-.sblab{flex:1;min-width:0;color:var(--app-mid);}
-.sbrow.warn .sblab{color:#8A5A00;}
-.sbval{flex:none;font-weight:700;color:var(--app-ink);display:flex;align-items:baseline;gap:7px;}
-.sbrow.none .sbval{color:var(--app-faint);font-weight:600;}
-.sbrow.warn .sbval{color:#8A5A00;}
-.sbval em{font-style:normal;font-variant-numeric:tabular-nums;color:#B87400;}
-.sbnames{display:flex;flex-wrap:wrap;gap:5px;padding:0 0 12px 29px;margin:-2px 0 0;}
-.sbnames span{background:var(--app-wash);color:var(--app-accent-ink);border-radius:12px;padding:4px 10px;font-size:12px;font-weight:600;}
-.sbmore{margin-top:12px;width:100%;border:1px solid var(--app-line-2);background:var(--app-bg);border-radius:10px;padding:11px 0;font-size:12.5px;font-weight:600;color:var(--app-mid);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;}
-.sbmore[aria-expanded="true"] .chev{transform:rotate(180deg);}
-.sbmore .chev{transition:transform .18s ease;}
-.otherbox{display:none;margin-top:8px;background:var(--app-sub);border-radius:10px;padding:2px 12px;}
-.otherbox.is-open{display:block;}
-.otherrow{display:flex;align-items:center;gap:9px;padding:11px 0;border-top:1px solid var(--app-line-2);font-size:13px;}
-.otherrow:first-child{border-top:0;}
-.otherrow .olab{flex:1;font-weight:600;}
-.otherrow .oval{font-size:12.5px;color:var(--app-mid);font-variant-numeric:tabular-nums;}
-.otherrow .oval b{color:var(--app-accent-ink);font-weight:700;}
+.itabs .tab{flex:1;justify-content:center;}
 
-/* --- 3층 : 원자료 --- */
-.morelabel{margin:0;padding:20px 16px 10px;font-size:12.5px;color:var(--app-faint);}
-.gradelegend{display:flex;align-items:center;gap:12px;padding:13px 16px 3px;flex-wrap:wrap;}
-.gradelegend span{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--app-mid);font-variant-numeric:tabular-nums;}
-.gradelegend .sw{width:9px;height:9px;border-radius:5px;flex:none;}
-.gradelegend .ln{margin-left:auto;color:var(--app-faint);}
-.ilisthead{display:flex;align-items:baseline;gap:8px;padding:18px 16px 6px;}
+/* --- 적합도 : 링 게이지 --- */
+.fit{padding:20px 16px 16px;}
+.flab{margin:0;font-size:11.5px;font-weight:700;color:var(--app-faint);letter-spacing:.02em;}
+.fitmain{display:flex;align-items:center;gap:16px;margin-top:12px;}
+.ring{position:relative;width:76px;height:76px;flex:none;display:grid;place-items:center;}
+.ring svg{position:absolute;inset:0;transform:rotate(-90deg);}
+.ring .rbg{fill:none;stroke:var(--app-sub-2);stroke-width:7;}
+.ring .rfg{fill:none;stroke:var(--app-accent);stroke-width:7;stroke-linecap:round;transition:stroke-dashoffset .5s ease;}
+.ring .rnum{display:flex;align-items:baseline;}
+.ring .rnum b{font-size:25px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.03em;}
+.ring .rnum i{font-style:normal;font-size:12px;font-weight:700;color:var(--app-mid);}
+.fittext{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.fittext b{font-size:16px;font-weight:800;letter-spacing:-.03em;}
+.fittext i{font-style:normal;font-size:12.5px;line-height:1.55;color:var(--app-mid);}
+
+/* --- 피부 타입별 비교 : 접지 않고 항상 노출 --- */
+.skincmp{margin-top:20px;padding-top:16px;border-top:1px solid var(--app-line);}
+.skincmp [data-skincmp]{display:flex;flex-direction:column;gap:12px;margin-top:12px;}
+.cmprow{display:flex;align-items:center;gap:12px;}
+.cmprow .clab{flex:none;width:64px;font-size:12.5px;color:var(--app-mid);display:flex;align-items:center;gap:4px;}
+.cmprow .clab em{font-style:normal;font-size:10px;font-weight:700;color:#fff;background:var(--app-accent);border-radius:4px;padding:0 4px;}
+.cmprow .cbar{flex:1;height:8px;border-radius:4px;background:var(--app-sub-2);overflow:hidden;}
+.cmprow .cbar i{display:block;height:100%;border-radius:4px;background:#B4BDBA;}
+.cmprow .cval{flex:none;width:28px;text-align:right;font-size:12.5px;font-family:var(--mono);color:var(--app-faint);}
+.cmprow.is-me .clab{color:var(--app-ink);font-weight:700;}
+.cmprow.is-me .cbar i{background:var(--app-accent);}
+.cmprow.is-me .cval{color:var(--app-ink);font-weight:700;}
+
+/* --- 전성분 : 검색 · 필터 · 정렬 --- */
+.ingtools{position:sticky;top:0;z-index:5;background:var(--app-bg);padding:12px 16px;border-top:1px solid var(--app-line);border-bottom:1px solid var(--app-line);}
+.ingsearch{display:flex;align-items:center;gap:8px;background:var(--app-sub);border-radius:10px;padding:0 12px;height:40px;}
+.ingsearch > svg{color:var(--app-faint);flex:none;}
+.ingsearch input{flex:1;min-width:0;border:0;background:transparent;outline:none;font:inherit;font-size:13.5px;color:var(--app-ink);}
+.ingsearch input::placeholder{color:var(--app-faint);}
+.ingsearch .clr{border:0;background:var(--app-line-2);color:var(--app-mid);width:20px;height:20px;border-radius:10px;display:grid;place-items:center;cursor:pointer;flex:none;padding:0;}
+.ifchiprow{display:flex;gap:8px;margin-top:12px;overflow-x:auto;scrollbar-width:none;}
+.ifchiprow::-webkit-scrollbar{display:none;}
+.ifchip{flex:none;border:1px solid var(--app-line-2);background:var(--app-bg);color:var(--app-mid);border-radius:16px;padding:8px 12px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:4px;white-space:nowrap;letter-spacing:-.02em;}
+.ifchip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--app-faint);}
+.ifchip[aria-pressed="true"]{background:var(--app-ink);border-color:var(--app-ink);color:#fff;font-weight:600;}
+.ifchip[aria-pressed="true"] i{color:rgba(255,255,255,.72);}
+.ifchip:disabled{opacity:.38;cursor:default;}
+
+/* --- 목록 공통 --- */
+.ilisthead{display:flex;align-items:baseline;gap:8px;padding:20px 16px 8px;}
 .ilisthead h2{margin:0;font-size:15px;font-weight:700;letter-spacing:-.025em;}
 .ilisthead .cnt{font-size:13px;font-weight:700;color:var(--app-accent);font-variant-numeric:tabular-nums;}
 .ilisthead .sub{margin-left:auto;font-size:11px;color:var(--app-faint);}
+.sortbtn{margin-left:auto;border:0;background:transparent;color:var(--app-faint);font-size:11.5px;cursor:pointer;display:flex;align-items:center;gap:4px;padding:0;align-self:center;}
+.sortbtn b{font-weight:700;color:var(--app-ink);}
 
-.irow{display:flex;align-items:center;gap:11px;width:100%;border:0;background:transparent;padding:12px 16px;cursor:pointer;text-align:left;border-top:1px solid var(--app-line);}
+/* 성분 구성 스택 바 : EWG 범례를 대신한다 */
+.compwrap{padding:0 16px 12px;}
+.sbar{display:flex;height:8px;border-radius:4px;overflow:hidden;background:var(--app-sub-2);}
+.sbar span{display:block;height:100%;}
+.slegend{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;margin-top:8px;}
+.slegend .slab{color:var(--app-faint);font-size:11.5px;font-weight:400;}
+.slegend span{display:flex;align-items:center;gap:4px;font-size:11.5px;color:var(--app-mid);letter-spacing:-.02em;}
+.slegend i{width:8px;height:8px;border-radius:2px;flex:none;}
+.slegend em{font-style:normal;font-family:var(--mono);color:var(--app-ink);font-weight:700;}
+
+.irow{display:flex;align-items:center;gap:12px;width:100%;border:0;background:transparent;padding:12px 16px;cursor:pointer;text-align:left;border-top:1px solid var(--app-line);}
 .irow:hover{background:var(--app-sub);}
-.grade{min-width:34px;height:24px;border-radius:6px;display:grid;place-items:center;font-size:11.5px;font-weight:800;flex:none;font-variant-numeric:tabular-nums;padding:0 6px;letter-spacing:-.02em;}
+.grade{min-width:36px;height:24px;border-radius:6px;display:grid;place-items:center;font-size:11.5px;font-weight:800;flex:none;font-variant-numeric:tabular-nums;padding:0 4px;letter-spacing:-.02em;}
 .grade.g1{background:#CDEDF1;color:#0A6B78;}
 .grade.g3{background:#FBE3B8;color:#8A5A00;}
 .grade.g7{background:#FBD2D2;color:#B02A30;}
@@ -595,14 +607,39 @@ button.field{cursor:pointer;text-align:left;}
 .irow .iname{flex:1;min-width:0;font-size:14px;font-weight:500;color:var(--app-ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .irow .ifn{font-size:11.5px;color:var(--app-faint);flex:none;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .irow .chev{color:var(--app-line-2);flex:none;}
+.irow mark{background:#FBE9B6;color:inherit;border-radius:2px;padding:0 4px;margin:0 -4px;}
+.irow .altag{font-size:10px;font-weight:700;color:#B02A30;background:#FBD2D2;border-radius:4px;padding:4px 8px;flex:none;}
+.irow.is-mine{background:#FEF9F1;}
+.irow.is-mine .iname{color:#8A5A00;font-weight:700;}
+.irow.is-mine:hover{background:#FCF2E2;}
+.topmark{display:flex;align-items:center;gap:8px;padding:8px 16px;background:var(--app-sub);border-top:1px solid var(--app-line);font-size:11px;color:var(--app-mid);letter-spacing:-.02em;}
+.topmark::before{content:"";width:4px;height:12px;border-radius:2px;background:var(--app-accent);flex:none;}
+.noing{padding:40px 16px;text-align:center;font-size:13px;color:var(--app-faint);line-height:1.6;border-top:1px solid var(--app-line);}
+
 .mineblock{background:#FEF9F1;border-top:1px solid #F3E2C6;border-bottom:1px solid #F3E2C6;}
+.mineblock .ilisthead{padding:12px 16px 4px;}
 .mineblock .ilisthead h2{color:#8A5A00;}
 .mineblock .ilisthead .cnt{color:#B87400;}
 .mineblock .irow{border-top:0;}
 .mineblock .irow:hover{background:#FCF2E2;}
 .mineblock .iname{font-weight:700;color:#8A5A00;}
-.mineblock .minetag{font-size:10px;font-weight:700;color:#fff;background:#D18A16;border-radius:4px;padding:3px 7px;flex:none;}
-.iend{padding:15px 16px 4px;text-align:center;font-size:12.5px;color:var(--app-faint);}
+.mineblock .minetag{font-size:10px;font-weight:700;color:#fff;background:#D18A16;border-radius:4px;padding:4px 8px;flex:none;}
+
+/* --- 목적별 : 점수 대신 제품 구성을 보여준다 --- */
+.phead{padding:20px 16px 16px;}
+.phead h2{margin:0 0 12px;font-size:16px;font-weight:700;letter-spacing:-.03em;}
+.phead h2 b{font-weight:800;color:var(--app-accent-ink);}
+.compbar{display:flex;height:12px;border-radius:6px;overflow:hidden;background:var(--app-sub-2);}
+.compbar span{display:block;height:100%;}
+.psub{margin:12px 0 0;font-size:12px;color:var(--app-mid);}
+.pchiprow{display:flex;gap:8px;padding:0 16px 4px;overflow-x:auto;scrollbar-width:none;}
+.pchiprow::-webkit-scrollbar{display:none;}
+.pchip{flex:none;border:1px solid var(--app-line-2);background:var(--app-bg);border-radius:16px;padding:8px 12px;font-size:12.5px;color:var(--app-mid);cursor:pointer;display:flex;align-items:center;gap:8px;white-space:nowrap;letter-spacing:-.02em;}
+.pchip .pdot{width:8px;height:8px;border-radius:4px;flex:none;}
+.pchip em{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--app-faint);}
+.pchip[aria-pressed="true"]{background:var(--app-ink);border-color:var(--app-ink);color:#fff;font-weight:600;}
+.pchip[aria-pressed="true"] em{color:rgba(255,255,255,.72);}
+.ewgnote{margin:0;padding:16px;font-size:11.5px;line-height:1.6;color:var(--app-faint);}
 
 /* 조건으로 찾기 (파라메트릭 검색) */
 .qform{margin:20px 16px 4px;border:1px solid var(--app-line-2);border-radius:14px;overflow:hidden;background:var(--app-bg);}
@@ -647,20 +684,6 @@ button.field{cursor:pointer;text-align:left;}
 .isbtn[data-on="true"]{background:var(--app-accent);border-color:var(--app-accent);color:#fff;}
 
 /* 아코디언 */
-.accrow{display:flex;align-items:center;gap:10px;width:100%;border:0;background:transparent;padding:15px 16px;cursor:pointer;text-align:left;border-top:1px solid var(--app-line);}
-.accrow:hover{background:var(--app-sub);}
-.accrow .alab{flex:1;min-width:0;font-size:14px;letter-spacing:-.02em;}
-.accrow .mineTag{font-size:10px;font-weight:700;color:#fff;background:var(--app-accent);border-radius:4px;padding:2px 6px;flex:none;}
-.accrow .anum{font-size:13.5px;font-weight:700;color:var(--app-ink);font-variant-numeric:tabular-nums;flex:none;}
-.accrow .anum b{color:var(--app-accent-ink);font-weight:700;}
-.accrow .chev{color:var(--app-faint);flex:none;transition:transform .18s ease;}
-.accrow[aria-expanded="true"]{background:var(--app-sub);}
-.accrow[aria-expanded="true"] .alab{font-weight:700;}
-.accrow[aria-expanded="true"] .chev{transform:rotate(90deg);}
-.accbody{display:none;background:var(--app-sub);padding:2px 0 8px;}
-.accbody.is-open{display:block;}
-.accbody .irow{border-top:0;padding-top:8px;padding-bottom:8px;}
-.accbody .irow:hover{background:#EDF1F0;}
 
 
 /* ===== 목업 없음 : 앱 화면만. 큰 화면에서는 최대 폰 폭(430px)으로 가운데 정렬 ===== */
@@ -1381,67 +1404,47 @@ button.field{cursor:pointer;text-align:left;}
               <button class="iconbtn" aria-label="도움말"><svg width="20" height="20"><use href="#i-help"/></svg></button>
             </div>
 
+            <!-- 상단 탭 : 헤더 바로 아래 고정 -->
+            <div class="tabs itabs" role="tablist" aria-label="성분 보기 방식">
+              <button class="tab" role="tab" aria-selected="true" data-pane="iAll"><b>전성분</b><i>51</i></button>
+              <button class="tab" role="tab" aria-selected="false" data-pane="iPurp"><b>목적별</b><i data-purp-tabcount>8</i></button>
+            </div>
+
             <div class="scroll">
-              <!-- 1층 : 결론 -->
-              <div class="verdict">
-                <div class="vtop">
-                  <span class="vface"><svg width="22" height="22"><use href="#i-face"/></svg></span>
-                  <span class="vnum">내 피부와 <b data-v-score>85</b><i>점</i></span>
-                  <span class="vband" data-v-band>잘 맞아요</span>
-                </div>
-                <div class="vmeterwrap">
-                  <div class="vmeter"><span class="fill" data-v-fill style="width:85%"></span><span class="tick" style="left:71%"></span></div>
-                  <span class="vticklab" style="left:71%">시트마스크 평균 71</span>
-                </div>
-              </div>
 
-              <!-- 2층 : 내 피부 기준 (판단 근거) -->
-              <div class="skinbox">
-                <h2><b>지성 피부</b> 기준으로 봤어요</h2>
-                <div class="sbrow good">
-                  <span class="sbic"><svg width="10" height="10"><use href="#i-check"/></svg></span>
-                  <span class="sblab">잘 맞는 성분</span>
-                  <span class="sbval">3개</span>
-                </div>
-                <p class="sbnames"><span>나이아신아마이드</span><span>알란토인</span><span>버지니아풍년화추출물</span></p>
-                <div class="sbrow none">
-                  <span class="sbic"><svg width="10" height="10"><use href="#i-check"/></svg></span>
-                  <span class="sblab">지성이 주의할 성분</span>
-                  <span class="sbval">없어요</span>
-                </div>
-                <div class="sbrow warn" data-v-warn>
-                  <span class="sbic"><svg width="10" height="10"><use href="#i-alert"/></svg></span>
-                  <span class="sblab">내가 뺀 성분</span>
-                  <span class="sbval"><b data-v-warn-name>향료</b><em data-v-warn-pen>−7점</em></span>
-                </div>
-                <div class="sbrow none">
-                  <span class="sbic"><svg width="10" height="10"><use href="#i-check"/></svg></span>
-                  <span class="sblab">20가지 주의 성분</span>
-                  <span class="sbval">없어요</span>
-                </div>
-
-                <button class="sbmore" data-acc="other" aria-expanded="false">다른 피부 타입은 어떤가요? <svg class="chev" width="13" height="13"><use href="#i-chevd"/></svg></button>
-                <div class="otherbox" data-accbody="other">
-                  <div class="otherrow"><span class="olab">건성</span><span class="oval"><b>잘 맞는 성분 5</b> · 주의 0</span></div>
-                  <div class="otherrow"><span class="olab">민감성</span><span class="oval"><b>잘 맞는 성분 3</b> · 주의 0</span></div>
-                  <div class="otherrow"><span class="olab">복합성</span><span class="oval"><b>잘 맞는 성분 4</b> · 주의 0</span></div>
-                </div>
-              </div>
-
-              <!-- 3층 : 원자료 -->
-              <p class="morelabel">성분을 직접 확인하고 싶다면</p>
-              <div class="tabs" role="tablist" aria-label="성분 보기 방식">
-                <button class="tab" role="tab" aria-selected="true" data-pane="iAll" style="flex:1;justify-content:center"><b>전성분</b><i>51</i></button>
-                <button class="tab" role="tab" aria-selected="false" data-pane="iPurp" style="flex:1;justify-content:center"><b>목적별</b></button>
-              </div>
-
-              <!-- 전성분 -->
+              <!-- ================= 전성분 : 내 피부 관점 ================= -->
               <div class="pane is-active" data-pane="iAll">
-                <div class="gradelegend">
-                  <span><i class="sw" style="background:#CDEDF1"></i>1–2 낮음</span>
-                  <span><i class="sw" style="background:#FBE3B8"></i>3–6 중간</span>
-                  <span><i class="sw" style="background:#FBD2D2"></i>7–10 높음</span>
-                  <span class="ln">EWG 등급</span>
+
+                <!-- 적합도 : 링 게이지 -->
+                <div class="fit">
+                  <p class="flab">내 피부 적합도</p>
+                  <div class="fitmain">
+                    <span class="ring">
+                      <svg width="76" height="76" viewBox="0 0 76 76" aria-hidden="true">
+                        <circle class="rbg" cx="38" cy="38" r="33"/>
+                        <circle class="rfg" cx="38" cy="38" r="33" data-ring/>
+                      </svg>
+                      <span class="rnum"><b data-fit-score>85</b><i>점</i></span>
+                    </span>
+                    <span class="fittext">
+                      <b data-fit-band>잘 맞는 제품이에요</b>
+                      <i data-fit-desc>지성 피부에 잘 맞는 성분 3개가 들어 있어요. 시트마스크 평균보다 14점 높아요.</i>
+                    </span>
+                  </div>
+
+                  <div class="skincmp">
+                    <p class="flab">피부 타입별로 보면</p>
+                    <div data-skincmp></div>
+                  </div>
+                </div>
+
+                <div class="ingtools">
+                  <div class="ingsearch">
+                    <svg width="15" height="15"><use href="#i-search"/></svg>
+                    <input type="text" data-ingq placeholder="성분 이름으로 찾기" aria-label="성분 이름으로 찾기">
+                    <button class="clr" data-ingqclear aria-label="지우기" style="display:none"><svg width="8" height="8"><use href="#i-x"/></svg></button>
+                  </div>
+                  <div class="ifchiprow" data-ifilters></div>
                 </div>
 
                 <div class="mineblock" data-mineblock>
@@ -1449,54 +1452,31 @@ button.field{cursor:pointer;text-align:left;}
                   <button class="irow" data-ing-row><span class="grade g3">4</span><span class="iname" data-mine-name>향료</span><span class="minetag">내가 뺀 성분</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
                 </div>
 
-                <div class="ilisthead"><h2>전성분</h2><span class="cnt">51개</span><span class="sub">함량 높은 순</span></div>
-                  <button class="irow"><span class="grade g1">1</span><span class="iname">정제수</span><span class="ifn">보습</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
-                  <button class="irow"><span class="grade g1">1-2</span><span class="iname">나이아신아마이드</span><span class="ifn">미백 · 피지 조절</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
-                  <button class="irow"><span class="grade g1">1</span><span class="iname">사이클로헥사실록세인</span><span class="ifn">수분 증발 차단</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
-                  <button class="irow"><span class="grade g1">1</span><span class="iname">소듐하이알루로네이트</span><span class="ifn">강력 보습</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
-                  <button class="irow"><span class="grade g1">1</span><span class="iname">판테놀</span><span class="ifn">보습 · 컨디셔닝</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
-                  <button class="irow"><span class="grade g1">1</span><span class="iname">알란토인</span><span class="ifn">수렴 · 진정</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
-                  <button class="irow"><span class="grade g3">1-4</span><span class="iname">부틸옥틸살리실레이트</span><span class="ifn">보습</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
-                  <button class="irow"><span class="grade g3">4</span><span class="iname">향료</span><span class="ifn">착향</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
-                  <button class="irow"><span class="grade g1">1</span><span class="iname">버지니아풍년화추출물</span><span class="ifn">수렴 · 진정</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
-                  <button class="irow"><span class="grade g0">–</span><span class="iname">병풀추출물</span><span class="ifn">진정</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
-                <div class="iend">나머지 41개 더 보기</div>
+                <div class="ilisthead">
+                  <h2 data-ilist-title>전성분</h2><span class="cnt" data-ilist-count>51개</span>
+                  <button class="sortbtn" data-isort>정렬 <b data-isort-label>함량 높은 순</b><svg width="12" height="12"><use href="#i-chevd"/></svg></button>
+                </div>
+                <div class="compwrap">
+                  <div class="sbar" data-sbar></div>
+                  <div class="slegend" data-slegend></div>
+                </div>
+                <div data-inglist></div>
               </div>
 
-              <!-- 목적별 -->
+              <!-- ================= 목적별 : 제품 관점 ================= -->
               <div class="pane" data-pane="iPurp">
+                <div class="phead">
+                  <h2 data-comp-title>이 제품은 <b>피부 보습</b> 성분 위주예요</h2>
+                  <div class="compbar" data-compbar></div>
+                  <p class="psub" data-comp-sub>전성분 51개 중 17개가 피부 보습 목적이에요</p>
+                </div>
+                <div class="pchiprow" data-pchips></div>
+                <div class="ilisthead">
+                  <h2 data-plist-title>피부 보습</h2><span class="cnt" data-plist-count>17개</span>
+                  <span class="sub">함량 높은 순</span>
+                </div>
+                <div data-purplist></div>
                 <p class="ewgnote">배합 목적 기준이에요. 완제품의 효능을 보장하진 않아요.</p>
-                <button class="accrow" data-acc="p1" aria-expanded="false"><span class="alab">피부 보습</span><span class="anum">32개</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
-                <div class="accbody" data-accbody="p1">
-                  <button class="irow"><span class="grade g1">1</span><span class="iname">정제수</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
-                  <button class="irow"><span class="grade g3">1-4</span><span class="iname">부틸옥틸살리실레이트</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
-                  <button class="irow"><span class="grade g1">1</span><span class="iname">소듐하이알루로네이트</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
-                  <button class="irow"><span class="grade g1">1</span><span class="iname">하이알루로닉애씨드</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
-                  <button class="irow"><span class="grade g1">1</span><span class="iname">글리세린</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
-                  <div class="iend">나머지 27개 더 보기</div>
-                </div>
-                <button class="accrow" data-acc="p2" aria-expanded="false"><span class="alab">피부 보호</span><span class="anum">8개</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
-                <div class="accbody" data-accbody="p2">
-                  <button class="irow"><span class="grade g1">1</span><span class="iname">나이아신아마이드</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
-                  <button class="irow"><span class="grade g1">1</span><span class="iname">판테놀</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
-                  <button class="irow"><span class="grade g1">1</span><span class="iname">세라마이드엔피</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
-                  <div class="iend">나머지 5개 더 보기</div>
-                </div>
-                <button class="accrow" data-acc="p3" aria-expanded="false"><span class="alab">수분 증발 차단</span><span class="anum">5개</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
-                <div class="accbody" data-accbody="p3">
-                  <button class="irow"><span class="grade g1">1</span><span class="iname">사이클로헥사실록세인</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
-                  <button class="irow"><span class="grade g1">1</span><span class="iname">다이메티콘</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
-                  <div class="iend">나머지 3개 더 보기</div>
-                </div>
-                <button class="accrow" data-acc="p4" aria-expanded="false"><span class="alab">미백</span><span class="anum">2개</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
-                <div class="accbody" data-accbody="p4">
-                  <button class="irow"><span class="grade g1">1</span><span class="iname">나이아신아마이드</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
-                  <button class="irow"><span class="grade g1">1</span><span class="iname">알부틴</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
-                </div>
-                <button class="accrow" data-acc="p5" aria-expanded="false"><span class="alab">수렴 진정</span><span class="anum">1개</span><svg class="chev" width="15" height="15"><use href="#i-chev"/></svg></button>
-                <div class="accbody" data-accbody="p5">
-                  <button class="irow"><span class="grade g1">1</span><span class="iname">알란토인</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
-                </div>
               </div>
 
             </div>
@@ -1794,22 +1774,278 @@ button.field{cursor:pointer;text-align:left;}
     /* 상세 궁합 점수 — 점수와 내역 칩을 한 번에 그린다 (게이지는 성분 페이지 담당) */
     renderFitChips(hits, score);
 
-    /* 성분 페이지 : 결론 + 근거 */
-    setText('[data-v-score]', String(score));
-    setText('[data-v-band]', band(score));
-    var vfill = document.querySelector('[data-v-fill]');
-    if(vfill){ vfill.style.width = score + '%'; }
-    var vwarn = document.querySelector('[data-v-warn]');
-    if(vwarn){
-      show(vwarn, hits.length > 0);
-      vwarn.querySelector('[data-v-warn-name]').textContent = hits.join(', ');
-      vwarn.querySelector('[data-v-warn-pen]').textContent = '−' + (FIT_PENALTY * hits.length) + '점';
-    }
     renderFitPills();
     show(document.querySelector('[data-mineblock]'), hits.length > 0);
     setText('[data-mine-count]', hits.length + '개');
     setText('[data-mine-name]', hits.join(', '));
     show(document.querySelector('[data-ing-flag]'), hits.length > 0);
+
+    /* 성분 화면 : 적합도 · 목록 */
+    renderFit(hits, score);
+    renderComp();
+    renderIngList();
+    renderPurp();
+  }
+
+  /* ================= 적합도 : 링 게이지 + 피부 타입 비교 =================
+     내가 뺀 성분의 감점은 모든 타입에 똑같이 적용해 서로 비교 가능하게 둔다. */
+  var GOOD_ING = ['나이아신아마이드','알란토인','버지니아풍년화추출물'];
+  var SKINS = [
+    {k:'지성',  base:FIT_BASE, me:true},
+    {k:'건성',  base:95},
+    {k:'민감성', base:78},
+    {k:'복합성', base:93}
+  ];
+  var CAT_AVG = 71, CAT_NAME = '시트마스크';
+
+  function renderFit(hits, score){
+    var arc = document.querySelector('[data-ring]');
+    if(!arc){ return; }
+
+    var C = 2 * Math.PI * 33;                       /* r=33 */
+    arc.style.strokeDasharray = C.toFixed(2);
+    arc.style.strokeDashoffset = (C * (1 - score / 100)).toFixed(2);
+
+    setText('[data-fit-score]', String(score));
+    setText('[data-fit-band]', score >= 90 ? '아주 잘 맞는 제품이에요'
+      : score >= 75 ? '잘 맞는 제품이에요'
+      : score >= 60 ? '무난한 제품이에요' : '잘 안 맞는 제품이에요');
+
+    var diff = score - CAT_AVG;
+    setText('[data-fit-desc]',
+      '지성 피부에 잘 맞는 성분 ' + GOOD_ING.length + '개가 들어 있어요'
+      + (hits.length ? ', 내가 뺀 성분 ' + hits.join(' · ') + '도 있고요' : '')
+      + '. ' + CAT_NAME + ' 평균(' + CAT_AVG + '점)보다 '
+      + (diff >= 0 ? diff + '점 높아요.' : (-diff) + '점 낮아요.'));
+
+    document.querySelector('[data-skincmp]').innerHTML = SKINS.map(function(s){
+      var v = Math.max(0, s.base - FIT_PENALTY * hits.length);
+      return '<div class="cmprow' + (s.me ? ' is-me' : '') + '">'
+        + '<span class="clab">' + s.k + (s.me ? '<em>나</em>' : '') + '</span>'
+        + '<span class="cbar"><i style="width:' + v + '%"></i></span>'
+        + '<span class="cval">' + v + '</span></div>';
+    }).join('');
+  }
+
+  /* 성분 구성 스택 바 — 내가 뺀 성분이 곧바로 '주의'로 넘어간다 */
+  var COMP = [
+    {k:'안심', c:'#12A594'},
+    {k:'참고', c:'#E8A317'},
+    {k:'주의', c:'#E5484D'},
+    {k:'미정', c:'#C7CFCC'}
+  ];
+  function bucketOf(x){
+    if(my.indexOf(x.n) !== -1 || x.al || x.gv >= 7){ return '주의'; }
+    if(x.gv < 0){ return '미정'; }
+    return x.gv >= 3 ? '참고' : '안심';
+  }
+  function renderComp(){
+    var bar = document.querySelector('[data-sbar]');
+    if(!bar){ return; }
+    var rows = COMP.map(function(c){
+      return { k:c.k, c:c.c, n:ALL_ING.filter(function(x){ return bucketOf(x) === c.k; }).length };
+    }).filter(function(r){ return r.n > 0; });
+    var tot = ALL_ING.length;
+    bar.innerHTML = rows.map(function(r){
+      return '<span style="width:' + (r.n / tot * 100).toFixed(2) + '%;background:' + r.c + '"></span>';
+    }).join('');
+    /* 위 게이지(적합도)와 구분되도록 '성분 구성'이라는 이름을 범례 앞에 붙인다 */
+    document.querySelector('[data-slegend]').innerHTML = '<b class="slab">성분 구성</b>' + rows.map(function(r){
+      return '<span><i style="background:' + r.c + '"></i>' + r.k + ' <em>' + r.n + '</em></span>';
+    }).join('');
+  }
+
+  /* ================= 성분 화면 : 전성분 · 목적별 =================
+     51개 전성분을 데이터로 두고 검색·필터·정렬을 붙인다.
+     g 는 표기용 EWG 문자열, gv 는 정렬·필터용 최대 등급. */
+  var PURPS = [
+    {k:'피부 보습',    c:'#12A594'},
+    {k:'수렴 진정',    c:'#E56B8C'},
+    {k:'제형 안정',    c:'#9AA3A0'},
+    {k:'피부 보호',    c:'#3E7BFA'},
+    {k:'보존 · 착향',  c:'#B87400'},
+    {k:'항산화 · 주름',c:'#2F9E5E'},
+    {k:'미백',        c:'#E8A317'},
+    {k:'수분 증발 차단',c:'#6E56CF'}
+  ];
+  /* 함량 높은 순 (원본 전성분 표기 순서) */
+  var ALL_ING = [
+    {n:'정제수',                        g:'1',   fn:'용매',              p:['피부 보습']},
+    {n:'나이아신아마이드',              g:'1-2', fn:'미백 · 피지 조절',  p:['미백','피부 보호']},
+    {n:'글리세린',                      g:'1-2', fn:'보습',              p:['피부 보습']},
+    {n:'부틸렌글라이콜',                g:'1',   fn:'보습 · 용제',       p:['피부 보습']},
+    {n:'다이프로필렌글라이콜',          g:'1',   fn:'보습 · 용제',       p:['피부 보습']},
+    {n:'사이클로헥사실록세인',          g:'1',   fn:'수분 증발 차단',    p:['수분 증발 차단']},
+    {n:'소듐하이알루로네이트',          g:'1',   fn:'강력 보습',         p:['피부 보습']},
+    {n:'하이알루로닉애씨드',            g:'1',   fn:'보습',              p:['피부 보습']},
+    {n:'판테놀',                        g:'1',   fn:'보습 · 컨디셔닝',   p:['피부 보습','피부 보호']},
+    {n:'알란토인',                      g:'1',   fn:'수렴 · 진정',       p:['수렴 진정','피부 보호']},
+    {n:'베타인',                        g:'1',   fn:'보습',              p:['피부 보습']},
+    {n:'트레할로스',                    g:'1',   fn:'보습',              p:['피부 보습']},
+    {n:'다이메티콘',                    g:'3',   fn:'수분 증발 차단',    p:['수분 증발 차단']},
+    {n:'부틸옥틸살리실레이트',          g:'1-4', fn:'보습 · 에몰리언트', p:['피부 보습']},
+    {n:'향료',                          g:'4',   fn:'착향',              p:['보존 · 착향'], al:true},
+    {n:'버지니아풍년화추출물',          g:'1',   fn:'수렴 · 진정',       p:['수렴 진정']},
+    {n:'병풀추출물',                    g:'–',   fn:'진정',              p:['수렴 진정']},
+    {n:'알부틴',                        g:'1',   fn:'미백',              p:['미백']},
+    {n:'세라마이드엔피',                g:'1',   fn:'피부 장벽',         p:['피부 보호']},
+    {n:'카프릴릭/카프릭트라이글리세라이드', g:'1', fn:'에몰리언트',      p:['피부 보습']},
+    {n:'글리세릴스테아레이트',          g:'1',   fn:'유화',              p:['제형 안정']},
+    {n:'세테아릴알코올',                g:'1',   fn:'점도 조절',         p:['제형 안정']},
+    {n:'스테아릭애씨드',                g:'1',   fn:'유화',              p:['제형 안정']},
+    {n:'폴리소르베이트60',              g:'3',   fn:'유화',              p:['제형 안정']},
+    {n:'잔탄검',                        g:'1',   fn:'점도 조절',         p:['제형 안정']},
+    {n:'카보머',                        g:'1',   fn:'점도 조절',         p:['제형 안정']},
+    {n:'트로메타민',                    g:'1-3', fn:'pH 조절',           p:['제형 안정']},
+    {n:'다이소듐이디티에이',            g:'1',   fn:'금속이온 봉쇄',     p:['제형 안정']},
+    {n:'1,2-헥산다이올',                g:'1',   fn:'보습 · 보존 보조',  p:['피부 보습','보존 · 착향']},
+    {n:'에틸헥실글리세린',              g:'1',   fn:'컨디셔닝',          p:['보존 · 착향']},
+    {n:'페녹시에탄올',                  g:'4',   fn:'보존',              p:['보존 · 착향']},
+    {n:'소듐벤조에이트',                g:'3',   fn:'보존',              p:['보존 · 착향']},
+    {n:'녹차추출물',                    g:'1',   fn:'항산화 · 진정',     p:['항산화 · 주름','수렴 진정']},
+    {n:'카모마일꽃추출물',              g:'1',   fn:'진정',              p:['수렴 진정']},
+    {n:'알로에베라잎추출물',            g:'1',   fn:'보습 · 진정',       p:['피부 보습','수렴 진정']},
+    {n:'마데카소사이드',                g:'1',   fn:'진정',              p:['수렴 진정']},
+    {n:'아시아티코사이드',              g:'1',   fn:'진정',              p:['수렴 진정']},
+    {n:'토코페롤',                      g:'1-3', fn:'항산화',            p:['항산화 · 주름']},
+    {n:'아스코빌글루코사이드',          g:'1',   fn:'미백',              p:['미백']},
+    {n:'글루타티온',                    g:'1',   fn:'항산화',            p:['항산화 · 주름']},
+    {n:'쌀추출물',                      g:'1',   fn:'보습',              p:['피부 보습']},
+    {n:'쌀겨추출물',                    g:'1',   fn:'보습 · 컨디셔닝',   p:['피부 보습']},
+    {n:'감초뿌리추출물',                g:'1',   fn:'진정',              p:['수렴 진정']},
+    {n:'어성초추출물',                  g:'1',   fn:'진정',              p:['수렴 진정']},
+    {n:'소듐피씨에이',                  g:'1',   fn:'천연보습인자',      p:['피부 보습']},
+    {n:'세라마이드에이피',              g:'1',   fn:'피부 장벽',         p:['피부 보호']},
+    {n:'콜레스테롤',                    g:'1',   fn:'피부 장벽',         p:['피부 보호']},
+    {n:'하이드로제네이티드레시틴',      g:'1',   fn:'유화',              p:['제형 안정']},
+    {n:'스쿠알란',                      g:'1',   fn:'에몰리언트',        p:['피부 보습']},
+    {n:'판테틴',                        g:'1',   fn:'컨디셔닝',          p:['피부 보호']},
+    {n:'아데노신',                      g:'1',   fn:'주름 개선',         p:['항산화 · 주름']}
+  ];
+  ALL_ING.forEach(function(x, i){
+    x.i = i;                                                   // 함량 순서
+    x.gv = x.g === '–' ? -1 : Math.max.apply(null, x.g.split('-').map(Number));
+  });
+
+  function gcls(gv){ return gv < 0 ? 'g0' : gv >= 7 ? 'g7' : gv >= 3 ? 'g3' : 'g1'; }
+  function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function hl(name, q){
+    if(!q){ return esc(name); }
+    var i = name.indexOf(q);
+    if(i === -1){ return esc(name); }
+    return esc(name.slice(0, i)) + '<mark>' + esc(name.slice(i, i + q.length)) + '</mark>' + esc(name.slice(i + q.length));
+  }
+  function irow(x, q){
+    var mine = my.indexOf(x.n) !== -1;
+    var tag = mine ? '<span class="minetag">내가 뺀 성분</span>'
+            : x.al ? '<span class="altag">알레르기</span>'
+            : '<span class="ifn">' + esc(x.fn) + '</span>';
+    return '<button class="irow' + (mine ? ' is-mine' : '') + '">'
+      + '<span class="grade ' + gcls(x.gv) + '">' + x.g + '</span>'
+      + '<span class="iname">' + hl(x.n, q) + '</span>' + tag
+      + icon('i-chev', 14) + '</button>';
+  }
+
+  var IF = 'all', ISORT = 'amt', IQ = '';
+  var SORTS = { amt:'함량 높은 순', ewg:'EWG 등급 높은 순', name:'가나다순' };
+  var IFILTERS = [
+    {k:'all',      lab:'전체',       t:function(){ return true; }},
+    /* 헤더에서 이름을 나열하는 대신 칩으로 옮겨, 목록에서 바로 확인하게 한다 */
+    {k:'good',     lab:'잘 맞는',    t:function(x){ return GOOD_ING.indexOf(x.n) !== -1; }},
+    {k:'mine',     lab:'내 성분',    t:function(x){ return my.indexOf(x.n) !== -1; }},
+    {k:'allergen', lab:'알레르기',   t:function(x){ return !!x.al; }},
+    {k:'high',     lab:'EWG 3 이상', t:function(x){ return x.gv >= 3; }},
+    {k:'unknown',  lab:'등급 미정',  t:function(x){ return x.gv < 0; }}
+  ];
+
+  function renderIngList(){
+    var chips = document.querySelector('[data-ifilters]');
+    if(!chips){ return; }
+
+    /* 칩 : 항상 전체 51개 기준 개수를 보여줘 "0개라 없는 것"인지 바로 알게 한다 */
+    chips.innerHTML = IFILTERS.map(function(f){
+      var n = ALL_ING.filter(f.t).length;
+      return '<button class="ifchip" data-ifilter="' + f.k + '" aria-pressed="' + (IF === f.k) + '"'
+        + (n === 0 ? ' disabled' : '') + '>' + f.lab + '<i>' + n + '</i></button>';
+    }).join('');
+
+    var f = IFILTERS.filter(function(x){ return x.k === IF; })[0] || IFILTERS[0];
+    var list = ALL_ING.filter(f.t);
+    if(IQ){ list = list.filter(function(x){ return x.n.indexOf(IQ) !== -1 || x.fn.indexOf(IQ) !== -1; }); }
+    list = list.slice().sort(function(a, b){
+      if(ISORT === 'ewg'){ return b.gv - a.gv || a.i - b.i; }
+      if(ISORT === 'name'){ return a.n.localeCompare(b.n, 'ko'); }
+      return a.i - b.i;
+    });
+
+    setText('[data-ilist-count]', list.length + '개');
+    setText('[data-isort-label]', SORTS[ISORT]);
+    setText('[data-ilist-title]', IQ ? '검색 결과' : (IF === 'all' ? '전성분' : f.lab));
+
+    /* 눈여겨볼 성분은 전체 보기일 때만. 검색·필터 중엔 결과와 섞이지 않게 감춘다. */
+    var hits = my.filter(function(k){ return DETAIL_ING.indexOf(k) !== -1; });
+    show(document.querySelector('[data-mineblock]'), hits.length > 0 && IF === 'all' && !IQ);
+
+    var box = document.querySelector('[data-inglist]');
+    if(!list.length){
+      box.innerHTML = '<p class="noing">조건에 맞는 성분이 없어요.<br>검색어나 필터를 바꿔보세요.</p>';
+      return;
+    }
+    var html = '';
+    list.forEach(function(x, i){
+      html += irow(x, IQ);
+      /* 함량순 · 전체 보기일 때만 상위 5개 경계선을 그어준다 */
+      if(i === 4 && ISORT === 'amt' && IF === 'all' && !IQ && list.length > 5){
+        html += '<div class="topmark">여기까지가 함량 상위 5개예요 · 배합의 대부분을 차지해요</div>';
+      }
+    });
+    box.innerHTML = html;
+  }
+
+  /* 목적별 : 아코디언 8개 대신 목적 칩 하나로 목록을 바꾼다 */
+  var PF = null;   /* 선택된 목적. null이면 첫 번째(가장 많은 목적) */
+
+  function purpGroups(){
+    return PURPS.map(function(p){
+      return { k:p.k, c:p.c, items:ALL_ING.filter(function(x){ return x.p.indexOf(p.k) !== -1; }) };
+    }).filter(function(g){ return g.items.length; })
+      .sort(function(a, b){ return b.items.length - a.items.length; });
+  }
+
+  function renderPurp(){
+    var bar = document.querySelector('[data-compbar]');
+    if(!bar){ return; }
+
+    var groups = purpGroups();
+    var total = groups.reduce(function(s, g){ return s + g.items.length; }, 0);
+    if(!PF || !groups.some(function(g){ return g.k === PF; })){ PF = groups[0].k; }
+    var cur = groups.filter(function(g){ return g.k === PF; })[0];
+
+    /* 헤더 : 점수가 아니라 '이 제품이 무엇으로 이루어졌는지' */
+    bar.innerHTML = groups.map(function(g){
+      return '<span style="width:' + (g.items.length / total * 100).toFixed(2) + '%;background:' + g.c
+        + (g.k === PF ? '' : ';opacity:.28') + '"></span>';
+    }).join('');
+
+    var top = groups[0];
+    var ct = document.querySelector('[data-comp-title]');
+    if(ct){ ct.innerHTML = '이 제품은 <b>' + top.k + '</b> 성분 위주예요'; }
+    /* 분모는 전성분 51개. total은 목적이 겹치는 성분까지 센 값이라 막대 비율에만 쓴다. */
+    setText('[data-comp-sub]', '전성분 ' + ALL_ING.length + '개 중 ' + top.items.length
+      + '개가 ' + top.k + ' 목적이에요');
+    setText('[data-purp-tabcount]', String(groups.length));
+
+    document.querySelector('[data-pchips]').innerHTML = groups.map(function(g){
+      var hit = g.items.filter(function(x){ return my.indexOf(x.n) !== -1; }).length;
+      return '<button class="pchip" data-pfilter="' + g.k + '" aria-pressed="' + (g.k === PF) + '">'
+        + '<span class="pdot" style="background:' + g.c + '"></span>' + g.k
+        + '<em>' + g.items.length + (hit ? ' · 내 성분 ' + hit : '') + '</em></button>';
+    }).join('');
+
+    setText('[data-plist-title]', cur.k);
+    setText('[data-plist-count]', cur.items.length + '개');
+    document.querySelector('[data-purplist]').innerHTML =
+      cur.items.map(function(x){ return irow(x, ''); }).join('');
   }
 
   /* ================= 검색 ================= */
@@ -2053,16 +2289,32 @@ button.field{cursor:pointer;text-align:left;}
       renderQForm();
       return;
     }
-    if((t = e.target.closest('[data-acc]'))){
-      var open = t.getAttribute('aria-expanded') === 'true';
-      var grp = t.closest('.pane') || t.closest('.skinbox') || t.closest('.screen');
-      grp.querySelectorAll('[data-acc]').forEach(function(x){ x.setAttribute('aria-expanded','false'); });
-      grp.querySelectorAll('.accbody, .otherbox').forEach(function(x){ x.classList.remove('is-open'); });
-      if(!open){
-        t.setAttribute('aria-expanded','true');
-        var body = grp.querySelector('[data-accbody="' + t.dataset.acc + '"]');
-        if(body){ body.classList.add('is-open'); }
-      }
+
+    /* 전성분 : 필터 칩 · 정렬 · 검색 지우기 */
+    if((t = e.target.closest('[data-ifilter]'))){
+      IF = t.dataset.ifilter;
+      renderIngList();
+      return;
+    }
+    if((t = e.target.closest('[data-isort]'))){
+      var order = ['amt','ewg','name'];
+      ISORT = order[(order.indexOf(ISORT) + 1) % order.length];
+      renderIngList();
+      return;
+    }
+    if((t = e.target.closest('[data-ingqclear]'))){
+      e.stopPropagation();
+      var qi = document.querySelector('[data-ingq]');
+      qi.value = ''; IQ = '';
+      t.style.display = 'none';
+      renderIngList(); qi.focus();
+      return;
+    }
+
+    /* 목적별 : 칩 하나로 목록을 바꾼다 (펼치고 접는 동작 없음) */
+    if((t = e.target.closest('[data-pfilter]'))){
+      PF = t.dataset.pfilter;
+      renderPurp();
       return;
     }
 
@@ -2112,6 +2364,15 @@ button.field{cursor:pointer;text-align:left;}
       }
     }
   });
+
+  var ingQ = document.querySelector('[data-ingq]');
+  if(ingQ){
+    ingQ.addEventListener('input', function(){
+      IQ = ingQ.value.trim();
+      document.querySelector('[data-ingqclear]').style.display = IQ ? '' : 'none';
+      renderIngList();
+    });
+  }
 
   var qInput = document.querySelector('[data-q]');
   if(qInput){
