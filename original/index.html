@@ -65,10 +65,7 @@ body{margin:0;background:var(--studio-bg);font-family:var(--ui);-webkit-font-smo
 
 /* ---------- gallery ---------- */
 .gallery{position:relative;width:100%;aspect-ratio:1/1;overflow:hidden;flex:none;background:#DCE7DE;}
-.gscene{position:absolute;inset:0;width:100%;height:100%;}
-.gband{position:absolute;left:0;right:0;bottom:0;height:52px;background:var(--teal);color:#fff;display:grid;place-items:center;font-size:23px;font-weight:800;font-style:italic;letter-spacing:-.03em;}
-.gonlywrap{display:flex;justify-content:center;margin-top:-13px;position:relative;z-index:3;}
-.gonly{background:var(--pink-wash);color:var(--pink-ink);font-size:12px;font-weight:700;border-radius:14px;padding:5px 13px;}
+.gscene{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block;}
 
 /* ---------- 궁합 점수 스티커 (오른쪽 고정 · 스크롤 시 축소) ---------- */
 .fitsticker{
@@ -492,14 +489,9 @@ body{margin:0;background:var(--studio-bg);font-family:var(--ui);-webkit-font-smo
 
         <div class="scroll">
           <div class="gallery">
-            <svg class="gscene" viewBox="0 0 390 390" preserveAspectRatio="xMidYMid slice" aria-label="제품 이미지 자리">
-              <rect width="390" height="390" fill="#DCE7DE"/>
-              <rect x="152" y="70" width="86" height="240" rx="10" fill="#2E5B46"/>
-              <rect x="176" y="44" width="38" height="30" rx="6" fill="#4A7360"/>
-            </svg>
-            <span class="gband">only hwahae</span>
+            <!-- only hwahae 밴드와 only화해 배지는 이미지에 포함돼 있어 별도로 그리지 않는다 -->
+            <img class="gscene" src="assets/product-yuripibu.jpg" alt="유리피부 그란떼 클렌징 오일 500ml 대용량 기획">
           </div>
-          <div class="gonlywrap"><span class="gonly">only화해</span></div>
 
           <div class="dbody">
             <button class="dbrand">유리피부 <svg width="13" height="13"><use href="#i-chev"/></svg></button>

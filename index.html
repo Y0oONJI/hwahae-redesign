@@ -96,22 +96,30 @@ body{margin:0;background:var(--studio-bg);color:var(--studio-ink);font-family:va
 .toptab.hasawait{padding-top:20px;}
 
 /* 퍼소나 카드 */
-.persona{margin:14px 16px 4px;border:1px solid var(--app-line-2);border-radius:15px;overflow:hidden;background:var(--app-bg);}
-.pertop{display:flex;align-items:flex-start;gap:12px;padding:15px 15px 14px;background:var(--app-wash);}
-.pface{width:44px;height:44px;border-radius:22px;background:#5B62B8;display:grid;place-items:center;flex:none;color:#CFE7F7;}
-.perinfo{flex:1;min-width:0;}
-.perinfo .plab{font-size:12px;color:var(--app-accent-ink);opacity:.75;}
-.pertags{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;}
-.ptag{background:var(--app-bg);color:var(--app-accent-ink);border-radius:12px;padding:4px 11px;font-size:12.5px;font-weight:700;}
-.peredit{border:0;background:transparent;padding:0;font-size:12px;color:var(--app-accent-ink);opacity:.75;cursor:pointer;display:flex;align-items:center;gap:2px;flex:none;}
-.persec{padding:12px 15px;border-top:1px solid var(--app-line);}
-.persec h4{margin:0 0 8px;font-size:11.5px;font-weight:650;color:var(--app-faint);}
+.persona{display:block;width:calc(100% - 32px);margin:16px 16px 8px;border:1px solid var(--app-line-2);
+  border-radius:16px;overflow:hidden;background:var(--app-bg);padding:0;cursor:pointer;text-align:left;font:inherit;}
+.persona:hover{background:var(--app-sub);}
+.persona:active{background:var(--app-sub-2);}
+.pertop{display:flex;align-items:center;gap:12px;padding:16px;}
+.pface{width:56px;height:56px;border-radius:28px;background:var(--app-sub-2);display:grid;place-items:center;flex:none;color:var(--app-faint);}
+.perinfo{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px;}
+.pertags{display:flex;flex-wrap:wrap;gap:6px;}
+.ptag{background:var(--app-sub);color:var(--app-ink);border-radius:8px;padding:6px 10px;font-size:13px;letter-spacing:-.02em;}
+.ptag.is-type{color:var(--app-blue);font-weight:700;}
+.perdesc{font-size:12.5px;color:var(--app-faint);letter-spacing:-.02em;}
+.perstats{display:flex;border-top:1px solid var(--app-line);}
+.pstat{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;padding:12px 16px;}
+.pstat + .pstat{border-left:1px solid var(--app-line);}
+.pstat b{font-size:12px;font-weight:400;color:var(--app-faint);}
+.pstat em{font-style:normal;font-size:15px;font-weight:800;color:var(--app-ink);letter-spacing:-.03em;}
+.pergo{display:flex;align-items:center;gap:8px;width:calc(100% - 32px);margin:0 16px 4px;border:1px solid var(--app-line-2);
+  border-radius:12px;background:transparent;padding:13px 15px;cursor:pointer;text-align:left;font-size:14px;
+  font-weight:700;letter-spacing:-.02em;color:var(--app-accent-ink);}
 .perchips{display:flex;flex-wrap:wrap;gap:6px;}
 .perchip{display:flex;align-items:center;gap:6px;background:#FDF0DC;color:#8A5A00;border:0;border-radius:14px;padding:6px 9px 6px 11px;font-size:12.5px;font-weight:650;cursor:pointer;}
 .perchip span{opacity:.6;display:grid;place-items:center;}
 .perchip.add{background:var(--app-bg);border:1px dashed var(--app-line-2);color:var(--app-mid);font-weight:500;padding:6px 11px;}
 .perempty{font-size:12.5px;color:var(--app-faint);}
-.pergo{display:flex;align-items:center;gap:8px;width:100%;border:0;border-top:1px solid var(--app-line);background:transparent;padding:13px 15px;cursor:pointer;text-align:left;font-size:14px;font-weight:700;letter-spacing:-.02em;color:var(--app-accent-ink);}
 .pergo .cnt{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:800;}
 .pergo .chev{color:var(--app-accent);flex:none;}
 
@@ -551,18 +559,60 @@ button.field{cursor:pointer;text-align:left;}
 .fittext b{font-size:16px;font-weight:800;letter-spacing:-.03em;}
 .fittext i{font-style:normal;font-size:12.5px;line-height:1.55;color:var(--app-mid);}
 
-/* --- 피부 타입별 비교 : 접지 않고 항상 노출 --- */
-.skincmp{margin-top:20px;padding-top:16px;border-top:1px solid var(--app-line);}
-.skincmp [data-skincmp]{display:flex;flex-direction:column;gap:12px;margin-top:12px;}
-.cmprow{display:flex;align-items:center;gap:12px;}
-.cmprow .clab{flex:none;width:64px;font-size:12.5px;color:var(--app-mid);display:flex;align-items:center;gap:4px;}
-.cmprow .clab em{font-style:normal;font-size:10px;font-weight:700;color:#fff;background:var(--app-accent);border-radius:4px;padding:0 4px;}
-.cmprow .cbar{flex:1;height:8px;border-radius:4px;background:var(--app-sub-2);overflow:hidden;}
-.cmprow .cbar i{display:block;height:100%;border-radius:4px;background:#B4BDBA;}
-.cmprow .cval{flex:none;width:28px;text-align:right;font-size:12.5px;font-family:var(--mono);color:var(--app-faint);}
-.cmprow.is-me .clab{color:var(--app-ink);font-weight:700;}
-.cmprow.is-me .cbar i{background:var(--app-accent);}
-.cmprow.is-me .cval{color:var(--app-ink);font-weight:700;}
+/* --- 판단 근거 : 아이콘은 상태를 구분하는 최소 크기만 --- */
+.basis{margin-top:16px;padding-top:16px;border-top:1px solid var(--app-line);}
+.basis .flab b{color:var(--app-accent-ink);font-weight:800;}
+.brow{display:flex;align-items:center;gap:8px;padding:8px 0;font-size:13.5px;}
+.bic{width:16px;height:16px;border-radius:8px;display:grid;place-items:center;flex:none;}
+.brow.good .bic{background:var(--app-wash);color:var(--app-accent-ink);}
+.brow.none .bic{background:var(--app-sub-2);color:var(--app-faint);}
+.brow.warn{width:100%;border:0;background:#FEF9F1;cursor:pointer;font:inherit;text-align:left;
+  margin:4px -8px;padding:8px;width:calc(100% + 16px);border-radius:10px;}
+.brow.warn:hover{background:#FCF2E2;}
+.brow.warn .bic{background:#FADFB4;color:#B87400;}
+.brow.warn .bchev{color:#D18A16;flex:none;margin-left:4px;}
+/* 해당 성분이 없을 때 : 자리는 그대로 두고 다른 '없어요' 행과 같은 톤으로 */
+.brow.warn.is-off{background:transparent;cursor:default;}
+.brow.warn.is-off .bic{background:var(--app-sub-2);color:var(--app-faint);}
+.brow.warn.is-off .blab{color:var(--app-mid);}
+.brow.warn.is-off .bval{color:var(--app-faint);font-weight:400;}
+.brow.warn.is-off .bchev{display:none;}
+.blab{flex:1;min-width:0;color:var(--app-mid);}
+.brow.warn .blab{color:#8A5A00;}
+.bval{flex:none;font-weight:700;color:var(--app-ink);display:flex;align-items:baseline;gap:8px;}
+.brow.none .bval{color:var(--app-faint);font-weight:400;}
+.brow.warn .bval{color:#8A5A00;}
+.bval em{font-style:normal;font-variant-numeric:tabular-nums;color:#B87400;}
+.bnames{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 4px;padding-left:24px;}
+.bnames span{background:var(--app-wash);color:var(--app-accent-ink);border-radius:12px;padding:4px 8px;font-size:11.5px;font-weight:600;}
+
+/* --- 피부 타입별 비교 : 숫자 대신 엄지로 잘 맞는지만 --- */
+.skincmp{margin-top:16px;padding-top:16px;border-top:1px solid var(--app-line);}
+.cmpline{display:flex;gap:8px;margin-top:8px;}
+.cmpitem{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;
+  border-radius:12px;background:var(--app-sub);}
+.cmpitem .ti{width:24px;height:24px;border-radius:12px;display:grid;place-items:center;flex:none;}
+.cmpitem.good .ti{background:var(--app-wash);color:var(--app-accent-ink);}
+.cmpitem.soso .ti{background:var(--app-sub-2);color:var(--app-faint);}
+.cmpitem.bad .ti{background:#FADFB4;color:#B87400;}
+.cmpitem .tn{display:flex;align-items:center;gap:4px;font-size:11.5px;color:var(--app-mid);white-space:nowrap;}
+.cmpitem em{font-style:normal;font-size:9.5px;font-weight:700;color:#fff;background:var(--app-accent);border-radius:4px;padding:0 4px;}
+.cmpitem .tc{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--app-faint);}
+.cmpitem.is-me{background:var(--app-wash);}
+.cmpitem.is-me .tn{color:var(--app-ink);font-weight:700;}
+
+/* --- 필터 : 두 줄 그룹 · 중복 선택 --- */
+.fgroups{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
+.fgroup{display:flex;align-items:center;gap:8px;}
+.fglab{flex:none;width:28px;font-size:11px;color:var(--app-faint);}
+.fgchips{flex:1;min-width:0;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:4px 0;}
+.fgchips::-webkit-scrollbar{display:none;}
+.freset{flex:none;display:flex;align-items:center;gap:4px;white-space:nowrap;cursor:pointer;
+  border:1px solid var(--app-accent);background:var(--app-bg);color:var(--app-accent-ink);
+  border-radius:16px;padding:8px 12px;font-size:12px;font-weight:600;letter-spacing:-.02em;}
+.freset svg{flex:none;}
+/* 조건이 없을 때도 자리를 지켜 레이아웃이 튀지 않게 한다 */
+.freset:disabled{border-color:var(--app-line-2);color:var(--app-faint);cursor:default;}
 
 /* --- 전성분 : 검색 · 필터 · 정렬 --- */
 .ingtools{position:sticky;top:0;z-index:5;background:var(--app-bg);padding:12px 16px;border-top:1px solid var(--app-line);border-bottom:1px solid var(--app-line);}
@@ -586,6 +636,22 @@ button.field{cursor:pointer;text-align:left;}
 .ilisthead .sub{margin-left:auto;font-size:11px;color:var(--app-faint);}
 .sortbtn{margin-left:auto;border:0;background:transparent;color:var(--app-faint);font-size:11.5px;cursor:pointer;display:flex;align-items:center;gap:4px;padding:0;align-self:center;}
 .sortbtn b{font-weight:700;color:var(--app-ink);}
+.sortbtn .chev{transition:transform .18s ease;}
+.sortbtn[aria-expanded="true"] .chev{transform:rotate(180deg);}
+.pfchips{display:flex;flex-wrap:wrap;gap:8px;}
+.pfchip{border:1px solid var(--app-line-2);background:var(--app-bg);color:var(--app-mid);border-radius:16px;
+  padding:8px 14px;font-size:13px;cursor:pointer;letter-spacing:-.02em;}
+.pfchip[aria-pressed="true"]{background:var(--app-ink);border-color:var(--app-ink);color:#fff;font-weight:650;}
+.picked.like{background:var(--app-accent);}
+.picked.avoid{background:#D18A16;}
+.sortlist{padding:0 0 32px;}
+.sortrow{display:flex;align-items:center;gap:12px;width:100%;border:0;background:transparent;
+  padding:16px 20px;cursor:pointer;text-align:left;font:inherit;font-size:15px;color:var(--app-ink);}
+.sortrow:hover{background:var(--app-sub);}
+.sortrow .sname{flex:1;min-width:0;}
+.sortrow .schk{color:var(--app-accent);flex:none;opacity:0;}
+.sortrow[aria-selected="true"]{font-weight:700;color:var(--app-accent-ink);}
+.sortrow[aria-selected="true"] .schk{opacity:1;}
 
 /* 성분 구성 스택 바 : EWG 범례를 대신한다 */
 .compwrap{padding:0 16px 12px;}
@@ -608,6 +674,7 @@ button.field{cursor:pointer;text-align:left;}
 .irow .ifn{font-size:11.5px;color:var(--app-faint);flex:none;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .irow .chev{color:var(--app-line-2);flex:none;}
 .irow mark{background:#FBE9B6;color:inherit;border-radius:2px;padding:0 4px;margin:0 -4px;}
+.irow .skintag{font-size:10px;font-weight:700;color:#fff;background:var(--app-amber);border-radius:4px;padding:4px 8px;flex:none;}
 .irow .altag{font-size:10px;font-weight:700;color:#B02A30;background:#FBD2D2;border-radius:4px;padding:4px 8px;flex:none;}
 .irow.is-mine{background:#FEF9F1;}
 .irow.is-mine .iname{color:#8A5A00;font-weight:700;}
@@ -616,14 +683,6 @@ button.field{cursor:pointer;text-align:left;}
 .topmark::before{content:"";width:4px;height:12px;border-radius:2px;background:var(--app-accent);flex:none;}
 .noing{padding:40px 16px;text-align:center;font-size:13px;color:var(--app-faint);line-height:1.6;border-top:1px solid var(--app-line);}
 
-.mineblock{background:#FEF9F1;border-top:1px solid #F3E2C6;border-bottom:1px solid #F3E2C6;}
-.mineblock .ilisthead{padding:12px 16px 4px;}
-.mineblock .ilisthead h2{color:#8A5A00;}
-.mineblock .ilisthead .cnt{color:#B87400;}
-.mineblock .irow{border-top:0;}
-.mineblock .irow:hover{background:#FCF2E2;}
-.mineblock .iname{font-weight:700;color:#8A5A00;}
-.mineblock .minetag{font-size:10px;font-weight:700;color:#fff;background:#D18A16;border-radius:4px;padding:4px 8px;flex:none;}
 
 /* --- 목적별 : 점수 대신 제품 구성을 보여준다 --- */
 .phead{padding:20px 16px 16px;}
@@ -703,6 +762,9 @@ button.field{cursor:pointer;text-align:left;}
   <symbol id="i-drop" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.2c0 0 4.6 4.9 4.6 8A4.6 4.6 0 0 1 8 13.8a4.6 4.6 0 0 1-4.6-4.6c0-3.1 4.6-8 4.6-8z"/></symbol>
   <symbol id="i-sun" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="3.1" fill="currentColor" stroke="none"/><path d="M8 1.4v1.6M8 13v1.6M1.4 8h1.6M13 8h1.6M3.4 3.4l1.1 1.1M11.5 11.5l1.1 1.1M12.6 3.4l-1.1 1.1M4.5 11.5l-1.1 1.1"/></symbol>
   <symbol id="i-spark" viewBox="0 0 16 16" fill="currentColor"><path d="M8 .8l1.7 4.5L14.2 7l-4.5 1.7L8 13.2 6.3 8.7 1.8 7l4.5-1.7z"/></symbol>
+  <symbol id="i-thumbup" viewBox="0 0 16 16" fill="currentColor"><path d="M2.6 7.2h2.6v7.3H2.6a.9.9 0 0 1-.9-.9V8.1a.9.9 0 0 1 .9-.9z"/><path d="M6.4 7.4l2.5-4.9a1.5 1.5 0 0 1 2.8.7c0 .2 0 .4-.1.6l-.7 2.1h2.3a1.4 1.4 0 0 1 1.36 1.74l-1.15 4.8a1.4 1.4 0 0 1-1.36 1.06H6.4z"/></symbol>
+  <symbol id="i-thumbdown" viewBox="0 0 16 16" fill="currentColor"><path d="M2.6 1.5h2.6v7.3H2.6a.9.9 0 0 1-.9-.9V2.4a.9.9 0 0 1 .9-.9z"/><path d="M6.4 8.6l2.5 4.9a1.5 1.5 0 0 0 2.8-.7c0-.2 0-.4-.1-.6l-.7-2.1h2.3a1.4 1.4 0 0 0 1.36-1.74l-1.15-4.8A1.4 1.4 0 0 0 12.15 1.5H6.4z"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4.4 8h7.2"/></symbol>
   <symbol id="i-alert" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="7"/><path d="M8 4.2v4.6M8 11.2v.1" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/></symbol>
   <symbol id="i-shield" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l5.2 2v4.4c0 3.4-2.2 6.2-5.2 7-3-.8-5.2-3.6-5.2-7V3z"/></symbol>
   <symbol id="i-filter" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1.6 3.4h12.8M3.8 8h8.4M6.2 12.6h3.6"/></symbol>
@@ -749,25 +811,25 @@ button.field{cursor:pointer;text-align:left;}
               <button class="toptab" role="tab" aria-selected="false"><span class="medal">1</span>랭킹</button>
             </div>
             <div class="scroll" style="padding-bottom:96px">
-              <div class="persona">
-                <div class="pertop">
-                  <span class="pface"><svg width="24" height="24"><use href="#i-face"/></svg></span>
+              <!-- 카드 전체가 하나의 수정 진입점이다. 항목별로 따로 들어가지 않는다. -->
+              <button class="persona" data-profile-open aria-label="내 피부 정보 수정">
+                <span class="pertop">
+                  <span class="pface"><svg width="26" height="26"><use href="#i-face"/></svg></span>
                   <span class="perinfo">
-                    <span class="plab">내 피부</span>
-                    <span class="pertags"><span class="ptag">지성</span><span class="ptag">모공</span><span class="ptag">미백</span></span>
+                    <span class="pertags" data-per-tags></span>
+                    <span class="perdesc">이 피부 정보를 기준으로 성분을 분석해 추천해 드려요</span>
                   </span>
-                  <button class="peredit">수정 <svg width="11" height="11"><use href="#i-chev"/></svg></button>
-                </div>
-                <div class="persec">
-                  <h4>피하는 성분</h4>
-                  <div class="perchips" data-per-chips></div>
-                </div>
-                <button class="pergo" data-go="resultsC">
-                  내 피부에 맞는 제품 보기
-                  <span class="cnt" data-persona-count>128</span>
-                  <svg class="chev" width="15" height="15"><use href="#i-chev"/></svg>
-                </button>
-              </div>
+                </span>
+                <span class="perstats">
+                  <span class="pstat"><b>피해야 할 성분</b><em data-avoid-count>3가지 등록됨</em></span>
+                  <span class="pstat"><b>관심 성분</b><em data-like-count>2가지 등록됨</em></span>
+                </span>
+              </button>
+              <button class="pergo" data-go="resultsC">
+                내 피부에 맞는 제품 보기
+                <span class="cnt" data-persona-count>128</span>
+                <svg class="chev" width="15" height="15"><use href="#i-chev"/></svg>
+              </button>
 
               <div class="hero">              <div class="hero">
                 <div class="herotrack">
@@ -1342,7 +1404,7 @@ button.field{cursor:pointer;text-align:left;}
                 <!-- 탭 이름이 약속한 '성분'을 실제로 배치 -->
                 <div class="ingsum">
                   <div class="ingsumhead"><h4>성분 구성</h4></div>
-                  <p class="ingsumstat">전성분 <b>51개</b> · 20가지 주의 성분 <b>0개</b> · 알레르기 유발 성분 <b>1개</b></p>
+                  <p class="ingsumstat">전성분 <b>26개</b> · 20가지 주의 성분 <b>0개</b> · 알레르기 유발 성분 <b>2개</b></p>
                   <div class="ingitem">
                     <span class="idot" style="background:var(--app-wash);color:var(--app-accent)"><svg width="14" height="14"><use href="#i-drop"/></svg></span>
                     <span class="itext"><b>나이아신아마이드</b><span>EWG 1 · 미백 기능성 · 지성 추천</span></span>
@@ -1360,7 +1422,7 @@ button.field{cursor:pointer;text-align:left;}
                     <span class="itext"><b>향료</b><span>EWG 4 · 알레르기 유발 주의</span></span>
                     <span class="iflag mine" data-ing-flag>내가 뺀 성분</span>
                   </div>
-                  <button class="allingbtn" data-go="ing">전성분 51개 모두 보기 <svg width="13" height="13"><use href="#i-chev"/></svg></button>
+                  <button class="allingbtn" data-go="ing">전성분 26개 모두 보기 <svg width="13" height="13"><use href="#i-chev"/></svg></button>
                 </div>
 
                 <div class="dsec">
@@ -1406,7 +1468,7 @@ button.field{cursor:pointer;text-align:left;}
 
             <!-- 상단 탭 : 헤더 바로 아래 고정 -->
             <div class="tabs itabs" role="tablist" aria-label="성분 보기 방식">
-              <button class="tab" role="tab" aria-selected="true" data-pane="iAll"><b>전성분</b><i>51</i></button>
+              <button class="tab" role="tab" aria-selected="true" data-pane="iAll"><b>전성분</b><i data-all-tabcount>26</i></button>
               <button class="tab" role="tab" aria-selected="false" data-pane="iPurp"><b>목적별</b><i data-purp-tabcount>8</i></button>
             </div>
 
@@ -1424,17 +1486,44 @@ button.field{cursor:pointer;text-align:left;}
                         <circle class="rbg" cx="38" cy="38" r="33"/>
                         <circle class="rfg" cx="38" cy="38" r="33" data-ring/>
                       </svg>
-                      <span class="rnum"><b data-fit-score>85</b><i>점</i></span>
+                      <span class="rnum"><b data-ring-score>85</b><i>점</i></span>
                     </span>
                     <span class="fittext">
                       <b data-fit-band>잘 맞는 제품이에요</b>
-                      <i data-fit-desc>지성 피부에 잘 맞는 성분 3개가 들어 있어요. 시트마스크 평균보다 14점 높아요.</i>
+                      <i data-fit-desc>시트마스크 평균(71점)보다 14점 높아요.</i>
                     </span>
+                  </div>
+
+                  <!-- 판단 근거 : 무엇을 보고 이 점수가 나왔는지 -->
+                  <div class="basis">
+                    <p class="flab"><b data-basis-skin>지성 피부</b> 기준으로 봤어요</p>
+                    <div class="brow good">
+                      <span class="bic"><svg width="9" height="9"><use href="#i-check"/></svg></span>
+                      <span class="blab">잘 맞는 성분</span>
+                      <span class="bval" data-basis-good>3개</span>
+                    </div>
+                    <p class="bnames" data-basis-names></p>
+                    <div class="brow none">
+                      <span class="bic"><svg width="9" height="9"><use href="#i-check"/></svg></span>
+                      <span class="blab" data-basis-warnlab>지성이 주의할 성분</span>
+                      <span class="bval" data-basis-warn>없어요</span>
+                    </div>
+                    <button class="brow warn" data-v-warn data-mine-jump>
+                      <span class="bic"><svg width="9" height="9"><use href="#i-alert"/></svg></span>
+                      <span class="blab">내가 뺀 성분</span>
+                      <span class="bval"><b data-v-warn-name>향료</b><em data-v-warn-pen>&#8722;7점</em></span>
+                      <svg class="bchev" width="13" height="13"><use href="#i-chev"/></svg>
+                    </button>
+                    <div class="brow none">
+                      <span class="bic"><svg width="9" height="9"><use href="#i-check"/></svg></span>
+                      <span class="blab">20가지 주의 성분</span>
+                      <span class="bval">없어요</span>
+                    </div>
                   </div>
 
                   <div class="skincmp">
                     <p class="flab">피부 타입별로 보면</p>
-                    <div data-skincmp></div>
+                    <div class="cmpline" data-skincmp></div>
                   </div>
                 </div>
 
@@ -1444,17 +1533,12 @@ button.field{cursor:pointer;text-align:left;}
                     <input type="text" data-ingq placeholder="성분 이름으로 찾기" aria-label="성분 이름으로 찾기">
                     <button class="clr" data-ingqclear aria-label="지우기" style="display:none"><svg width="8" height="8"><use href="#i-x"/></svg></button>
                   </div>
-                  <div class="ifchiprow" data-ifilters></div>
-                </div>
-
-                <div class="mineblock" data-mineblock>
-                  <div class="ilisthead"><h2>눈여겨볼 성분</h2><span class="cnt" data-mine-count>1개</span></div>
-                  <button class="irow" data-ing-row><span class="grade g3">4</span><span class="iname" data-mine-name>향료</span><span class="minetag">내가 뺀 성분</span><svg class="chev" width="14" height="14"><use href="#i-chev"/></svg></button>
+                  <div class="fgroups" data-ifilters></div>
                 </div>
 
                 <div class="ilisthead">
                   <h2 data-ilist-title>전성분</h2><span class="cnt" data-ilist-count>51개</span>
-                  <button class="sortbtn" data-isort>정렬 <b data-isort-label>함량 높은 순</b><svg width="12" height="12"><use href="#i-chevd"/></svg></button>
+                  <button class="sortbtn" data-sortopen aria-expanded="false" aria-haspopup="listbox">정렬 <b data-isort-label>함량 높은 순</b><svg class="chev" width="12" height="12"><use href="#i-chevd"/></svg></button>
                 </div>
                 <div class="compwrap">
                   <div class="sbar" data-sbar></div>
@@ -1547,6 +1631,49 @@ button.field{cursor:pointer;text-align:left;}
           </section>
 
           <!-- ================= 성분 상세 시트 ================= -->
+          <!-- ================= 내 피부 정보 수정 시트 ================= -->
+          <div class="sheetwrap" data-profilewrap>
+            <button class="sheetdim" data-profileclose aria-label="닫기"></button>
+            <div class="sheet" role="dialog" aria-label="내 피부 정보 수정">
+              <div class="sheethandle"></div>
+              <div class="sheethead">
+                <h3>내 피부 정보</h3>
+                <p>여기서 바꾸면 추천과 성분 분석에 바로 반영돼요</p>
+              </div>
+              <div class="sheetbody">
+                <div class="sheetsec">
+                  <h4>피부 타입</h4>
+                  <div class="pfchips" data-skin-pick></div>
+                </div>
+                <div class="sheetsec">
+                  <h4>피부 고민</h4>
+                  <div class="pfchips" data-worry-pick></div>
+                </div>
+                <div class="sheetsec">
+                  <h4>피해야 할 성분 <em data-avoid-n>3</em></h4>
+                  <div class="pickedwrap" data-avoid-list></div>
+                  <div class="addchips" data-avoid-add></div>
+                </div>
+                <div class="sheetsec">
+                  <h4>관심 성분 <em data-like-n>2</em></h4>
+                  <div class="pickedwrap" data-like-list></div>
+                  <div class="addchips" data-like-add></div>
+                </div>
+              </div>
+              <div class="isfoot"><button class="isbtn" data-on="true" data-profileclose>완료</button></div>
+            </div>
+          </div>
+
+          <!-- ================= 정렬 시트 ================= -->
+          <div class="sheetwrap" data-sortwrap>
+            <button class="sheetdim" data-sortclose aria-label="닫기"></button>
+            <div class="sheet" role="dialog" aria-label="정렬">
+              <div class="sheethandle"></div>
+              <div class="sheethead"><h3>정렬</h3></div>
+              <div class="sortlist" data-sortlist></div>
+            </div>
+          </div>
+
           <div class="sheetwrap" data-isheetwrap>
             <button class="sheetdim" data-isheet="close" aria-label="닫기"></button>
             <div class="isheet" role="dialog" aria-label="성분 상세">
@@ -1616,9 +1743,10 @@ button.field{cursor:pointer;text-align:left;}
   var EXCL = {'레티놀':62,'향료':486,'벤조페논-3':128,'에탄올':312,'멘톨':44,'파라벤':96,'인공색소':71,'미네랄오일':58};
   var POOL = ['레티놀','향료','벤조페논-3','에탄올','멘톨','파라벤','인공색소','미네랄오일'];
   var BASE = 2140;
-  var DETAIL_ING = ['향료'];          // 상세 제품에 실제로 든 성분
-  var FIT_BASE = 92, FIT_PENALTY = 7; // 피부타입 궁합 92점, 뺀 성분 1개당 -7
-  var my = ['레티놀','향료','벤조페논-3'];
+  /* 제품 : 유리피부 [only화해] 그란떼 클렌징 오일 500ml — 수치는 원본 프로토타입의 화해 데이터 */
+  var DETAIL_ING = ['d-리모넨'];      // 상세 제품에 실제로 든, 내가 뺀 성분
+  var FIT_BASE = 86, FIT_PENALTY = 7; // 86 - 7(디리모넨) = 79점, 원본 궁합 점수와 같다
+  var my = ['레티놀','d-리모넨','벤조페논-3'];
 
   function fmt(n){ return n.toLocaleString('ko-KR'); }
   function hidden(){ return my.reduce(function(s,k){ return s + (EXCL[k]||0); }, 0); }
@@ -1695,6 +1823,53 @@ button.field{cursor:pointer;text-align:left;}
       });
       items.forEach(function(el){ list.appendChild(el); });
     });
+  }
+
+  function renderProfile(){
+    /* 카드 : 타입 칩(강조) + 고민 칩 */
+    var tags = document.querySelector('[data-per-tags]');
+    if(tags){
+      tags.innerHTML = '<span class="ptag is-type">' + MYSKIN + '</span>'
+        + WORRY.map(function(w){ return '<span class="ptag">' + w + '</span>'; }).join('');
+    }
+    setText('[data-avoid-count]', my.length + '가지 등록됨');
+    setText('[data-like-count]',  LIKE.length + '가지 등록됨');
+
+    /* 시트 : 피부 타입 · 고민 */
+    var sp = document.querySelector('[data-skin-pick]');
+    if(sp){
+      sp.innerHTML = Object.keys(SKIN_ING).map(function(k){
+        return '<button class="pfchip" data-pick-skin="' + k + '" aria-pressed="' + (MYSKIN === k) + '">' + k + '</button>';
+      }).join('');
+    }
+    var wp = document.querySelector('[data-worry-pick]');
+    if(wp){
+      wp.innerHTML = WORRY_POOL.map(function(w){
+        return '<button class="pfchip" data-pick-worry="' + w + '" aria-pressed="' + (WORRY.indexOf(w) !== -1) + '">' + w + '</button>';
+      }).join('');
+    }
+
+    /* 시트 : 성분 두 갈래 */
+    function fill(listSel, addSel, nSel, arr, pool, cls, act){
+      var L = document.querySelector(listSel);
+      if(L){
+        L.innerHTML = arr.length
+          ? arr.map(function(k){ return '<button class="picked ' + cls + '" data-' + act + '-del="' + k + '">' + k + '<span>' + icon('i-x',9) + '</span></button>'; }).join('')
+          : '<span class="emptypick">아직 등록한 성분이 없어요</span>';
+      }
+      var A = document.querySelector(addSel);
+      if(A){
+        A.innerHTML = pool.filter(function(k){ return arr.indexOf(k) === -1; })
+          .map(function(k){ return '<button class="addchip" data-' + act + '-add="' + k + '">' + icon('i-plus',11) + k + '</button>'; }).join('');
+      }
+      setText(nSel, String(arr.length));
+    }
+    fill('[data-avoid-list]','[data-avoid-add]','[data-avoid-n]', my,   AVOID_POOL, 'avoid', 'avoid');
+    fill('[data-like-list]', '[data-like-add]', '[data-like-n]',  LIKE, LIKE_POOL,  'like',  'like');
+
+    /* 판단 근거 머리말도 프로필을 따른다 */
+    setText('[data-basis-skin]', MYSKIN + ' 피부');
+    setText('[data-basis-warnlab]', MYSKIN + '이 주의할 성분');
   }
 
   function renderIng(){
@@ -1775,12 +1950,10 @@ button.field{cursor:pointer;text-align:left;}
     renderFitChips(hits, score);
 
     renderFitPills();
-    show(document.querySelector('[data-mineblock]'), hits.length > 0);
-    setText('[data-mine-count]', hits.length + '개');
-    setText('[data-mine-name]', hits.join(', '));
     show(document.querySelector('[data-ing-flag]'), hits.length > 0);
 
     /* 성분 화면 : 적합도 · 목록 */
+    renderProfile();
     renderFit(hits, score);
     renderComp();
     renderIngList();
@@ -1789,14 +1962,25 @@ button.field{cursor:pointer;text-align:left;}
 
   /* ================= 적합도 : 링 게이지 + 피부 타입 비교 =================
      내가 뺀 성분의 감점은 모든 타입에 똑같이 적용해 서로 비교 가능하게 둔다. */
-  var GOOD_ING = ['나이아신아마이드','알란토인','버지니아풍년화추출물'];
-  var SKINS = [
-    {k:'지성',  base:FIT_BASE, me:true},
-    {k:'건성',  base:95},
-    {k:'민감성', base:78},
-    {k:'복합성', base:93}
-  ];
-  var CAT_AVG = 71, CAT_NAME = '시트마스크';
+  /* 타입별로 좋은 성분 · 주의할 성분. 기존 '다른 피부 타입' 수치(건성5·민감성3·복합성4)와 같은 값이다. */
+  /* 원본 화해 데이터 : 지성 좋음 2 · 건성 0 · 민감성 주의 3 */
+  var SKIN_ING = {
+    '지성'  : ['홍차추출물','스페인감초뿌리추출물'],
+    '건성'  : [],
+    '민감성': []
+  };
+  var SKIN_WARN = { '민감성': ['오렌지오일','로즈마리잎오일','라벤더오일'] };
+  /* 마이 성분은 두 갈래다 — 찾고 싶은 것(관심)과 빼고 싶은 것(피할). my 는 후자. */
+  var LIKE = ['스쿠알란','호호바씨오일'];
+  /* 내 피부 프로필 — 카드와 수정 시트가 같은 값을 본다 */
+  var MYSKIN = '지성';
+  var WORRY  = ['모공','미백'];
+  var WORRY_POOL = ['모공','미백','주름','트러블','각질','홍조'];
+  var AVOID_POOL = ['레티놀','d-리모넨','벤조페논-3','에탄올','멘톨','파라벤','인공색소','미네랄오일','리날룰'];
+  var LIKE_POOL  = ['스쿠알란','호호바씨오일','판테놀','세라마이드엔피','나이아신아마이드','녹차추출물'];
+  function goodIng(){ return SKIN_ING[MYSKIN] || []; }
+  var SKINS = [{k:'지성', me:true}, {k:'건성'}, {k:'민감성'}];
+  var CAT_AVG = 72, CAT_NAME = '클렌징 오일';
 
   function renderFit(hits, score){
     var arc = document.querySelector('[data-ring]');
@@ -1806,24 +1990,45 @@ button.field{cursor:pointer;text-align:left;}
     arc.style.strokeDasharray = C.toFixed(2);
     arc.style.strokeDashoffset = (C * (1 - score / 100)).toFixed(2);
 
-    setText('[data-fit-score]', String(score));
+    setText('[data-ring-score]', String(score));
     setText('[data-fit-band]', score >= 90 ? '아주 잘 맞는 제품이에요'
       : score >= 75 ? '잘 맞는 제품이에요'
       : score >= 60 ? '무난한 제품이에요' : '잘 안 맞는 제품이에요');
 
+    /* 링 옆 문장은 비교만 맡는다. 내역은 아래 '판단 근거'가 보여주므로 겹쳐 쓰지 않는다. */
     var diff = score - CAT_AVG;
-    setText('[data-fit-desc]',
-      '지성 피부에 잘 맞는 성분 ' + GOOD_ING.length + '개가 들어 있어요'
-      + (hits.length ? ', 내가 뺀 성분 ' + hits.join(' · ') + '도 있고요' : '')
-      + '. ' + CAT_NAME + ' 평균(' + CAT_AVG + '점)보다 '
+    setText('[data-fit-desc]', CAT_NAME + ' 평균(' + CAT_AVG + '점)보다 '
       + (diff >= 0 ? diff + '점 높아요.' : (-diff) + '점 낮아요.'));
 
+    /* 판단 근거 */
+    setText('[data-basis-good]', goodIng().length + '개');
+    var names = document.querySelector('[data-basis-names]');
+    if(names){
+      names.innerHTML = goodIng().map(function(k){ return '<span>' + k + '</span>'; }).join('');
+    }
+    /* 행을 숨기면 아래 줄이 밀려 올라온다. 자리는 지키고 상태만 바꾼다. */
+    var vwarn = document.querySelector('[data-v-warn]');
+    if(vwarn){
+      var on = hits.length > 0;
+      vwarn.classList.toggle('is-off', !on);
+      vwarn.disabled = !on;
+      vwarn.querySelector('[data-v-warn-name]').textContent = on ? hits.join(', ') : '없어요';
+      vwarn.querySelector('[data-v-warn-pen]').textContent = on ? '\u2212' + (FIT_PENALTY * hits.length) + '점' : '';
+    }
+
+    /* 점수 대신 판정만 : 85+ 잘 맞음 / 70~84 보통 / 70 미만 안 맞음 */
+    /* 판정은 점수가 아니라 그 타입의 좋은/주의 성분 개수에서 나온다 — 화해와 같은 방식 */
     document.querySelector('[data-skincmp]').innerHTML = SKINS.map(function(s){
-      var v = Math.max(0, s.base - FIT_PENALTY * hits.length);
-      return '<div class="cmprow' + (s.me ? ' is-me' : '') + '">'
-        + '<span class="clab">' + s.k + (s.me ? '<em>나</em>' : '') + '</span>'
-        + '<span class="cbar"><i style="width:' + v + '%"></i></span>'
-        + '<span class="cval">' + v + '</span></div>';
+      var good = SKIN_ING[s.k].length, warn = (SKIN_WARN[s.k] || []).length;
+      var band = warn > 0 ? 'bad' : good > 0 ? 'good' : 'soso';
+      var ic = band === 'good' ? 'i-thumbup' : band === 'bad' ? 'i-thumbdown' : 'i-minus';
+      var word = band === 'good' ? '잘 맞는 성분 ' + good + '개'
+               : band === 'bad'  ? '주의할 성분 ' + warn + '개'
+               : '해당 성분 없어요';
+      return '<span class="cmpitem ' + band + (s.me ? ' is-me' : '') + '" title="' + s.k + ' · ' + word + '">'
+        + '<span class="ti">' + icon(ic, 13) + '</span>'
+        + '<span class="tn">' + s.k + (s.me ? '<em>나</em>' : '')
+        + '<span class="tc">' + (good + warn) + '</span></span></span>';
     }).join('');
   }
 
@@ -1859,68 +2064,45 @@ button.field{cursor:pointer;text-align:left;}
      51개 전성분을 데이터로 두고 검색·필터·정렬을 붙인다.
      g 는 표기용 EWG 문자열, gv 는 정렬·필터용 최대 등급. */
   var PURPS = [
-    {k:'피부 보습',    c:'#12A594'},
-    {k:'수렴 진정',    c:'#E56B8C'},
-    {k:'제형 안정',    c:'#9AA3A0'},
-    {k:'피부 보호',    c:'#3E7BFA'},
-    {k:'보존 · 착향',  c:'#B87400'},
-    {k:'항산화 · 주름',c:'#2F9E5E'},
-    {k:'미백',        c:'#E8A317'},
-    {k:'수분 증발 차단',c:'#6E56CF'}
+    {k:'피부 보습',     c:'#12A594'},
+    {k:'수분 증발 차단', c:'#6E56CF'},
+    {k:'수렴 진정',     c:'#E56B8C'},
+    {k:'피부 보호',     c:'#3E7BFA'},
+    {k:'착향',         c:'#B87400'},
+    {k:'제형',         c:'#9AA3A0'},
+    {k:'산화방지',      c:'#2F9E5E'}
   ];
   /* 함량 높은 순 (원본 전성분 표기 순서) */
+  /* 함량 높은 순. 23개는 원본 프로토타입에 이름·등급·배합목적이 그대로 있던 값이고,
+     소르비탄세스퀴올리에이트 · 폴리소르베이트20 · 토코페롤 3개는 26개를 채우려고 넣은 더미다.
+     더미는 목적별(보습14·차단6·진정3·보호2)과 등급 분포(낮음18·중간8)를 흔들지 않는 자리에 뒀다. */
   var ALL_ING = [
-    {n:'정제수',                        g:'1',   fn:'용매',              p:['피부 보습']},
-    {n:'나이아신아마이드',              g:'1-2', fn:'미백 · 피지 조절',  p:['미백','피부 보호']},
-    {n:'글리세린',                      g:'1-2', fn:'보습',              p:['피부 보습']},
-    {n:'부틸렌글라이콜',                g:'1',   fn:'보습 · 용제',       p:['피부 보습']},
-    {n:'다이프로필렌글라이콜',          g:'1',   fn:'보습 · 용제',       p:['피부 보습']},
-    {n:'사이클로헥사실록세인',          g:'1',   fn:'수분 증발 차단',    p:['수분 증발 차단']},
-    {n:'소듐하이알루로네이트',          g:'1',   fn:'강력 보습',         p:['피부 보습']},
-    {n:'하이알루로닉애씨드',            g:'1',   fn:'보습',              p:['피부 보습']},
-    {n:'판테놀',                        g:'1',   fn:'보습 · 컨디셔닝',   p:['피부 보습','피부 보호']},
-    {n:'알란토인',                      g:'1',   fn:'수렴 · 진정',       p:['수렴 진정','피부 보호']},
-    {n:'베타인',                        g:'1',   fn:'보습',              p:['피부 보습']},
-    {n:'트레할로스',                    g:'1',   fn:'보습',              p:['피부 보습']},
-    {n:'다이메티콘',                    g:'3',   fn:'수분 증발 차단',    p:['수분 증발 차단']},
-    {n:'부틸옥틸살리실레이트',          g:'1-4', fn:'보습 · 에몰리언트', p:['피부 보습']},
-    {n:'향료',                          g:'4',   fn:'착향',              p:['보존 · 착향'], al:true},
-    {n:'버지니아풍년화추출물',          g:'1',   fn:'수렴 · 진정',       p:['수렴 진정']},
-    {n:'병풀추출물',                    g:'–',   fn:'진정',              p:['수렴 진정']},
-    {n:'알부틴',                        g:'1',   fn:'미백',              p:['미백']},
-    {n:'세라마이드엔피',                g:'1',   fn:'피부 장벽',         p:['피부 보호']},
-    {n:'카프릴릭/카프릭트라이글리세라이드', g:'1', fn:'에몰리언트',      p:['피부 보습']},
-    {n:'글리세릴스테아레이트',          g:'1',   fn:'유화',              p:['제형 안정']},
-    {n:'세테아릴알코올',                g:'1',   fn:'점도 조절',         p:['제형 안정']},
-    {n:'스테아릭애씨드',                g:'1',   fn:'유화',              p:['제형 안정']},
-    {n:'폴리소르베이트60',              g:'3',   fn:'유화',              p:['제형 안정']},
-    {n:'잔탄검',                        g:'1',   fn:'점도 조절',         p:['제형 안정']},
-    {n:'카보머',                        g:'1',   fn:'점도 조절',         p:['제형 안정']},
-    {n:'트로메타민',                    g:'1-3', fn:'pH 조절',           p:['제형 안정']},
-    {n:'다이소듐이디티에이',            g:'1',   fn:'금속이온 봉쇄',     p:['제형 안정']},
-    {n:'1,2-헥산다이올',                g:'1',   fn:'보습 · 보존 보조',  p:['피부 보습','보존 · 착향']},
-    {n:'에틸헥실글리세린',              g:'1',   fn:'컨디셔닝',          p:['보존 · 착향']},
-    {n:'페녹시에탄올',                  g:'4',   fn:'보존',              p:['보존 · 착향']},
-    {n:'소듐벤조에이트',                g:'3',   fn:'보존',              p:['보존 · 착향']},
-    {n:'녹차추출물',                    g:'1',   fn:'항산화 · 진정',     p:['항산화 · 주름','수렴 진정']},
-    {n:'카모마일꽃추출물',              g:'1',   fn:'진정',              p:['수렴 진정']},
-    {n:'알로에베라잎추출물',            g:'1',   fn:'보습 · 진정',       p:['피부 보습','수렴 진정']},
-    {n:'마데카소사이드',                g:'1',   fn:'진정',              p:['수렴 진정']},
-    {n:'아시아티코사이드',              g:'1',   fn:'진정',              p:['수렴 진정']},
-    {n:'토코페롤',                      g:'1-3', fn:'항산화',            p:['항산화 · 주름']},
-    {n:'아스코빌글루코사이드',          g:'1',   fn:'미백',              p:['미백']},
-    {n:'글루타티온',                    g:'1',   fn:'항산화',            p:['항산화 · 주름']},
-    {n:'쌀추출물',                      g:'1',   fn:'보습',              p:['피부 보습']},
-    {n:'쌀겨추출물',                    g:'1',   fn:'보습 · 컨디셔닝',   p:['피부 보습']},
-    {n:'감초뿌리추출물',                g:'1',   fn:'진정',              p:['수렴 진정']},
-    {n:'어성초추출물',                  g:'1',   fn:'진정',              p:['수렴 진정']},
-    {n:'소듐피씨에이',                  g:'1',   fn:'천연보습인자',      p:['피부 보습']},
-    {n:'세라마이드에이피',              g:'1',   fn:'피부 장벽',         p:['피부 보호']},
-    {n:'콜레스테롤',                    g:'1',   fn:'피부 장벽',         p:['피부 보호']},
-    {n:'하이드로제네이티드레시틴',      g:'1',   fn:'유화',              p:['제형 안정']},
-    {n:'스쿠알란',                      g:'1',   fn:'에몰리언트',        p:['피부 보습']},
-    {n:'판테틴',                        g:'1',   fn:'컨디셔닝',          p:['피부 보호']},
-    {n:'아데노신',                      g:'1',   fn:'주름 개선',         p:['항산화 · 주름']}
+    {n:'옥수수배아오일',              g:'1',   fn:'수분 증발 차단',        p:['수분 증발 차단']},
+    {n:'녹차씨오일',                  g:'1',   fn:'보습 · 수분 증발 차단', p:['피부 보습','수분 증발 차단']},
+    {n:'녹차추출물',                  g:'2',   fn:'수렴 · 진정 · 보습',   p:['수렴 진정','피부 보습','피부 보호']},
+    {n:'드럼스틱잎추출물',            g:'1',   fn:'피부 보습',            p:['피부 보습']},
+    {n:'홍차추출물',                  g:'2-4', fn:'보호 · 보습 · 수렴',   p:['피부 보호','피부 보습','수렴 진정']},
+    {n:'은행나무잎추출물',            g:'2',   fn:'피부 보습',            p:['피부 보습']},
+    {n:'황금추출물',                  g:'1',   fn:'피부 보습',            p:['피부 보습']},
+    {n:'1,2-헥산다이올',              g:'1',   fn:'용제',                p:['제형']},
+    {n:'에틸헥실글리세린',            g:'2',   fn:'피부 보습',            p:['피부 보습']},
+    {n:'d-리모넨',                    g:'4-5', fn:'착향 · 용제',          p:['착향','제형'], al:true},
+    {n:'리날룰',                      g:'3-4', fn:'착향',                p:['착향'], al:true},
+    {n:'정제수',                      g:'1',   fn:'용매',                p:['피부 보습']},
+    {n:'모란뿌리추출물',              g:'1',   fn:'피부 보습',            p:['피부 보습']},
+    {n:'스페인감초뿌리추출물',        g:'5',   fn:'살균 · 항염',          p:['피부 보습']},
+    {n:'로즈우드오일',                g:'3',   fn:'보습 · 수렴 진정',     p:['피부 보습','수렴 진정']},
+    {n:'로즈마리잎오일',              g:'4',   fn:'피부 보습',            p:['피부 보습']},
+    {n:'라벤더오일',                  g:'2',   fn:'피부 보습',            p:['피부 보습']},
+    {n:'스피루리나 플라텐시스추출물', g:'1',   fn:'피부 보습',            p:['피부 보습']},
+    {n:'마카다미아넛오일(1)',         g:'1',   fn:'수분 증발 차단',        p:['수분 증발 차단']},
+    {n:'잇꽃씨오일',                  g:'1',   fn:'수분 증발 차단',        p:['수분 증발 차단']},
+    {n:'호호바씨오일',                g:'1',   fn:'수분 증발 차단',        p:['수분 증발 차단']},
+    {n:'스쿠알란',                    g:'1',   fn:'에몰리언트',           p:['수분 증발 차단']},
+    {n:'오렌지오일',                  g:'3',   fn:'착향',                p:['착향']},
+    {n:'소르비탄세스퀴올리에이트',    g:'1',   fn:'유화',                p:['제형']},
+    {n:'폴리소르베이트20',            g:'3',   fn:'유화',                p:['제형']},
+    {n:'토코페롤',                    g:'1',   fn:'산화방지',            p:['산화방지']}
   ];
   ALL_ING.forEach(function(x, i){
     x.i = i;                                                   // 함량 순서
@@ -1935,9 +2117,11 @@ button.field{cursor:pointer;text-align:left;}
     if(i === -1){ return esc(name); }
     return esc(name.slice(0, i)) + '<mark>' + esc(name.slice(i, i + q.length)) + '</mark>' + esc(name.slice(i + q.length));
   }
-  function irow(x, q){
+  function irow(x, q, warnSkin){
     var mine = my.indexOf(x.n) !== -1;
-    var tag = mine ? '<span class="minetag">내가 뺀 성분</span>'
+    /* 타입을 걸어 본 상태라면 그 타입 기준 주의를 가장 먼저 알린다 */
+    var tag = warnSkin ? '<span class="skintag">' + warnSkin + ' 주의</span>'
+            : mine ? '<span class="minetag">내가 뺀 성분</span>'
             : x.al ? '<span class="altag">알레르기</span>'
             : '<span class="ifn">' + esc(x.fn) + '</span>';
     return '<button class="irow' + (mine ? ' is-mine' : '') + '">'
@@ -1946,31 +2130,52 @@ button.field{cursor:pointer;text-align:left;}
       + icon('i-chev', 14) + '</button>';
   }
 
-  var IF = 'all', ISORT = 'amt', IQ = '';
+  var ISORT = 'amt', IQ = '';
   var SORTS = { amt:'함량 높은 순', ewg:'EWG 등급 높은 순', name:'가나다순' };
-  var IFILTERS = [
-    {k:'all',      lab:'전체',       t:function(){ return true; }},
-    /* 헤더에서 이름을 나열하는 대신 칩으로 옮겨, 목록에서 바로 확인하게 한다 */
-    {k:'good',     lab:'잘 맞는',    t:function(x){ return GOOD_ING.indexOf(x.n) !== -1; }},
-    {k:'mine',     lab:'내 성분',    t:function(x){ return my.indexOf(x.n) !== -1; }},
-    {k:'allergen', lab:'알레르기',   t:function(x){ return !!x.al; }},
-    {k:'high',     lab:'EWG 3 이상', t:function(x){ return x.gv >= 3; }},
-    {k:'unknown',  lab:'등급 미정',  t:function(x){ return x.gv < 0; }}
+  /* 축 3개를 겹쳐 건다. 축 안에서는 OR, 축끼리는 AND. */
+  var F = { skin:[], trait:[] };
+  /* 등급 축은 뺐다 — 낮음이 82%라 걸러지지 않고, 분포는 아래 '성분 구성' 바가,
+     위험한 것부터 보기는 'EWG 등급 높은 순' 정렬이 이미 맡는다. 실제로 쓸 조각만 남긴다. */
+  var TRAITS = [
+    {k:'like',     lab:'내 관심 성분', t:function(x){ return LIKE.indexOf(x.n) !== -1; }},
+    {k:'mine',     lab:'내 피할 성분', t:function(x){ return my.indexOf(x.n) !== -1; }},
+    {k:'warn20',   lab:'20가지 주의',  t:function(x){ return !!x.w20; }},
+    {k:'allergen', lab:'알레르기 주의', t:function(x){ return !!x.al; }},
+    {k:'high',     lab:'높은 위험',    t:function(x){ return x.gv >= 7; }}
   ];
-
+  var SKINF = Object.keys(SKIN_ING).map(function(k){
+    return { k:k, lab:k, t:function(x){ return skinAll(k).indexOf(x.n) !== -1; } };
+  });
+  function skinAll(k){ return SKIN_ING[k].concat(SKIN_WARN[k] || []); }
+  function skinWarns(k, n){ return !!(SKIN_WARN[k] && SKIN_WARN[k].indexOf(n) !== -1); }
+  function fActive(){ return F.skin.length > 0 || F.trait.length > 0; }
+  function fMatch(x){
+    if(F.skin.length && !F.skin.some(function(k){ return skinAll(k).indexOf(x.n) !== -1; })){ return false; }
+    if(F.trait.length && !TRAITS.some(function(t){ return F.trait.indexOf(t.k) !== -1 && t.t(x); })){ return false; }
+    return true;
+  }
   function renderIngList(){
-    var chips = document.querySelector('[data-ifilters]');
-    if(!chips){ return; }
+    var box = document.querySelector('[data-ifilters]');
+    if(!box){ return; }
 
-    /* 칩 : 항상 전체 51개 기준 개수를 보여줘 "0개라 없는 것"인지 바로 알게 한다 */
-    chips.innerHTML = IFILTERS.map(function(f){
-      var n = ALL_ING.filter(f.t).length;
-      return '<button class="ifchip" data-ifilter="' + f.k + '" aria-pressed="' + (IF === f.k) + '"'
-        + (n === 0 ? ' disabled' : '') + '>' + f.lab + '<i>' + n + '</i></button>';
-    }).join('');
+    /* 개수는 항상 전성분 51개 기준. 0개면 눌러보기 전에 없다는 걸 알 수 있다. */
+    function chips(group, defs, sel){
+      return defs.map(function(d){
+        var n = ALL_ING.filter(d.t).length;
+        return '<button class="ifchip" data-fchip2="' + group + '" data-fk="' + d.k + '"'
+          + ' aria-pressed="' + (sel.indexOf(d.k) !== -1) + '"' + (n === 0 ? ' disabled' : '')
+          + '>' + d.lab + '<i>' + n + '</i></button>';
+      }).join('');
+    }
+    box.innerHTML =
+      '<div class="fgroup"><span class="fglab">성분</span><div class="fgchips">'
+        + '<button class="freset" data-freset' + (fActive() ? '' : ' disabled') + '>'
+        + icon('i-reset', 11) + '초기화</button>'
+        + chips('trait', TRAITS, F.trait) + '</div></div>'
+      + '<div class="fgroup"><span class="fglab">피부</span><div class="fgchips">'
+        + chips('skin', SKINF, F.skin) + '</div></div>';
 
-    var f = IFILTERS.filter(function(x){ return x.k === IF; })[0] || IFILTERS[0];
-    var list = ALL_ING.filter(f.t);
+    var list = ALL_ING.filter(fMatch);
     if(IQ){ list = list.filter(function(x){ return x.n.indexOf(IQ) !== -1 || x.fn.indexOf(IQ) !== -1; }); }
     list = list.slice().sort(function(a, b){
       if(ISORT === 'ewg'){ return b.gv - a.gv || a.i - b.i; }
@@ -1978,28 +2183,28 @@ button.field{cursor:pointer;text-align:left;}
       return a.i - b.i;
     });
 
+    var plain = !fActive() && !IQ;
     setText('[data-ilist-count]', list.length + '개');
     setText('[data-isort-label]', SORTS[ISORT]);
-    setText('[data-ilist-title]', IQ ? '검색 결과' : (IF === 'all' ? '전성분' : f.lab));
+    setText('[data-ilist-title]', IQ ? '검색 결과'
+      : plain ? '전성분'
+      : (F.skin.length === 1 && !F.trait.length)
+        ? (SKIN_WARN[F.skin[0]] ? F.skin[0] + ' 관련 성분' : F.skin[0] + '에 좋은 성분')
+      : '필터 결과');
 
-    /* 눈여겨볼 성분은 전체 보기일 때만. 검색·필터 중엔 결과와 섞이지 않게 감춘다. */
-    var hits = my.filter(function(k){ return DETAIL_ING.indexOf(k) !== -1; });
-    show(document.querySelector('[data-mineblock]'), hits.length > 0 && IF === 'all' && !IQ);
-
-    var box = document.querySelector('[data-inglist]');
+    var out = document.querySelector('[data-inglist]');
     if(!list.length){
-      box.innerHTML = '<p class="noing">조건에 맞는 성분이 없어요.<br>검색어나 필터를 바꿔보세요.</p>';
+      out.innerHTML = '<p class="noing">조건에 맞는 성분이 없어요.<br>필터를 바꾸거나 초기화해 보세요.</p>';
       return;
     }
     var html = '';
     list.forEach(function(x, i){
-      html += irow(x, IQ);
-      /* 함량순 · 전체 보기일 때만 상위 5개 경계선을 그어준다 */
-      if(i === 4 && ISORT === 'amt' && IF === 'all' && !IQ && list.length > 5){
+      html += irow(x, IQ, F.skin.filter(function(k){ return skinWarns(k, x.n); })[0] || null);
+      if(i === 4 && ISORT === 'amt' && plain && list.length > 5){
         html += '<div class="topmark">여기까지가 함량 상위 5개예요 · 배합의 대부분을 차지해요</div>';
       }
     });
-    box.innerHTML = html;
+    out.innerHTML = html;
   }
 
   /* 목적별 : 아코디언 8개 대신 목적 칩 하나로 목록을 바꾼다 */
@@ -2034,6 +2239,7 @@ button.field{cursor:pointer;text-align:left;}
     setText('[data-comp-sub]', '전성분 ' + ALL_ING.length + '개 중 ' + top.items.length
       + '개가 ' + top.k + ' 목적이에요');
     setText('[data-purp-tabcount]', String(groups.length));
+    setText('[data-all-tabcount]', String(ALL_ING.length));
 
     document.querySelector('[data-pchips]').innerHTML = groups.map(function(g){
       var hit = g.items.filter(function(x){ return my.indexOf(x.n) !== -1; }).length;
@@ -2176,19 +2382,42 @@ button.field{cursor:pointer;text-align:left;}
     if(!target){ return; }
     document.querySelectorAll('.screen').forEach(function(s){ s.classList.toggle('is-active', s === target); });
     target.querySelectorAll('.scroll').forEach(function(sc){ sc.scrollTop = 0; });
-    sheet(false); isheet(false);
+    sheet(false); isheet(false); ssheet(false); psheet(false);
   }
   function sheet(open){ document.querySelector('[data-sheetwrap]').classList.toggle('is-open', open); }
   function isheet(open){ document.querySelector('[data-isheetwrap]').classList.toggle('is-open', open); }
+  function psheet(open){ document.querySelector('[data-profilewrap]').classList.toggle('is-open', open); }
+  function ssheet(open){
+    document.querySelector('[data-sortwrap]').classList.toggle('is-open', open);
+    var btn = document.querySelector('[data-sortopen]');
+    if(btn){ btn.setAttribute('aria-expanded', String(open)); }
+    if(open){ renderSortList(); }
+  }
+  function renderSortList(){
+    var box = document.querySelector('[data-sortlist]');
+    if(!box){ return; }
+    box.innerHTML = Object.keys(SORTS).map(function(k){
+      return '<button class="sortrow" data-sortpick="' + k + '" role="option"'
+        + ' aria-selected="' + (ISORT === k) + '">'
+        + '<span class="sname">' + SORTS[k] + '</span>'
+        + '<span class="schk">' + icon('i-check', 15) + '</span></button>';
+    }).join('');
+  }
 
   var ING_DESC = {
-    '향료':'향을 내기 위해 넣는 성분이에요. 여러 향 물질을 묶어 부르는 이름이라 정확한 구성이 공개되지 않고, 민감성 피부에서 자극이나 알레르기 반응이 보고됩니다.',
-    '정제수':'화장품의 기본 용매예요. 대부분 제품에서 함량 1위이며, 그 자체로는 피부에 영향을 주지 않습니다.',
-    '나이아신아마이드':'비타민 B3 계열이에요. 멜라닌 생성을 억제해 피부톤을 밝히고 피지 분비를 조절합니다. 지성 피부에 특히 잘 맞습니다.',
-    '판테놀':'프로비타민 B5예요. 진정과 보습에 관여하고 자극이 적어 민감성 피부에도 널리 쓰입니다.',
-    '알란토인':'수렴과 진정에 관여해요. 자극이 낮아 트러블성 피부 제품에 자주 들어갑니다.',
-    '소듐하이알루로네이트':'히알루론산의 염 형태로 보습력이 강해요. 분자가 작아 흡수가 잘 됩니다.',
-    '병풀추출물':'시카로 알려진 성분이에요. 진정에 관여하지만 EWG 등급 자료가 충분하지 않아 미정으로 표시됩니다.'
+    'd-리모넨':'감귤류 껍질에서 얻는 향 성분이에요. 상쾌한 향을 내지만 EU가 지정한 알레르기 유발 향료 26종에 들어가고, 공기에 닿아 산화되면 자극이 커질 수 있습니다.',
+    '리날룰':'라벤더·로즈우드 등에 들어 있는 향 성분이에요. 알레르기 유발 향료 26종 중 하나라 민감성 피부에서는 반응이 보고됩니다.',
+    '옥수수배아오일':'옥수수 씨눈에서 짜낸 오일이에요. 클렌징 오일의 기름때를 녹이는 기본 유분이면서 수분 증발을 막아줍니다.',
+    '녹차씨오일':'녹차 씨앗에서 얻은 오일이에요. 보습과 수분 증발 차단을 함께 맡고 자극이 낮은 편입니다.',
+    '녹차추출물':'항산화 성분이 풍부해요. 수렴·진정과 보습에 두루 관여해 이 제품에서 세 가지 목적을 겸합니다.',
+    '홍차추출물':'수렴과 진정에 관여해요. 지성 피부에 도움이 되는 성분으로 분류되지만 EWG 등급 폭이 2–4로 넓습니다.',
+    '스페인감초뿌리추출물':'살균·항염에 관여해요. 지성 피부에 좋은 성분으로 꼽히지만 이 제품 성분 중 EWG 등급이 5로 가장 높습니다.',
+    '로즈마리잎오일':'아로마 오일이에요. 향과 컨디셔닝을 맡지만 아로마 오일 공통으로 민감성 피부에 자극이 될 수 있습니다.',
+    '라벤더오일':'진정 이미지로 알려진 아로마 오일이에요. 다만 민감성 피부에는 자극 요인으로 분류됩니다.',
+    '오렌지오일':'감귤류 향 성분이에요. 산성이 강해 민감성 피부에서는 주의가 필요합니다.',
+    '스쿠알란':'피부에 원래 있는 스쿠알렌을 안정화한 유분이에요. 가볍게 발리면서 수분 증발을 막아 자극이 매우 낮습니다.',
+    '호호바씨오일':'사람 피지와 구조가 비슷한 왁스에스터예요. 유분 균형을 잡아주고 자극이 낮습니다.',
+    '정제수':'화장품의 기본 용매예요. 그 자체로는 피부에 영향을 주지 않습니다.'
   };
   function openIngSheet(row){
     var name = (row.querySelector('.iname') || row.querySelector('.dicttext b'));
@@ -2290,16 +2519,60 @@ button.field{cursor:pointer;text-align:left;}
       return;
     }
 
-    /* 전성분 : 필터 칩 · 정렬 · 검색 지우기 */
-    if((t = e.target.closest('[data-ifilter]'))){
-      IF = t.dataset.ifilter;
+    /* 내가 뺀 성분 행 → 1개면 바로 그 성분 시트, 여러 개면 목록을 걸러 보여준다 */
+    if((t = e.target.closest('[data-mine-jump]'))){
+      var hit = my.filter(function(k){ return DETAIL_ING.indexOf(k) !== -1; });
+      if(!hit.length){ return; }
+      if(hit.length === 1){
+        var row = [].slice.call(document.querySelectorAll('[data-inglist] .irow'))
+          .filter(function(r){ return r.querySelector('.iname').textContent.trim() === hit[0]; })[0];
+        if(row){ openIngSheet(row); return; }
+      }
+      F.skin = []; F.trait = ['mine'];
+      renderIngList();
+      var tl = document.querySelector('.ingtools');
+      if(tl){ tl.scrollIntoView({ behavior:'smooth', block:'start' }); }
+      return;
+    }
+
+    /* 특성 · 등급 칩 : 축 안에서는 여러 개를 함께 걸 수 있다 */
+    if((t = e.target.closest('[data-fchip2]'))){
+      var grp = t.dataset.fchip2, key = t.dataset.fk;
+      var arr = F[grp];
+      var at = arr.indexOf(key);
+      if(at === -1){ arr.push(key); } else { arr.splice(at, 1); }
       renderIngList();
       return;
     }
-    if((t = e.target.closest('[data-isort]'))){
-      var order = ['amt','ewg','name'];
-      ISORT = order[(order.indexOf(ISORT) + 1) % order.length];
+    if((t = e.target.closest('[data-freset]'))){
+      F.skin = []; F.trait = [];
       renderIngList();
+      renderFit(my.filter(function(k){ return DETAIL_ING.indexOf(k) !== -1; }),
+                FIT_BASE - FIT_PENALTY * my.filter(function(k){ return DETAIL_ING.indexOf(k) !== -1; }).length);
+      return;
+    }
+    /* 퍼소나 카드 : 카드 전체가 수정 진입점 */
+    if((t = e.target.closest('[data-profile-open]'))){ e.stopPropagation(); psheet(true); return; }
+    if((t = e.target.closest('[data-profileclose]'))){ e.stopPropagation(); psheet(false); return; }
+    if((t = e.target.closest('[data-pick-skin]'))){ e.stopPropagation(); MYSKIN = t.dataset.pickSkin; renderIng(); return; }
+    if((t = e.target.closest('[data-pick-worry]'))){
+      e.stopPropagation();
+      var w = t.dataset.pickWorry, at = WORRY.indexOf(w);
+      if(at === -1){ WORRY.push(w); } else { WORRY.splice(at, 1); }
+      renderIng(); return;
+    }
+    if((t = e.target.closest('[data-avoid-del]'))){ e.stopPropagation(); my = my.filter(function(x){ return x !== t.dataset.avoidDel; }); renderIng(); return; }
+    if((t = e.target.closest('[data-avoid-add]'))){ e.stopPropagation(); if(my.indexOf(t.dataset.avoidAdd) === -1){ my.push(t.dataset.avoidAdd); } renderIng(); return; }
+    if((t = e.target.closest('[data-like-del]'))){ e.stopPropagation(); LIKE = LIKE.filter(function(x){ return x !== t.dataset.likeDel; }); renderIng(); return; }
+    if((t = e.target.closest('[data-like-add]'))){ e.stopPropagation(); if(LIKE.indexOf(t.dataset.likeAdd) === -1){ LIKE.push(t.dataset.likeAdd); } renderIng(); return; }
+
+    if((t = e.target.closest('[data-sortopen]'))){ e.stopPropagation(); ssheet(true); return; }
+    if((t = e.target.closest('[data-sortclose]'))){ e.stopPropagation(); ssheet(false); return; }
+    if((t = e.target.closest('[data-sortpick]'))){
+      e.stopPropagation();
+      ISORT = t.dataset.sortpick;
+      renderIngList();
+      ssheet(false);
       return;
     }
     if((t = e.target.closest('[data-ingqclear]'))){
