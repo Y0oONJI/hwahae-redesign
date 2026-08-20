@@ -71,7 +71,6 @@ body{margin:0;background:var(--studio-bg);font-family:var(--ui);-webkit-font-smo
 
 /* ---------- gallery ---------- */
 .gallery{position:relative;width:100%;aspect-ratio:1/1;overflow:hidden;flex:none;background:#e3e3e3;}
-.gscene{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block;}
 
 /* ---------- 궁합 점수 스티커 (오른쪽 고정 · 스크롤 시 축소) ---------- */
 .fitsticker{
@@ -81,7 +80,7 @@ body{margin:0;background:var(--studio-bg);font-family:var(--ui);-webkit-font-smo
   box-shadow:0 2px 9px -4px rgba(0,0,0,.3);
   transition:width .22s ease,padding .22s ease,background-color .22s ease,border-radius .22s ease;
 }
-.fitsticker .fface{width:34px;height:34px;border-radius:17px;background:#dedede;margin:0 auto 3px;}
+.fitsticker .fface{display:block;width:34px;height:34px;border-radius:17px;background:#dedede;margin:0 auto 3px;}
 .fitsticker .flab{display:block;font-size:12px;font-weight:600;white-space:nowrap;letter-spacing:-.04em;}
 .fitsticker .fnum{display:block;font-size:14px;font-weight:800;letter-spacing:-.04em;white-space:nowrap;margin-top:2px;}
 .fitsticker .farrow{display:none;}
@@ -486,8 +485,6 @@ body{margin:0;background:var(--studio-bg);font-family:var(--ui);-webkit-font-smo
 /* 보조 버튼 — 주 버튼(어두운 면)과 명도로 구분되게 테두리를 진하게 */
 .dbtn.cart{border-color:#2E2E2E;color:#2E2E2E;}
 
-/* 실사진은 CSS 색이 아니라 래스터라 필터로 탈색 */
-.gscene{filter:grayscale(1);}
 
 /* 찜 on 상태 — 색이 없으니 채움/비움으로 구분 */
 .zzim[data-on="true"],.brandrow .heartbtn[data-on="true"]{color:#1A1A1A;}
@@ -539,8 +536,8 @@ body{margin:0;background:var(--studio-bg);font-family:var(--ui);-webkit-font-smo
 
         <div class="scroll">
           <div class="gallery">
-            <!-- only hwahae 밴드와 only화해 배지는 이미지에 포함돼 있어 별도로 그리지 않는다 -->
-            <img class="gscene" src="assets/product-yuripibu.jpg" alt="유리피부 그란떼 클렌징 오일 500ml 대용량 기획">
+            <!-- UT 무채색: 제품 사진 제거. 브랜드/패키지 인지가 반응에 섞이지 않도록
+                 1:1 빈 면만 남긴다 (레이아웃 높이는 그대로). -->
           </div>
 
           <div class="dbody">
