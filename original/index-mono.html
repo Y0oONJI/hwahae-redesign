@@ -76,17 +76,17 @@ body{margin:0;background:var(--studio-bg);font-family:var(--ui);-webkit-font-smo
 /* ---------- 궁합 점수 스티커 (오른쪽 고정 · 스크롤 시 축소) ---------- */
 .fitsticker{
   position:absolute;right:0;top:56%;z-index:6;border:0;cursor:pointer;
-  width:76px;padding:11px 8px 13px;border-radius:24px 0 0 24px;
+  width:68px;padding:6px 7px 8px;border-radius:21px 0 0 21px;
   background:#565656;color:#ffffff;text-align:center;
-  box-shadow:0 3px 12px -4px rgba(0,0,0,.3);
+  box-shadow:0 2px 9px -4px rgba(0,0,0,.3);
   transition:width .22s ease,padding .22s ease,background-color .22s ease,border-radius .22s ease;
 }
-.fitsticker .fface{width:42px;height:42px;border-radius:21px;background:#dedede;margin:0 auto 6px;display:grid;place-items:center;color:#565656;overflow:hidden;}
-.fitsticker .flab{display:block;font-size:11px;font-weight:600;white-space:nowrap;letter-spacing:-.04em;}
-.fitsticker .fnum{display:block;font-size:15px;font-weight:800;letter-spacing:-.04em;white-space:nowrap;margin-top:2px;}
+.fitsticker .fface{width:34px;height:34px;border-radius:17px;background:#dedede;margin:0 auto 3px;}
+.fitsticker .flab{display:block;font-size:12px;font-weight:600;white-space:nowrap;letter-spacing:-.04em;}
+.fitsticker .fnum{display:block;font-size:14px;font-weight:800;letter-spacing:-.04em;white-space:nowrap;margin-top:2px;}
 .fitsticker .farrow{display:none;}
 /* 축소 상태 */
-.fitsticker.mini{width:28px;padding:20px 0;background:rgba(120,120,120,.62);border-radius:16px 0 0 16px;box-shadow:none;}
+.fitsticker.mini{width:25px;padding:18px 0;background:rgba(120,120,120,.62);border-radius:14px 0 0 14px;box-shadow:none;}
 .fitsticker.mini .fface,.fitsticker.mini .flab,.fitsticker.mini .fnum{display:none;}
 .fitsticker.mini .farrow{display:grid;place-items:center;color:#ffffff;}
 
@@ -872,10 +872,10 @@ body{margin:0;background:var(--studio-bg);font-family:var(--ui);-webkit-font-smo
         </div>
 
         <button class="fitsticker" data-fit aria-label="궁합 점수 79점">
-          <span class="fface"><svg width="26" height="26"><use href="#i-face"/></svg></span>
+          <span class="fface"></span>
           <span class="flab">궁합 점수</span>
           <span class="fnum" data-fit-score>79점 ›</span>
-          <span class="farrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M15 5v14l-9-7z"/></svg></span>
+          <span class="farrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M15 5v14l-9-7z"/></svg></span>
         </button>
 
         <button class="totop" aria-label="맨 위로"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>

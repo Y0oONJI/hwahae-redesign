@@ -628,6 +628,12 @@ button.field{cursor:pointer;text-align:left;}
 .ifchip[aria-pressed="true"]{background:var(--app-ink);border-color:var(--app-ink);color:#fff;font-weight:600;}
 .ifchip[aria-pressed="true"] i{color:rgba(255,255,255,.72);}
 .ifchip:disabled{opacity:.38;cursor:default;}
+.ifchip .sdot{width:6px;height:6px;border-radius:3px;flex:none;}
+.ifchip.is-good .sdot{background:var(--app-accent);}
+.ifchip.is-warn .sdot{background:var(--app-amber);}
+.ifchip.is-good[aria-pressed="true"]{background:var(--app-accent);border-color:var(--app-accent);}
+.ifchip.is-warn[aria-pressed="true"]{background:var(--app-amber);border-color:var(--app-amber);}
+.ifchip.is-good[aria-pressed="true"] .sdot,.ifchip.is-warn[aria-pressed="true"] .sdot{background:#fff;}
 
 /* --- 목록 공통 --- */
 .ilisthead{display:flex;align-items:baseline;gap:8px;padding:20px 16px 8px;}
@@ -675,6 +681,7 @@ button.field{cursor:pointer;text-align:left;}
 .irow .chev{color:var(--app-line-2);flex:none;}
 .irow mark{background:#FBE9B6;color:inherit;border-radius:2px;padding:0 4px;margin:0 -4px;}
 .irow .skintag{font-size:10px;font-weight:700;color:#fff;background:var(--app-amber);border-radius:4px;padding:4px 8px;flex:none;}
+.irow .goodtag{font-size:10px;font-weight:700;color:var(--app-accent-ink);background:var(--app-wash);border-radius:4px;padding:4px 8px;flex:none;}
 .irow .altag{font-size:10px;font-weight:700;color:#B02A30;background:#FBD2D2;border-radius:4px;padding:4px 8px;flex:none;}
 .irow.is-mine{background:#FEF9F1;}
 .irow.is-mine .iname{color:#8A5A00;font-weight:700;}
@@ -2117,10 +2124,11 @@ button.field{cursor:pointer;text-align:left;}
     if(i === -1){ return esc(name); }
     return esc(name.slice(0, i)) + '<mark>' + esc(name.slice(i, i + q.length)) + '</mark>' + esc(name.slice(i + q.length));
   }
-  function irow(x, q, warnSkin){
+  function irow(x, q, hit){
     var mine = my.indexOf(x.n) !== -1;
-    /* 타입을 걸어 본 상태라면 그 타입 기준 주의를 가장 먼저 알린다 */
-    var tag = warnSkin ? '<span class="skintag">' + warnSkin + ' 주의</span>'
+    /* 조합을 걸어 본 상태라면 그 기준의 판정을 가장 먼저 알린다 */
+    var tag = hit ? '<span class="' + (hit.pol === 'warn' ? 'skintag' : 'goodtag') + '">'
+                      + hit.type + (hit.pol === 'warn' ? ' 주의' : ' 좋음') + '</span>'
             : mine ? '<span class="minetag">내가 뺀 성분</span>'
             : x.al ? '<span class="altag">알레르기</span>'
             : '<span class="ifn">' + esc(x.fn) + '</span>';
@@ -2143,28 +2151,63 @@ button.field{cursor:pointer;text-align:left;}
     {k:'allergen', lab:'알레르기 주의', t:function(x){ return !!x.al; }},
     {k:'high',     lab:'높은 위험',    t:function(x){ return x.gv >= 7; }}
   ];
-  var SKINF = Object.keys(SKIN_ING).map(function(k){
-    return { k:k, lab:k, t:function(x){ return skinAll(k).indexOf(x.n) !== -1; } };
-  });
-  function skinAll(k){ return SKIN_ING[k].concat(SKIN_WARN[k] || []); }
-  function skinWarns(k, n){ return !!(SKIN_WARN[k] && SKIN_WARN[k].indexOf(n) !== -1); }
+  /* 피부 축은 타입이 아니라 '타입 x 관점'이 칩 하나다. 화해 데이터가 원래 타입별로
+     좋은 성분 / 주의할 성분 두 갈래인데 칩 라벨이 타입 이름뿐이라 어느 쪽인지 눌러봐야 알았다.
+     성분이 0개인 조합은 만들지 않는다 — 칩 구성이 제품 데이터를 그대로 따라가고,
+     이 제품처럼 한 타입이 한쪽만 가진 경우엔 칩이 늘기는커녕 줄어든다. */
+  var SKINF = [], SKINMAP = {};
+  function josaI(w){
+    var c = w.charCodeAt(w.length - 1) - 0xAC00;
+    return (c >= 0 && c < 11172 && c % 28) ? '이' : '가';
+  }
+  function buildSkinDefs(){
+    SKINF = []; SKINMAP = {};
+    Object.keys(SKIN_ING).forEach(function(k){
+      [ { pol:'good', src:SKIN_ING[k]  || [], lab:k + '에 좋은',          title:k + '에 좋은 성분' },
+        { pol:'warn', src:SKIN_WARN[k] || [], lab:k + josaI(k) + ' 주의', title:k + josaI(k) + ' 주의할 성분' }
+      ].forEach(function(p){
+        var n = ALL_ING.filter(function(x){ return p.src.indexOf(x.n) !== -1; }).length;
+        if(!n){ return; }                       /* 눌러도 소용없는 칩은 자리를 차지하지 않는다 */
+        SKINF.push({ k:k + '|' + p.pol, type:k, pol:p.pol, lab:p.lab, title:p.title, n:n,
+                     t:function(x){ return p.src.indexOf(x.n) !== -1; } });
+      });
+    });
+    /* 내 피부 먼저 → 주의 먼저 → 개수 많은 순. 줄이 넘쳐도 앞자리는 늘 제일 급한 칩이다. */
+    SKINF.sort(function(a, b){
+      return (b.type === MYSKIN) - (a.type === MYSKIN)
+          || (a.pol === 'warn' ? 0 : 1) - (b.pol === 'warn' ? 0 : 1)
+          || b.n - a.n;
+    });
+    SKINF.forEach(function(d){ SKINMAP[d.k] = d; });
+  }
+  /* 걸어 둔 조합 중 이 성분이 걸린 것. 행 태그가 문구와 톤을 여기서 그대로 받아 간다. */
+  function skinHit(x){
+    for(var i = 0; i < F.skin.length; i++){
+      var d = SKINMAP[F.skin[i]];
+      if(d && d.t(x)){ return d; }
+    }
+    return null;
+  }
   function fActive(){ return F.skin.length > 0 || F.trait.length > 0; }
   function fMatch(x){
-    if(F.skin.length && !F.skin.some(function(k){ return skinAll(k).indexOf(x.n) !== -1; })){ return false; }
+    if(F.skin.length && !skinHit(x)){ return false; }
     if(F.trait.length && !TRAITS.some(function(t){ return F.trait.indexOf(t.k) !== -1 && t.t(x); })){ return false; }
     return true;
   }
   function renderIngList(){
     var box = document.querySelector('[data-ifilters]');
     if(!box){ return; }
+    buildSkinDefs();
 
-    /* 개수는 항상 전성분 51개 기준. 0개면 눌러보기 전에 없다는 걸 알 수 있다. */
+    /* 개수는 항상 전성분 전체 기준. 특성 칩은 0개여도 자리를 지켜 없다는 걸 알리고,
+       피부 칩은 조합 자체를 만들지 않는다 — 있는 관점만 뜨는 편이 읽기 빠르다. */
     function chips(group, defs, sel){
       return defs.map(function(d){
         var n = ALL_ING.filter(d.t).length;
-        return '<button class="ifchip" data-fchip2="' + group + '" data-fk="' + d.k + '"'
+        return '<button class="ifchip' + (d.pol ? ' is-' + d.pol : '') + '"'
+          + ' data-fchip2="' + group + '" data-fk="' + d.k + '"'
           + ' aria-pressed="' + (sel.indexOf(d.k) !== -1) + '"' + (n === 0 ? ' disabled' : '')
-          + '>' + d.lab + '<i>' + n + '</i></button>';
+          + '>' + (d.pol ? '<span class="sdot"></span>' : '') + d.lab + '<i>' + n + '</i></button>';
       }).join('');
     }
     box.innerHTML =
@@ -2189,7 +2232,7 @@ button.field{cursor:pointer;text-align:left;}
     setText('[data-ilist-title]', IQ ? '검색 결과'
       : plain ? '전성분'
       : (F.skin.length === 1 && !F.trait.length)
-        ? (SKIN_WARN[F.skin[0]] ? F.skin[0] + ' 관련 성분' : F.skin[0] + '에 좋은 성분')
+        ? ((SKINMAP[F.skin[0]] || {}).title || '필터 결과')
       : '필터 결과');
 
     var out = document.querySelector('[data-inglist]');
@@ -2199,7 +2242,7 @@ button.field{cursor:pointer;text-align:left;}
     }
     var html = '';
     list.forEach(function(x, i){
-      html += irow(x, IQ, F.skin.filter(function(k){ return skinWarns(k, x.n); })[0] || null);
+      html += irow(x, IQ, skinHit(x));
       if(i === 4 && ISORT === 'amt' && plain && list.length > 5){
         html += '<div class="topmark">여기까지가 함량 상위 5개예요 · 배합의 대부분을 차지해요</div>';
       }
