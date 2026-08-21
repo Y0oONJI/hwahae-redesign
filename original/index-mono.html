@@ -1,8 +1,10 @@
 <!doctype html>
+<html lang="ko">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<!-- Maze 유니버설 스니펫 (UT 트래킹). 명시적 <head> 태그가 없는 파일이라
-     브라우저가 만드는 암묵적 head 에 붙는다 — 위 meta 들이 이미 head 를 연 뒤라 안전하다. -->
+<!-- Maze 유니버설 스니펫 (UT 트래킹).
+     head 최상단에 두어 페이지 로드 즉시 실행되게 한다. -->
 <script>
 (function (m, a, z, e) {
   var s, t, u, v;
@@ -522,6 +524,8 @@ body{margin:0;background:var(--studio-bg);font-family:var(--ui);-webkit-font-smo
 /* 찜 on 상태 — 색이 없으니 채움/비움으로 구분 */
 .zzim[data-on="true"],.brandrow .heartbtn[data-on="true"]{color:#1A1A1A;}
 </style>
+</head>
+<body>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></symbol>
@@ -1199,3 +1203,5 @@ body{margin:0;background:var(--studio-bg);font-family:var(--ui);-webkit-font-smo
   });
 })();
 </script>
+</body>
+</html>
