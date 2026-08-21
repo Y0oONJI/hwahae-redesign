@@ -521,6 +521,16 @@ body{margin:0;background:var(--studio-bg);font-family:var(--ui);-webkit-font-smo
 .dbtn.cart{border-color:#2E2E2E;color:#2E2E2E;}
 
 
+/* 그래프 — 원본에서 밝은 하늘색(#3FD1D6, L* 77)이던 막대가 무채색 변환 때
+   거의 검정(L* 19)이 돼 원본보다 훨씬 무겁게 읽혔다. 원본과 같은 명도의
+   회색으로 되돌린다. 흰 글자를 얹는 면(버튼)은 어두운 채로 둔다.
+   트랙은 살짝 어둡게 해서 밝아진 막대가 묻히지 않게 한다. */
+.pcol .track{background:#ececec;}
+.pcol .fill{background:#bebebe;}
+.stbar.up .b{background:#bebebe;}
+.stbar.down .b{background:#949494;}
+.strow2.up .ic{color:#ababab;}
+
 /* 찜 on 상태 — 색이 없으니 채움/비움으로 구분 */
 .zzim[data-on="true"],.brandrow .heartbtn[data-on="true"]{color:#1A1A1A;}
 </style>
