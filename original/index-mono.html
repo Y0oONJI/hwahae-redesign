@@ -1,5 +1,38 @@
+<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Maze 유니버설 스니펫 (UT 트래킹). 명시적 <head> 태그가 없는 파일이라
+     브라우저가 만드는 암묵적 head 에 붙는다 — 위 meta 들이 이미 head 를 연 뒤라 안전하다. -->
+<script>
+(function (m, a, z, e) {
+  var s, t, u, v;
+  try {
+    t = m.sessionStorage.getItem('maze-us');
+  } catch (err) {}
+
+  if (!t) {
+    t = new Date().getTime();
+    try {
+      m.sessionStorage.setItem('maze-us', t);
+    } catch (err) {}
+  }
+
+  u = document.currentScript || (function () {
+    var w = document.getElementsByTagName('script');
+    return w[w.length - 1];
+  })();
+  v = u && u.nonce;
+
+  s = a.createElement('script');
+  s.src = z + '?apiKey=' + e;
+  s.async = true;
+  if (v) s.setAttribute('nonce', v);
+  a.getElementsByTagName('head')[0].appendChild(s);
+  m.mazeUniversalSnippetApiKey = e;
+})(window, document, 'https://snippet.maze.co/maze-universal-loader.js', 'f54cb29c-c1f2-415a-b30c-5936397b42e8');
+</script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <title>[UT 무채색] 화해 원본 UI — 제품 상세</title>
 <style>
 :root{
@@ -28,7 +61,7 @@
   --risk-high:#3d3d3d;
   --risk-none:#efefef;
 
-  --ui:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic",sans-serif;
+  --ui:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;
   --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,monospace;
 }
 @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){ --studio-bg:#101010; } }
@@ -404,7 +437,7 @@ body{margin:0;background:var(--studio-bg);font-family:var(--ui);-webkit-font-smo
 .fscard h3{margin:0 0 12px;display:flex;align-items:center;gap:8px;font-size:16px;font-weight:800;letter-spacing:-.035em;}
 .fscard h3 .ic{width:22px;height:22px;border-radius:11px;display:grid;place-items:center;flex:none;}
 .fscard.good h3 .ic{background:#a3a3a3;color:#ffffff;}
-.fscard.care h3 .ic{background:#8A8A8A;color:#ffffff;}
+.fscard.care h3 .ic{background:#8A8A8A;color:#8A8A8A;}
 .fscard.tip h3 .ic{background:#7b7b7b;color:#ffffff;}
 .fscard ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:11px;}
 .fscard li{display:flex;gap:8px;font-size:14.5px;line-height:1.6;letter-spacing:-.03em;}
