@@ -460,6 +460,121 @@ body{margin:0;background:var(--studio-bg);font-family:var(--ui);-webkit-font-smo
 .prow .nm{flex:1;min-width:0;font-size:14.5px;font-weight:600;letter-spacing:-.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .prow .chev{color:var(--line2);flex:none;}
 
+
+/* ---------- 검색 결과 화면 ---------- */
+.shead{padding:0 12px 10px;display:flex;align-items:center;gap:2px;flex:none;}
+.sfield{flex:1;display:flex;align-items:center;gap:8px;height:38px;margin:0 2px 0 6px;border:0;border-radius:9px;background:var(--sub);padding:0 12px;cursor:pointer;text-align:left;}
+.sfield .q{flex:1;min-width:0;font-size:14.5px;font-weight:600;letter-spacing:-.035em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sfield .sic{color:var(--ink);flex:none;}
+
+.stabs{display:flex;gap:22px;padding:0 16px;border-bottom:1px solid var(--line);flex:none;}
+.stab{position:relative;border:0;background:transparent;padding:10px 1px 12px;cursor:pointer;font-size:15px;font-weight:600;color:var(--faint);letter-spacing:-.035em;}
+.stab[aria-selected="true"]{color:var(--ink);font-weight:700;}
+.stab[aria-selected="true"]::after{content:"";position:absolute;left:-3px;right:-3px;bottom:-1px;height:2.5px;background:var(--ink);}
+
+/* 카테고리 랭킹 배너 */
+.rankbar{display:flex;align-items:center;gap:5px;margin:16px 16px 0;width:calc(100% - 32px);border:1px solid var(--line2);border-radius:10px;background:var(--bg);padding:13px 14px;cursor:pointer;text-align:left;}
+.rankbar .lab{font-size:13.5px;color:var(--faint);letter-spacing:-.03em;}
+.rankbar b{font-size:14px;font-weight:700;letter-spacing:-.03em;}
+.rankbar .chev{color:var(--faint);flex:none;}
+.rankbar .medal{margin-left:auto;position:relative;width:26px;height:32px;flex:none;}
+.rankbar .medal svg{display:block;}
+.rankbar .medal em{position:absolute;left:0;right:0;bottom:5px;text-align:center;font-style:normal;font-size:11px;font-weight:800;color:#fff;}
+
+/* 섹션 헤더 */
+.ssechead{display:flex;align-items:center;gap:6px;width:100%;border:0;background:transparent;padding:28px 16px 14px;cursor:pointer;text-align:left;}
+.ssechead h3{margin:0;font-size:18px;font-weight:800;letter-spacing:-.04em;}
+.ssechead .chev{margin-left:auto;color:var(--ink);flex:none;}
+.ssechead .newf{margin-left:auto;display:flex;align-items:center;gap:5px;border:0;background:transparent;padding:0;cursor:pointer;font-size:12.5px;color:var(--mid);letter-spacing:-.03em;}
+.ssechead .newf .nb{width:15px;height:15px;border-radius:8px;background:var(--teal);color:#fff;font-size:9.5px;font-weight:800;font-style:normal;display:grid;place-items:center;flex:none;}
+.ssechead .newf .chev{margin-left:0;color:var(--faint);}
+
+/* 쇼핑상품 카드 */
+.shopscroll{display:flex;gap:8px;overflow-x:auto;padding:0 16px 4px;}
+.shopscroll::-webkit-scrollbar{height:0;}
+.shopcard{flex:none;width:120px;display:flex;flex-direction:column;gap:2px;border:0;background:transparent;padding:0;cursor:pointer;text-align:left;}
+.shopimg{position:relative;width:120px;height:120px;border-radius:9px;overflow:hidden;flex:none;}
+.onlyb{align-self:flex-start;margin-top:8px;background:var(--pink-ink);color:#fff;font-size:9.5px;font-weight:700;border-radius:4px;padding:2px 6px;letter-spacing:-.04em;}
+.scname{font-size:12.5px;line-height:1.42;letter-spacing:-.03em;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.swas em{font-style:normal;color:var(--red);}
+.swas{font-size:11px;color:var(--faint);letter-spacing:-.03em;font-variant-numeric:tabular-nums;margin-top:3px;}
+.spr{display:flex;align-items:baseline;gap:4px;margin-top:1px;white-space:nowrap;}
+.spr .pc{font-size:13px;font-weight:800;color:var(--red);font-variant-numeric:tabular-nums;letter-spacing:-.04em;}
+.spr .am{font-size:13px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.04em;}
+.spr .free{display:flex;align-items:center;gap:1px;font-size:9.5px;color:var(--faint);font-weight:500;}
+.spt{display:flex;align-items:center;gap:4px;font-size:11px;color:#E8811A;font-weight:600;font-variant-numeric:tabular-nums;margin-top:3px;}
+.spt .p{width:13px;height:13px;border-radius:7px;background:#F5A623;color:#fff;font-size:8px;font-weight:800;display:grid;place-items:center;flex:none;}
+
+/* 제품 목록 */
+.prodrow{display:flex;align-items:flex-start;gap:12px;width:100%;border:0;background:transparent;padding:14px 16px;cursor:pointer;text-align:left;border-top:1px solid var(--line);}
+.prodrow:first-of-type{border-top:0;}
+.pthumb{width:64px;height:78px;flex:none;display:grid;place-items:center;}
+.pinfo{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;padding-top:2px;}
+.pnm{font-size:13.5px;line-height:1.45;letter-spacing:-.03em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.prate{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--faint);font-variant-numeric:tabular-nums;}
+.prate b{font-weight:700;color:var(--ink);}
+.ppr{display:flex;align-items:baseline;gap:5px;font-variant-numeric:tabular-nums;letter-spacing:-.03em;}
+.ppr .pc{font-size:14px;font-weight:800;color:var(--red);}
+.ppr .lb{font-size:12.5px;color:var(--faint);}
+.ppr .am{font-size:14px;font-weight:800;}
+.ppr .vol{font-size:12px;color:var(--faint);font-weight:400;}
+.ppt{display:flex;align-items:center;gap:4px;font-size:11.5px;color:#E8811A;font-weight:600;font-variant-numeric:tabular-nums;}
+.ppt .p{width:14px;height:14px;border-radius:7px;background:#F5A623;color:#fff;font-size:8.5px;font-weight:800;display:grid;place-items:center;flex:none;}
+
+.allbtn{display:flex;align-items:center;justify-content:center;gap:4px;margin:18px 16px 0;width:calc(100% - 32px);border:1px solid var(--line2);border-radius:9px;background:transparent;padding:15px 0;font-size:14.5px;font-weight:700;letter-spacing:-.04em;color:var(--ink);cursor:pointer;}
+.allbtn .chev{color:var(--faint);flex:none;}
+
+/* 리뷰 목록 */
+.rvit{padding:17px 16px;border-top:1px solid var(--line);}
+.rvit:first-of-type{border-top:0;padding-top:2px;}
+.rvwho{display:block;font-size:11.5px;color:var(--faint);letter-spacing:-.03em;}
+.rvline{display:flex;align-items:center;gap:5px;margin-top:5px;font-size:11.5px;color:var(--faint);font-variant-numeric:tabular-nums;}
+.rvline .sts{display:flex;gap:1px;flex:none;}
+.rvmain{display:flex;gap:10px;margin-top:9px;}
+.rvtx{margin:0;flex:1;min-width:0;font-size:13px;line-height:1.62;letter-spacing:-.03em;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.rvtx b{font-weight:700;}
+.rvmain .ph{width:72px;height:72px;}
+.rvprod{display:flex;align-items:center;gap:8px;margin-top:11px;width:100%;border:1px solid var(--line2);border-radius:8px;background:transparent;padding:8px 11px;cursor:pointer;text-align:left;}
+.rvprod .nm{flex:1;min-width:0;font-size:12.5px;letter-spacing:-.03em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.rvprod .th{width:26px;height:32px;flex:none;display:grid;place-items:center;}
+.rvprod .chev{color:var(--faint);flex:none;}
+
+.screen[data-screen="results"] .totop{bottom:26px;}
+.rend{height:26px;}
+
+
+/* ---------- 검색 결과 · 쇼핑상품 탭 ---------- */
+.fchips{display:flex;gap:7px;overflow-x:auto;padding:14px 16px 0;}
+.fchips::-webkit-scrollbar{height:0;}
+.fchip{flex:none;display:flex;align-items:center;gap:4px;border:1px solid var(--line2);background:var(--bg);border-radius:18px;padding:8px 14px;font-size:13px;letter-spacing:-.03em;color:var(--ink);cursor:pointer;white-space:nowrap;}
+.fchip[aria-pressed="true"]{background:#2B2F36;border-color:#2B2F36;color:#fff;font-weight:700;}
+.fchip .cv{color:var(--faint);flex:none;}
+.fchip[aria-pressed="true"] .cv{color:rgba(255,255,255,.7);}
+
+.cntbar{display:flex;align-items:center;padding:18px 16px 12px;}
+.cntbar b{flex:1;font-size:13.5px;font-weight:700;letter-spacing:-.03em;font-variant-numeric:tabular-nums;}
+.sortbtn{display:flex;align-items:center;gap:5px;border:0;background:transparent;padding:0;font-size:13px;letter-spacing:-.03em;color:var(--ink);cursor:pointer;flex:none;}
+
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:24px 14px;padding:0 16px;}
+.scard{display:flex;flex-direction:column;min-width:0;border:0;background:transparent;padding:0;cursor:pointer;text-align:left;}
+.simg{width:100%;aspect-ratio:1/1;border-radius:10px;flex:none;}
+.sname{font-size:13px;line-height:1.46;letter-spacing:-.03em;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.sname em{font-style:normal;color:var(--faint);}
+.srate{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--faint);font-variant-numeric:tabular-nums;margin-top:6px;}
+.srate b{font-weight:700;color:var(--ink);}
+.scard .swas{margin-top:5px;font-size:12px;}
+.scard .spr .pc,.scard .spr .am{font-size:15px;}
+.scard .spt{margin-top:4px;font-size:11.5px;}
+.scard .spt .p{width:14px;height:14px;font-size:8.5px;}
+.sopt{display:flex;align-items:center;gap:7px;margin-top:10px;background:var(--sub);border-radius:8px;padding:7px 9px;font-size:12.5px;letter-spacing:-.03em;}
+.sopt .ph{width:22px;height:22px;border-radius:5px;flex:none;}
+.sopt .cv{margin-left:auto;color:var(--mid);flex:none;}
+
+
+/* 제품 탭 : 적립 필터 칩 · 행 브랜드명 */
+.fchip .pi{width:15px;height:15px;border-radius:8px;background:#F5A623;color:#fff;font-size:9.5px;font-weight:800;font-style:normal;display:grid;place-items:center;flex:none;}
+.pnm em{font-style:normal;color:var(--faint);}
+
 /* ===== 목업 없음 : 앱 화면만. 큰 화면에서는 최대 폰 폭(430px)으로 가운데 정렬 ===== */
 .studio{min-height:100vh;min-height:100dvh;padding:0;display:flex;justify-content:center;place-items:initial;background:var(--studio-bg);}
 .deviceframe{width:100%;max-width:430px;padding:0;border-radius:0;background:none;box-shadow:none;transform:none;margin:0;}
@@ -491,11 +606,328 @@ body{margin:0;background:var(--studio-bg);font-family:var(--ui);-webkit-font-smo
   <symbol id="i-thumbup" viewBox="0 0 16 16" fill="currentColor"><path d="M2.6 7.2h2.6v7.3H2.6a.9.9 0 0 1-.9-.9V8.1a.9.9 0 0 1 .9-.9z"/><path d="M6.4 7.4l2.5-4.9a1.5 1.5 0 0 1 2.8.7c0 .2 0 .4-.1.6l-.7 2.1h2.3a1.4 1.4 0 0 1 1.36 1.74l-1.15 4.8a1.4 1.4 0 0 1-1.36 1.06H6.4z"/></symbol>
   <symbol id="i-thumbdown" viewBox="0 0 16 16" fill="currentColor"><path d="M2.6 1.5h2.6v7.3H2.6a.9.9 0 0 1-.9-.9V2.4a.9.9 0 0 1 .9-.9z"/><path d="M6.4 8.6l2.5 4.9a1.5 1.5 0 0 0 2.8-.7c0-.2 0-.4-.1-.6l-.7-2.1h2.3a1.4 1.4 0 0 0 1.36-1.74l-1.15-4.8A1.4 1.4 0 0 0 12.15 1.5H6.4z"/></symbol>
   <symbol id="i-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3.6 9.8h16.8v3H3.6zM5 12.8h14v7.6H5zM12 9.8v10.6"/><path d="M12 9.8S9.8 9.8 8.7 8.8a1.9 1.9 0 1 1 2.8-2.4C12.4 7.2 12 9.8 12 9.8zM12 9.8s2.2 0 3.3-1a1.9 1.9 0 1 0-2.8-2.4C11.6 7.2 12 9.8 12 9.8z"/></symbol>
+  <symbol id="i-sort" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16m-3.3-3.5L7 20l3.3-3.5"/><path d="M17 20V4m-3.3 3.5L17 4l3.3 3.5"/></symbol>
+  <symbol id="i-truck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.6 6.6h10.6v9.4H2.6z"/><path d="M13.2 9.6h4l3.2 3.1V16h-7.2z"/><circle cx="7" cy="17.9" r="1.9"/><circle cx="17.2" cy="17.9" r="1.9"/></symbol>
 </svg>
 
 <div class="studio">
   <div class="deviceframe">
     <div class="viewport">
+
+      <section class="screen" data-screen="results">
+        <div class="statusbar">
+          <span class="clock">4:26</span><div class="island"></div>
+          <div class="statusicons"><svg width="18" height="12"><use href="#i-cell"/></svg><span class="g5">5G</span><svg width="26" height="13"><use href="#i-batt"/></svg></div>
+        </div>
+
+        <div class="shead">
+          <button class="iconbtn" aria-label="뒤로"><svg width="23" height="23"><use href="#i-back"/></svg></button>
+          <button class="iconbtn" aria-label="홈"><svg width="23" height="23"><use href="#i-houseline"/></svg></button>
+          <button class="sfield"><span class="q">클렌징 오일</span><svg class="sic" width="21" height="21"><use href="#i-search"/></svg></button>
+        </div>
+
+        <div class="stabs" role="tablist" aria-label="검색 결과 분류">
+          <button class="stab" role="tab" aria-selected="true" data-spane="all">전체</button>
+          <button class="stab" role="tab" aria-selected="false" data-spane="shop">쇼핑상품</button>
+          <button class="stab" role="tab" aria-selected="false" data-spane="prod">제품</button>
+          <button class="stab" role="tab" aria-selected="false" data-spane="rev">리뷰</button>
+        </div>
+
+        <div class="scroll">
+      <div class="pane is-active" data-spane="all">
+        <button class="rankbar">
+          <span class="lab">카테고리 랭킹 ·</span><b>클렌징 오일</b><svg class="chev" width="13" height="13"><use href="#i-chev"/></svg>
+          <span class="medal"><svg width="26" height="32" viewBox="0 0 26 32" aria-hidden="true"><path d="M3.6 0h6.2l3.6 11.4-6.2 2.8z" fill="#F7C948"/><path d="M22.4 0h-6.2L12.6 11.4l6.2 2.8z" fill="#E0A014"/><circle cx="13" cy="21.4" r="10.2" fill="#F7C948"/><circle cx="13" cy="21.4" r="7.6" fill="#FFDE84"/></svg><em>2</em></span>
+        </button>
+        <button class="ssechead"><h3>쇼핑상품</h3><svg class="chev" width="17" height="17"><use href="#i-chev"/></svg></button>
+        <div class="shopscroll">
+          <button class="shopcard" data-go-detail>
+            <span class="shopimg ph"></span>
+            <span class="onlyb">only화해</span>
+            <span class="scname">유리피부 [only화해] 그란떼 클렌징 오일 500ml 대용량 기획</span>
+            <span class="swas"><em>한정특가</em> <s>43,000원</s></span>
+            <span class="spr"><span class="pc">49%</span><span class="am">21,900원</span><span class="free"><svg width="10" height="10"><use href="#i-truck"/></svg>무료</span></span>
+            <span class="spt"><i class="p">P</i>최대 3,290P</span>
+          </button>
+          <button class="shopcard" data-go-detail>
+            <span class="shopimg ph"></span>
+            <span class="onlyb">only화해</span>
+            <span class="scname">비플레인 [only화해] 녹두 클렌징 오일 200ml+50ml 기획</span>
+            <span class="swas"><em>한정특가</em> <s>29,000원</s></span>
+            <span class="spr"><span class="pc">38%</span><span class="am">17,900원</span></span>
+            <span class="spt"><i class="p">P</i>최대 2,890P</span>
+          </button>
+          <button class="shopcard" data-go-detail>
+            <span class="shopimg ph"></span>
+            <span class="onlyb">only화해</span>
+            <span class="scname">에스네이처 [only화해] 아쿠아 라이스 약산성 클렌징폼 160ml 기획</span>
+            <span class="swas"><s>31,000원</s></span>
+            <span class="spr"><span class="pc">36%</span><span class="am">19,900원</span></span>
+            <span class="spt"><i class="p">P</i>최대 3,090P</span>
+          </button>
+        </div>
+        <div class="ssechead">
+          <h3>제품</h3>
+          <button class="newf"><i class="nb">N</i>성분 맞춤 필터가 생겼어요<svg class="chev" width="12" height="12"><use href="#i-chev"/></svg></button>
+        </div>
+        <div class="prodlist">
+            <button class="prodrow" data-go-detail>
+              <span class="pthumb"><span class="ph" style="width:52px;height:66px;border-radius:7px"></span></span>
+              <span class="pinfo">
+                <span class="pnm"><em>비플레인</em> 녹두 클렌징 오일</span>
+                <span class="prate"><svg width="12" height="12"><use href="#i-star"/></svg><b>4.65</b> (13,841)</span>
+                <span class="ppr"><span class="pc">38%</span><span class="am">17,900원</span><span class="vol">/ 200ml+50ml</span></span>
+              <span class="ppt"><i class="p">P</i>최대 2,890P</span>
+              </span>
+            </button>
+            <button class="prodrow" data-go-detail>
+              <span class="pthumb"><span class="ph" style="width:52px;height:66px;border-radius:7px"></span></span>
+              <span class="pinfo">
+                <span class="pnm"><em>유리피부</em> 그란떼 데일리 클렌징 오일</span>
+                <span class="prate"><svg width="12" height="12"><use href="#i-star"/></svg><b>4.54</b> (17,558)</span>
+                <span class="ppr"><span class="pc">50%</span><span class="am">18,900원</span><span class="vol">/ 300ml</span></span>
+              <span class="ppt"><i class="p">P</i>최대 2,045P</span>
+              </span>
+            </button>
+            <button class="prodrow" data-go-detail>
+              <span class="pthumb"><span class="ph" style="width:52px;height:66px;border-radius:7px"></span></span>
+              <span class="pinfo">
+                <span class="pnm"><em>마녀공장</em> 퓨어 소이빈 클렌징 오일</span>
+                <span class="prate"><svg width="12" height="12"><use href="#i-star"/></svg><b>4.40</b> (23,998)</span>
+                <span class="ppr"><span class="lb">정가</span><span class="am">25,000원</span><span class="vol">/ 200ml</span></span>
+              </span>
+            </button>
+            <button class="prodrow" data-go-detail>
+              <span class="pthumb"><span class="ph" style="width:52px;height:66px;border-radius:7px"></span></span>
+              <span class="pinfo">
+                <span class="pnm"><em>프리메이</em> 리얼 딥 클렌징오일</span>
+                <span class="prate"><svg width="12" height="12"><use href="#i-star"/></svg><b>4.60</b> (2,474)</span>
+                <span class="ppr"><span class="pc">65%</span><span class="am">12,500원</span><span class="vol">/ 330ml</span></span>
+              <span class="ppt"><i class="p">P</i>최대 1,725P</span>
+              </span>
+            </button>
+            <button class="prodrow" data-go-detail>
+              <span class="pthumb"><span class="ph" style="width:52px;height:66px;border-radius:7px"></span></span>
+              <span class="pinfo">
+                <span class="pnm"><em>아이레시피</em> 세라마이드 유자 바이오 클렌징 오일</span>
+                <span class="prate"><svg width="12" height="12"><use href="#i-star"/></svg><b>4.58</b> (2,508)</span>
+                <span class="ppr"><span class="pc">36%</span><span class="am">17,900원</span><span class="vol">/ 200ml + 20ml + 20ml</span></span>
+              <span class="ppt"><i class="p">P</i>최대 2,890P</span>
+              </span>
+            </button>
+        </div>
+        <button class="allbtn">2,641개의 제품 전체보기<svg class="chev" width="13" height="13"><use href="#i-chev"/></svg></button>
+        <button class="ssechead"><h3>리뷰</h3><svg class="chev" width="17" height="17"><use href="#i-chev"/></svg></button>
+        <div class="rvlist">
+            <div class="rvit">
+              <span class="rvwho">20대/수부지/겨울쿨톤</span>
+              <span class="rvline"><span class="sts"><svg width="11" height="11"><use href="#i-star"/></svg><svg width="11" height="11"><use href="#i-star"/></svg><svg width="11" height="11"><use href="#i-star"/></svg><svg width="11" height="11"><use href="#i-star"/></svg><svg width="11" height="11"><use href="#i-star"/></svg></span>쑤*** · 2022.02.12</span>
+              <div class="rvmain"><p class="rvtx">제가 데일리로 사용하는 <b>클렌징 오일</b>이 비플레인 녹두 <b>클렌징 오일</b>이고 블랙헤드 제거용으로 사용하는 <b>클렌징 오일</b>이 메이크프렘 세이프 미 릴리프 모이스처 <b>클렌징 오일</b>이에요 데일리</p></div>
+              <button class="rvprod" data-go-detail><span class="nm">비플레인 녹두 클렌징 오일</span><span class="th"><span class="ph" style="width:22px;height:28px;border-radius:4px"></span></span><svg class="chev" width="13" height="13"><use href="#i-chev"/></svg></button>
+            </div>
+            <div class="rvit">
+              <span class="rvwho">30대/복합성/잘 모르겠어요</span>
+              <span class="rvline"><span class="sts"><svg width="11" height="11"><use href="#i-star"/></svg><svg width="11" height="11"><use href="#i-star"/></svg><svg width="11" height="11"><use href="#i-star"/></svg><svg width="11" height="11"><use href="#i-star"/></svg><svg width="11" height="11"><use href="#i-star"/></svg></span>장*** · 2025.10.12</span>
+              <div class="rvmain"><p class="rvtx">비플레인 녹두 <b>클렌징 오일</b>은 피지 각질제거를 질 해주어요 비플레인 녹두 <b>클렌징 오일</b>은 여느 <b>클렌징 오일</b>과 마찬가지로 비슷해요</p><span class="ph"></span></div>
+              <button class="rvprod" data-go-detail><span class="nm">비플레인 녹두 클렌징 오일</span><span class="th"><span class="ph" style="width:22px;height:28px;border-radius:4px"></span></span><svg class="chev" width="13" height="13"><use href="#i-chev"/></svg></button>
+            </div>
+            <div class="rvit">
+              <span class="rvwho">30대/복합성</span>
+              <span class="rvline"><span class="sts"><svg width="11" height="11"><use href="#i-star"/></svg><svg width="11" height="11"><use href="#i-star"/></svg><svg width="11" height="11"><use href="#i-star"/></svg><svg width="11" height="11"><use href="#i-star"/></svg><svg width="11" height="11"><use href="#i-star"/></svg></span>주*** · 2020.06.09</span>
+              <div class="rvmain"><p class="rvtx"><b>클렌징 오일</b> 11 버블폼 총 3개의 제품을 29000원으로 구매했습니다 제형을 다른 <b>클렌징 오일</b>과 비슷하고 평범하나 쓰기 좋은 <b>클렌징 오일</b>입니다 여러…</p><span class="ph"></span></div>
+              <button class="rvprod" data-go-detail><span class="nm">유리피부 그란떼 데일리 클렌징 오일</span><span class="th"><span class="ph" style="width:22px;height:28px;border-radius:4px"></span></span><svg class="chev" width="13" height="13"><use href="#i-chev"/></svg></button>
+            </div>
+        </div>
+        <button class="allbtn">306,180개의 리뷰 전체보기<svg class="chev" width="13" height="13"><use href="#i-chev"/></svg></button>
+        <div class="rend"></div>
+      </div>
+      <div class="pane" data-spane="shop">
+        <div class="fchips">
+          <button class="fchip" aria-pressed="false" data-ftoggle>샘플체험</button>
+          <button class="fchip" aria-pressed="false" data-ftoggle>only화해</button>
+          <button class="fchip">혜택<svg class="cv" width="11" height="11"><use href="#i-chevd"/></svg></button>
+          <button class="fchip">가격<svg class="cv" width="11" height="11"><use href="#i-chevd"/></svg></button>
+        </div>
+        <div class="cntbar">
+          <b>2,719개의 쇼핑상품</b>
+          <button class="sortbtn"><svg width="14" height="14"><use href="#i-sort"/></svg>추천순</button>
+        </div>
+        <div class="sgrid">
+          <button class="scard" data-go-detail>
+            <span class="simg ph"></span>
+            <span class="onlyb">only화해</span>
+            <span class="sname"><em>유리피부</em> [only화해] 그란떼 클렌징 오일 500ml 대용량(+그란떼 오일 30ml 증정)</span>
+            <span class="srate"><svg width="12" height="12"><use href="#i-star"/></svg><b>4.54</b> (17,558)</span>
+            <span class="swas"><em>한정특가</em> <s>43,000원</s></span>
+            <span class="spr"><span class="pc">49%</span><span class="am">21,900원</span><span class="free"><svg width="10" height="10"><use href="#i-truck"/></svg>무료</span></span>
+            <span class="spt"><i class="p">P</i>최대 3,290P</span>
+            <span class="sopt"><span class="ph"></span>상품 옵션 2<svg class="cv" width="11" height="11"><use href="#i-chevd"/></svg></span>
+          </button>
+          <button class="scard" data-go-detail>
+            <span class="simg ph"></span>
+            <span class="onlyb">only화해</span>
+            <span class="sname"><em>비플레인</em> [only화해] 녹두 클렌징 오일 200ml+50ml 기획</span>
+            <span class="srate"><svg width="12" height="12"><use href="#i-star"/></svg><b>4.65</b> (13,841)</span>
+            <span class="swas"><em>한정특가</em> <s>29,000원</s></span>
+            <span class="spr"><span class="pc">38%</span><span class="am">17,900원</span></span>
+            <span class="spt"><i class="p">P</i>최대 2,890P</span>
+            <span class="sopt"><span class="ph"></span>상품 옵션 1<svg class="cv" width="11" height="11"><use href="#i-chevd"/></svg></span>
+          </button>
+          <button class="scard" data-go-detail>
+            <span class="simg ph"></span>
+            <span class="onlyb">only화해</span>
+            <span class="sname"><em>에스네이처</em> [only화해] 아쿠아 라이스 약산성 클렌징폼 160ml 기획</span>
+            <span class="srate"><svg width="12" height="12"><use href="#i-star"/></svg><b>4.71</b> (7,833)</span>
+            <span class="swas"><s>31,000원</s></span>
+            <span class="spr"><span class="pc">36%</span><span class="am">19,900원</span></span>
+            <span class="spt"><i class="p">P</i>최대 3,090P</span>
+            <span class="sopt"><span class="ph"></span>상품 옵션 7<svg class="cv" width="11" height="11"><use href="#i-chevd"/></svg></span>
+          </button>
+          <button class="scard" data-go-detail>
+            <span class="simg ph"></span>
+            <span class="onlyb">only화해</span>
+            <span class="sname"><em>아이레시피</em> [only화해] 세라마이드 유자바이오 클렌징 오일 200ml</span>
+            <span class="srate"><svg width="12" height="12"><use href="#i-star"/></svg><b>4.58</b> (2,508)</span>
+            <span class="swas"><s>28,000원</s></span>
+            <span class="spr"><span class="pc">36%</span><span class="am">17,900원</span></span>
+            <span class="spt"><i class="p">P</i>최대 2,890P</span>
+            <span class="sopt"><span class="ph"></span>상품 옵션 2<svg class="cv" width="11" height="11"><use href="#i-chevd"/></svg></span>
+          </button>
+          <button class="scard" data-go-detail>
+            <span class="simg ph"></span>
+            <span class="sname"><em>프리메이</em> 비건 리얼 딥 클렌징오일 330ml</span>
+            <span class="srate"><svg width="12" height="12"><use href="#i-star"/></svg><b>4.60</b> (2,474)</span>
+            <span class="swas"><s>36,000원</s></span>
+            <span class="spr"><span class="pc">65%</span><span class="am">12,500원</span></span>
+            <span class="spt"><i class="p">P</i>최대 1,725P</span>
+            <span class="sopt"><span class="ph"></span>상품 옵션 2<svg class="cv" width="11" height="11"><use href="#i-chevd"/></svg></span>
+          </button>
+          <button class="scard" data-go-detail>
+            <span class="simg ph"></span>
+            <span class="sname"><em>에이트루</em> 오리진 퓨어 밸런싱 클렌징 오일 300ml</span>
+            <span class="srate"><svg width="12" height="12"><use href="#i-star"/></svg><b>4.38</b> (17,169)</span>
+            <span class="swas"><em>한정특가</em> <s>46,000원</s></span>
+            <span class="spr"><span class="pc">54%</span><span class="am">20,900원</span><span class="free"><svg width="10" height="10"><use href="#i-truck"/></svg>무료</span></span>
+            <span class="spt"><i class="p">P</i>최대 2,145P</span>
+            <span class="sopt"><span class="ph"></span>상품 옵션 2<svg class="cv" width="11" height="11"><use href="#i-chevd"/></svg></span>
+          </button>
+        </div>
+        <div class="rend"></div>
+      </div>
+      <div class="pane" data-spane="prod">
+        <div class="fchips">
+          <button class="fchip" aria-pressed="false" data-ftoggle><i class="pi">P</i>적립가능</button>
+          <button class="fchip">카테고리<svg class="cv" width="11" height="11"><use href="#i-chevd"/></svg></button>
+          <button class="fchip">브랜드<svg class="cv" width="11" height="11"><use href="#i-chevd"/></svg></button>
+          <button class="fchip">마이 성분<svg class="cv" width="11" height="11"><use href="#i-chevd"/></svg></button>
+        </div>
+        <div class="cntbar">
+          <b>2,641개의 제품</b>
+          <button class="sortbtn"><svg width="14" height="14"><use href="#i-sort"/></svg>추천순</button>
+        </div>
+        <div class="prodlist">
+            <button class="prodrow" data-go-detail>
+              <span class="pthumb"><span class="ph" style="width:52px;height:66px;border-radius:7px"></span></span>
+              <span class="pinfo">
+                <span class="pnm"><em>비플레인</em> 녹두 클렌징 오일</span>
+                <span class="prate"><svg width="12" height="12"><use href="#i-star"/></svg><b>4.65</b> (13,841)</span>
+                <span class="ppr"><span class="pc">38%</span><span class="am">17,900원</span><span class="vol">/ 200ml+50ml</span></span>
+                <span class="ppt"><i class="p">P</i>최대 2,890P</span>
+              </span>
+            </button>
+            <button class="prodrow" data-go-detail>
+              <span class="pthumb"><span class="ph" style="width:52px;height:66px;border-radius:7px"></span></span>
+              <span class="pinfo">
+                <span class="pnm"><em>유리피부</em> 그란떼 데일리 클렌징 오일</span>
+                <span class="prate"><svg width="12" height="12"><use href="#i-star"/></svg><b>4.54</b> (17,558)</span>
+                <span class="ppr"><span class="pc">50%</span><span class="am">18,900원</span><span class="vol">/ 300ml</span></span>
+                <span class="ppt"><i class="p">P</i>최대 2,045P</span>
+              </span>
+            </button>
+            <button class="prodrow" data-go-detail>
+              <span class="pthumb"><span class="ph" style="width:52px;height:66px;border-radius:7px"></span></span>
+              <span class="pinfo">
+                <span class="pnm"><em>마녀공장</em> 퓨어 소이빈 클렌징 오일</span>
+                <span class="prate"><svg width="12" height="12"><use href="#i-star"/></svg><b>4.40</b> (23,998)</span>
+                <span class="ppr"><span class="lb">정가</span><span class="am">25,000원</span><span class="vol">/ 200ml</span></span>
+              </span>
+            </button>
+            <button class="prodrow" data-go-detail>
+              <span class="pthumb"><span class="ph" style="width:52px;height:66px;border-radius:7px"></span></span>
+              <span class="pinfo">
+                <span class="pnm"><em>프리메이</em> 리얼 딥 클렌징오일</span>
+                <span class="prate"><svg width="12" height="12"><use href="#i-star"/></svg><b>4.60</b> (2,474)</span>
+                <span class="ppr"><span class="pc">65%</span><span class="am">12,500원</span><span class="vol">/ 330ml</span></span>
+                <span class="ppt"><i class="p">P</i>최대 1,725P</span>
+              </span>
+            </button>
+            <button class="prodrow" data-go-detail>
+              <span class="pthumb"><span class="ph" style="width:52px;height:66px;border-radius:7px"></span></span>
+              <span class="pinfo">
+                <span class="pnm"><em>아이레시피</em> 세라마이드 유자 바이오 클렌징 오일</span>
+                <span class="prate"><svg width="12" height="12"><use href="#i-star"/></svg><b>4.58</b> (2,508)</span>
+                <span class="ppr"><span class="pc">36%</span><span class="am">17,900원</span><span class="vol">/ 200ml + 20ml + 20ml</span></span>
+                <span class="ppt"><i class="p">P</i>최대 2,890P</span>
+              </span>
+            </button>
+            <button class="prodrow" data-go-detail>
+              <span class="pthumb"><span class="ph" style="width:52px;height:66px;border-radius:7px"></span></span>
+              <span class="pinfo">
+                <span class="pnm"><em>에스네이처</em> 아쿠아 라이스클렌징오일</span>
+                <span class="prate"><svg width="12" height="12"><use href="#i-star"/></svg><b>4.65</b> (2,234)</span>
+                <span class="ppr"><span class="pc">25%</span><span class="am">17,900원</span><span class="vol">/ 200ml</span></span>
+                <span class="ppt"><i class="p">P</i>최대 1,995P</span>
+              </span>
+            </button>
+            <button class="prodrow" data-go-detail>
+              <span class="pthumb"><span class="ph" style="width:52px;height:66px;border-radius:7px"></span></span>
+              <span class="pinfo">
+                <span class="pnm"><em>아누아</em> 어성초 포어 컨트롤 클렌징오일</span>
+                <span class="prate"><svg width="12" height="12"><use href="#i-star"/></svg><b>4.27</b> (1,474)</span>
+                <span class="ppr"><span class="pc">27%</span><span class="am">16,000원</span><span class="vol">/ 200ml</span></span>
+                <span class="ppt"><i class="p">P</i>최대 1,900P</span>
+              </span>
+            </button>
+            <button class="prodrow" data-go-detail>
+              <span class="pthumb"><span class="ph" style="width:52px;height:66px;border-radius:7px"></span></span>
+              <span class="pinfo">
+                <span class="pnm"><em>마녀공장</em> 퓨어 클렌징 오일 딥 클린</span>
+                <span class="prate"><svg width="12" height="12"><use href="#i-star"/></svg><b>4.70</b> (1,076)</span>
+                <span class="ppr"><span class="lb">정가</span><span class="am">29,000원</span><span class="vol">/ 200ml</span></span>
+              </span>
+            </button>
+        </div>
+        <div class="rend"></div>
+      </div>
+      <div class="pane" data-spane="rev">
+        <div class="rvlist" style="padding-top:16px">
+            <div class="rvit">
+              <span class="rvwho">20대/수부지/겨울쿨톤</span>
+              <span class="rvline"><span class="sts"><svg width="11" height="11"><use href="#i-star"/></svg><svg width="11" height="11"><use href="#i-star"/></svg><svg width="11" height="11"><use href="#i-star"/></svg><svg width="11" height="11"><use href="#i-star"/></svg><svg width="11" height="11"><use href="#i-star"/></svg></span>쑤*** · 2022.02.12</span>
+              <div class="rvmain"><p class="rvtx">제가 데일리로 사용하는 <b>클렌징 오일</b>이 비플레인 녹두 <b>클렌징 오일</b>이고 블랙헤드 제거용으로 사용하는 <b>클렌징 오일</b>이 메이크프렘 세이프 미 릴리프 모이스처 <b>클렌징 오일</b>이에요 데일리</p></div>
+              <button class="rvprod" data-go-detail><span class="nm">비플레인 녹두 클렌징 오일</span><span class="th"><span class="ph" style="width:22px;height:28px;border-radius:4px"></span></span><svg class="chev" width="13" height="13"><use href="#i-chev"/></svg></button>
+            </div>
+            <div class="rvit">
+              <span class="rvwho">30대/복합성/잘 모르겠어요</span>
+              <span class="rvline"><span class="sts"><svg width="11" height="11"><use href="#i-star"/></svg><svg width="11" height="11"><use href="#i-star"/></svg><svg width="11" height="11"><use href="#i-star"/></svg><svg width="11" height="11"><use href="#i-star"/></svg><svg width="11" height="11"><use href="#i-star"/></svg></span>장*** · 2025.10.12</span>
+              <div class="rvmain"><p class="rvtx">비플레인 녹두 <b>클렌징 오일</b>은 피지 각질제거를 질 해주어요 비플레인 녹두 <b>클렌징 오일</b>은 여느 <b>클렌징 오일</b>과 마찬가지로 비슷해요</p><span class="ph"></span></div>
+              <button class="rvprod" data-go-detail><span class="nm">비플레인 녹두 클렌징 오일</span><span class="th"><span class="ph" style="width:22px;height:28px;border-radius:4px"></span></span><svg class="chev" width="13" height="13"><use href="#i-chev"/></svg></button>
+            </div>
+            <div class="rvit">
+              <span class="rvwho">30대/복합성</span>
+              <span class="rvline"><span class="sts"><svg width="11" height="11"><use href="#i-star"/></svg><svg width="11" height="11"><use href="#i-star"/></svg><svg width="11" height="11"><use href="#i-star"/></svg><svg width="11" height="11"><use href="#i-star"/></svg><svg width="11" height="11"><use href="#i-star"/></svg></span>주*** · 2020.06.09</span>
+              <div class="rvmain"><p class="rvtx"><b>클렌징 오일</b> 11 버블폼 총 3개의 제품을 29000원으로 구매했습니다 제형을 다른 <b>클렌징 오일</b>과 비슷하고 평범하나 쓰기 좋은 <b>클렌징 오일</b>입니다 여러…</p><span class="ph"></span></div>
+              <button class="rvprod" data-go-detail><span class="nm">유리피부 그란떼 데일리 클렌징 오일</span><span class="th"><span class="ph" style="width:22px;height:28px;border-radius:4px"></span></span><svg class="chev" width="13" height="13"><use href="#i-chev"/></svg></button>
+            </div>
+        </div>
+        <button class="allbtn">306,180개의 리뷰 전체보기<svg class="chev" width="13" height="13"><use href="#i-chev"/></svg></button>
+        <div class="rend"></div>
+      </div>
+        </div>
+
+        <button class="totop" aria-label="맨 위로" data-totop><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+        <div class="homebar"><i></i></div>
+      </section>
 
       <section class="screen is-active" data-screen="detail">
         <div class="statusbar">
@@ -504,7 +936,7 @@ body{margin:0;background:var(--studio-bg);font-family:var(--ui);-webkit-font-smo
         </div>
 
         <div class="dhead">
-          <button class="iconbtn" aria-label="뒤로"><svg width="23" height="23"><use href="#i-back"/></svg></button>
+          <button class="iconbtn" aria-label="뒤로" data-go-results><svg width="23" height="23"><use href="#i-back"/></svg></button>
           <button class="iconbtn" aria-label="홈"><svg width="23" height="23"><use href="#i-houseline"/></svg></button>
           <span class="spacer"></span>
           <button class="iconbtn" aria-label="공유"><svg width="22" height="22"><use href="#i-share"/></svg></button>
@@ -1135,6 +1567,23 @@ body{margin:0;background:var(--studio-bg);font-family:var(--ui);-webkit-font-smo
     if((t = e.target.closest('.ichip'))){
       t.closest('.ichips').querySelectorAll('.ichip').forEach(function(c){ c.setAttribute('aria-pressed','false'); });
       t.setAttribute('aria-pressed','true');
+      return;
+    }
+    if((t = e.target.closest('.stab'))){
+      var ssc = t.closest('.screen');
+      ssc.querySelectorAll('.stab').forEach(function(x){ x.setAttribute('aria-selected', String(x === t)); });
+      ssc.querySelectorAll('[data-spane]').forEach(function(p){ if(p.classList.contains('pane')){ p.classList.toggle('is-active', p.dataset.spane === t.dataset.spane); } });
+      ssc.querySelector('.scroll').scrollTop = 0;
+      return;
+    }
+    if((t = e.target.closest('[data-totop]'))){
+      var tsc = t.closest('.screen').querySelector('.scroll');
+      if(tsc){ tsc.scrollTo({top:0, behavior:'smooth'}); }
+      return;
+    }
+    if((t = e.target.closest('[data-go-results]'))){ show('results'); return; }
+    if((t = e.target.closest('[data-ftoggle]'))){
+      t.setAttribute('aria-pressed', t.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
       return;
     }
     if((t = e.target.closest('[data-toggle-heart], [data-toggle-zzim]'))){
