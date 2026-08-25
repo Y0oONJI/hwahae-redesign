@@ -33,6 +33,27 @@
   m.mazeUniversalSnippetApiKey = e;
 })(window, document, 'https://snippet.maze.co/maze-universal-loader.js', 'f54cb29c-c1f2-415a-b30c-5936397b42e8');
 </script>
+<!-- URL 라우팅 (Maze 경로 추적용).
+     Maze 스니펫은 '페이지 로드 시점의 새 URL'로만 스텝을 기록한다. 클래스 토글로
+     화면을 바꾸면 URL이 그대로라 경로가 안 잡히므로, 화면/탭마다 ?s= 값을 주고
+     전환할 때 실제로 페이지를 다시 불러온다.
+     이 스크립트는 head 에서 돌아 첫 페인트 전에 <html> 에 상태를 박는다 (화면 깜빡임 방지). -->
+<script>
+(function(){
+  var R = {
+    'detail':'detail|info', 'detail-rev':'detail|rev',
+    'results':'results|all', 'results-shop':'results|shop',
+    'results-prod':'results|prod', 'results-rev':'results|rev',
+    'ing':'ing|comp', 'ing-purp':'ing|purp', 'ing-skin':'ing|skin'
+  };
+  var m = location.search.match(/[?&]s=([^&]*)/);
+  var key = m ? decodeURIComponent(m[1]) : 'detail';
+  var v = (R[key] || R['detail']).split('|');
+  var d = document.documentElement;
+  d.setAttribute('data-scr', v[0]);
+  d.setAttribute('data-tab', v[1]);
+})();
+</script>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <title>[UT 무채색] 화해 원본 UI — 제품 상세</title>
@@ -614,6 +635,26 @@ body{margin:0;background:var(--studio-bg);font-family:var(--ui);-webkit-font-smo
 /* 제품 탭 : 적립 필터 칩 · 행 브랜드명 */
 .fchip .pi{width:15px;height:15px;border-radius:8px;background:#8A8A8A;color:#fff;font-size:9.5px;font-weight:800;font-style:normal;display:grid;place-items:center;flex:none;}
 .pnm em{font-style:normal;color:var(--faint);}
+
+
+/* ---------- URL 라우팅 (?s=) ----------
+   head 스크립트가 <html data-scr data-tab> 을 채우면 그 값이 .is-active 를 이긴다.
+   스크립트가 안 돌면 속성이 없으므로 기존 .is-active 동작으로 그대로 폴백된다. */
+:root[data-scr] .screen{display:none;}
+:root[data-scr="detail"]  .screen[data-screen="detail"],
+:root[data-scr="results"] .screen[data-screen="results"],
+:root[data-scr="ing"]     .screen[data-screen="ing"]{display:flex;}
+
+:root[data-tab] .pane{display:none;}
+:root[data-tab="info"] .pane[data-pane="info"],
+:root[data-tab="rev"]  .pane[data-pane="rev"],
+:root[data-tab="all"]  .pane[data-spane="all"],
+:root[data-tab="shop"] .pane[data-spane="shop"],
+:root[data-tab="prod"] .pane[data-spane="prod"],
+:root[data-tab="rev"]  .pane[data-spane="rev"],
+:root[data-tab="comp"] .pane[data-ipane="comp"],
+:root[data-tab="purp"] .pane[data-ipane="purp"],
+:root[data-tab="skin"] .pane[data-ipane="skin"]{display:block;}
 
 /* ===== 목업 없음 : 앱 화면만. 큰 화면에서는 최대 폰 폭(430px)으로 가운데 정렬 ===== */
 .studio{min-height:100vh;min-height:100dvh;padding:0;display:flex;justify-content:center;place-items:initial;background:var(--studio-bg);}
@@ -1589,11 +1630,18 @@ body{margin:0;background:var(--studio-bg);font-family:var(--ui);-webkit-font-smo
 
 <script>
 (function(){
-  function show(id){
-    document.querySelectorAll('.screen').forEach(function(s){ s.classList.toggle('is-active', s.dataset.screen === id); });
-    var sc = document.querySelector('.screen.is-active .scroll'); if(sc){ sc.scrollTop = 0; }
-    var fw = document.querySelector('[data-fitwrap]'); if(fw){ fw.classList.remove('is-open'); }
-  }
+  /* 화면 전환 = 진짜 페이지 이동. 이래야 Maze 가 스텝으로 기록한다. */
+  function show(id){ location.assign(location.pathname + '?s=' + id); }
+
+  /* 부팅 시 탭 선택 표시를 URL 에 맞춘다 (화면/패널 자체는 CSS 가 이미 처리했다). */
+  (function(){
+    var tab = document.documentElement.getAttribute('data-tab');
+    if(!tab){ return; }
+    document.querySelectorAll('.dtab, .stab, .itab').forEach(function(x){
+      var k = x.dataset.pane || x.dataset.spane || x.dataset.ipane;
+      x.setAttribute('aria-selected', String(k === tab));
+    });
+  })();
   var stick = document.querySelector('[data-fit]');
   var dsc = document.querySelector('[data-screen="detail"] .scroll');
   if(stick && dsc){
@@ -1610,10 +1658,7 @@ body{margin:0;background:var(--studio-bg);font-family:var(--ui);-webkit-font-smo
   document.addEventListener('click', function(e){
     var t;
     if((t = e.target.closest('.dtab'))){
-      var scope = t.closest('.screen');
-      scope.querySelectorAll('.dtab').forEach(function(x){ x.setAttribute('aria-selected', String(x === t)); });
-      scope.querySelectorAll('.pane').forEach(function(p){ p.classList.toggle('is-active', p.dataset.pane === t.dataset.pane); });
-      return;
+      show(t.dataset.pane === 'info' ? 'detail' : 'detail-' + t.dataset.pane); return;
     }
     if((t = e.target.closest('[data-fit]'))){
       if(t.classList.contains('mini')){ t.classList.remove('mini'); t.dataset.pinned = 'open'; return; }
@@ -1627,11 +1672,7 @@ body{margin:0;background:var(--studio-bg);font-family:var(--ui);-webkit-font-smo
     if((t = e.target.closest('[data-go-ing]'))){ show('ing'); return; }
     if((t = e.target.closest('[data-go-detail]'))){ show('detail'); return; }
     if((t = e.target.closest('.itab'))){
-      var sc = t.closest('.screen');
-      sc.querySelectorAll('.itab').forEach(function(x){ x.setAttribute('aria-selected', String(x === t)); });
-      sc.querySelectorAll('[data-ipane]').forEach(function(p){ if(p.classList.contains('pane')){ p.classList.toggle('is-active', p.dataset.ipane === t.dataset.ipane); } });
-      sc.querySelector('.scroll').scrollTop = 0;
-      return;
+      show(t.dataset.ipane === 'comp' ? 'ing' : 'ing-' + t.dataset.ipane); return;
     }
     if((t = e.target.closest('.ichip'))){
       t.closest('.ichips').querySelectorAll('.ichip').forEach(function(c){ c.setAttribute('aria-pressed','false'); });
@@ -1639,11 +1680,7 @@ body{margin:0;background:var(--studio-bg);font-family:var(--ui);-webkit-font-smo
       return;
     }
     if((t = e.target.closest('.stab'))){
-      var ssc = t.closest('.screen');
-      ssc.querySelectorAll('.stab').forEach(function(x){ x.setAttribute('aria-selected', String(x === t)); });
-      ssc.querySelectorAll('[data-spane]').forEach(function(p){ if(p.classList.contains('pane')){ p.classList.toggle('is-active', p.dataset.spane === t.dataset.spane); } });
-      ssc.querySelector('.scroll').scrollTop = 0;
-      return;
+      show(t.dataset.spane === 'all' ? 'results' : 'results-' + t.dataset.spane); return;
     }
     if((t = e.target.closest('[data-totop]'))){
       var tsc = t.closest('.screen').querySelector('.scroll');
